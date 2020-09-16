@@ -1,0 +1,239 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Serif+Text:ital@0;1&display=swap');
+
+* { 
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+}
+
+body {
+	font-family: 'DM Serif Text', serif;
+	font-size: 16px;
+    background: #e5e5e5;
+	margin: 10vh 5vw;
+}
+
+h1{
+    font-family: 'DM Serif Display', serif;
+    font-style: italic;
+    font-weight: 400;
+    font-size: 1.8em;
+    color: #e5e5e5;
+    text-align: center;
+}
+
+ul {
+	list-style: none;
+}
+
+a {
+	text-decoration: none;
+}
+
+.btn:hover{
+	font-weight: 400;
+}
+
+/* after login page */
+/* .msg-container {
+	font-family: 'DM Serif Text', serif;
+	max-width: 900px;
+	margin: 30px auto;
+	overflow: hidden;
+}
+
+.msg-container .btn{
+    font-family: 'DM Serif Text', serif;
+    cursor: pointer;
+    padding: 10px 15px;
+    color: black;
+    background: #e5e5e5;
+    border-style: solid;
+    font-size: 16px;
+    border-width: 2px;
+    margin-left: 20px;
+    border-color: black;
+    flex: 1;
+}
+
+.msg-container .btn:hover{
+    font-style: italic;
+    color: white;
+    background: black;
+}
+
+.msg-header {	
+	border-style: solid;
+    border-width: 2px;
+    border-color: #000000;
+    background: black;
+    padding: 20px 30px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.msg-main {
+	display: block;
+}
+
+.msg-messages {
+    padding: 25px;
+    border-left-width: 2px;
+    border-right-width: 2px;
+    border-left-color: #000000;
+    border-right-color: #000000;
+    border-left-style: solid;
+    border-right-style: solid;
+    height: 460px;
+    overflow-y: scroll;
+
+}
+
+.msg-messages .message {
+	padding: 5px;
+    margin-bottom: 15px;
+}
+
+.msg-messages .message .meta {
+	font-size: 1.2em;
+    font-style: italic;
+    color: #000000;
+    margin-bottom: 5px;
+}
+
+.msg-messages .message .meta span {
+	font-family: 'DM Serif Text', serif;
+    font-size: 0.8em;
+    color: #b5b5b5;
+}
+
+.msg-form-container {
+	border-style: solid;
+    border-width: 2px;
+    border-color: #000000;
+    padding: 20px 30px;
+}
+
+.msg-form-container form {
+	display: flex;
+}
+
+.msg-form-container input[type='text'] {
+	letter-spacing: 0.5px;
+	font-size: 0.9em;
+    padding: 20px;
+    border-style: none;
+    background-color: #ffea29;
+    width: 100%;
+    font-family: 'DM Serif Text', serif;
+    flex: 7;
+}
+
+.msg-form-container input::placeholder{
+    color: black;
+} */
+
+/* Login Page */
+.login-container {
+	max-width: 450px;
+	margin: 80px auto;
+	color: #fff;
+}
+
+.login-header {
+    text-align: center;
+    padding: 15px 25px;
+    border-style: solid;
+    color: #feea2a;
+    background-color: black;
+    border-width: 2px;
+    border-color: #000000;
+    font-style: italic;
+}
+
+.login-main {
+	padding: 40px 30px;
+    padding-bottom: 50px;
+    border-left-style: solid;
+    border-right-style: solid;
+    border-bottom-style: solid;
+    border-width: 2px;
+    border-color: #000000;
+    background: #e5e5e5;
+}
+
+.login-main p {
+	margin-bottom: 20px;
+}
+
+.login-main .form-control {
+	margin-bottom: 20px;
+}
+
+.login-main label {
+	display: block;
+    margin-bottom: 8px;
+    color: #000000;
+    font-family: DM Serif Text;
+    font-style: italic;
+    font-size: 1.2em;
+}
+
+.login-main input::placeholder{
+    color: black;
+}
+
+.login-main input[type='text'] {
+    letter-spacing: 0.3px;
+	font-size: 0.9em;
+    padding: 20px;
+    border-style: none;
+    background-color: #ffea29;
+    width: 100%;
+    font-family: 'DM Serif Text', serif;
+}
+
+.login-main input[type='password'] {
+    letter-spacing: 0.5px;
+	font-size: 0.9em;
+    padding: 20px;
+    border-style: none;
+    background-color: #ffea29;
+    width: 100%;
+    font-family: 'DM Serif Text', serif;
+}
+
+.login-main select {
+	font-size: 16px;
+	padding: 5px;
+	height: 40px;
+	width: 100%;
+}
+
+.login-main .btn {
+	font-size: 16px;
+    margin-top: 20px;
+    padding: 18px;
+    width: 100%;
+    color: #000000;
+    border-style: solid;
+    border-color: #000000;
+    border-width: 2px;
+    justify-content: center;
+    background-color: #e5e5e5;
+    font-family: 'DM Serif Text', serif;
+    letter-spacing: 0.3px;
+}
+
+.login-main .btn:hover {
+    font-style: italic;
+    background: black;
+    color: white;
+}
+
+@media (max-width: 650px) {
+    h1{
+        font-size: 1.5em;
+    }
+}
