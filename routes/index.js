@@ -35,7 +35,6 @@ function checkUsername(req, res, next) {}
 
 router.post("/", (req, res) => {
   const { username } = req.body;
-  //   res.status(200).send("hi")
 
   // check if username exists
   User.findOne({ username: username })
@@ -54,6 +53,7 @@ router.post("/", (req, res) => {
       // username exists
       else {
         passport.authenticate("local", (err, user) => {
+          console.error(err);
           // password incorrect, prompt user to re-enter;
           if (!user) {
             res.status(400).send("password incorrect");
