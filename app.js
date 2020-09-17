@@ -16,7 +16,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use(passport.initialize());
-app.use(flash());
+// app.use(flash());
 
 app.use(routes);
 
