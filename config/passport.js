@@ -21,14 +21,14 @@ const authenticateUser = (username, password, done) => {
 
 passport.use(new LocalStrategy(authenticateUser));
 
-passport.serializeUser((user, done) => {
-  done(null, user.id);
-});
+// passport.serializeUser((user, done) => {
+//   done(null, user.id);
+// });
 
-passport.deserializeUser((userId, done) => {
-  User.findById(userId)
-    .then((user) => {
-      done(null, user);
-    })
-    .catch((err) => done(err));
-});
+// passport.deserializeUser((userId, done) => {
+//   User.findById(userId)
+//     .then((user) => {
+//       done(null, user);
+//     })
+//     .catch((err) => done(err));
+// });

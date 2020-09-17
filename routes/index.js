@@ -52,8 +52,9 @@ router.post("/", (req, res) => {
   })(req, res);
 });
 
-// TODO: Not sure where to put this
-function createNewUser(username, password) {
+router.post("create-user", (req, res) => {
+  const { username, password } = req.body;
+
   // create new user and save to db
   const hashAndSalt = genHashAndSalt(password);
   const newUser = new User({
@@ -65,7 +66,7 @@ function createNewUser(username, password) {
     console.log(user);
   });
   res.redirect("/welcome");
-}
+});
 
 //Old session authenticate logic
 
