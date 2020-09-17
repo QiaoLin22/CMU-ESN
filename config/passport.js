@@ -1,36 +1,42 @@
+const JwtStrategy = require('passport-jwt').Strategy
+const ExtractJwt = require('passport-jwt').ExtractJwt;
 const passport = require('passport');
-const LocalStrategy = require('passport-local').Strategy;
-const connectdb = require('../models/model');
-const User = connectdb.models.User;
-const validatePs = require('../middleware/psMiddleware').validatePs;
+const fs = require('fs');
+const path = require('path');
+const connection = require('../models/user');
+const User = connection.models.User;
 
+const pathToKey = path.join(__dirname, '..', 'id_rsa_pub.pem');
+const PUB_KEY = fs.readFileSync(pathToKey, 'utf8');
 
-const verifyPs = (username, password, done) => {
+const options = {
+    jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+    secretOrKey: PUB_KEY,
+    algorithms: ['RS256']
+  };
 
-    User.findOne({ username: username })
-        .then((user) => {
+  module.exports = (passport) => {
+   
+    passport.use(new JwtStrategy(options, function(jwt_payload, done) {
 
-            if (!user) { return done(null, false) }
-            
-            if (validatePs(password, user.hash, user.salt)) {
+        console.log(jwt_payload);
+        
+        User.findOne({_id: jwt_payload.sub}, function(err, user) {
+
+            if (err) {
+                return done(err, false);
+            }
+            //for future use
+            // if(user.admin){
+
+            // }
+            if (user) {
                 return done(null, user);
             } else {
                 return done(null, false);
             }
-        })
-        .catch(err => done(err))
+            
+        });
+        
+    }));
 }
-
-passport.use(new LocalStrategy(verifyPs));
-
-passport.serializeUser((user, done) => {
-    done(null, user.id);
-});
-
-passport.deserializeUser((userId, done) => {
-    User.findById(userId)
-        .then((user) => {
-            done(null, user);
-        })
-        .catch(err => done(err))
-});

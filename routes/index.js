@@ -1,93 +1,79 @@
-const router = require('express').Router();
+const mongoose = require('mongoose');
+const router = require('express').Router();   
+const connection = require('../models/user');
+const User = connection.models.User;
 const passport = require('passport');
-const savePassword = require('../middleware/psMiddleware').genPs;
-const connectdb = require('../models/model')
-const User = connectdb.models.User;
+const utils = require('../lib/utils');
 
- router.post('/', passport.authenticate('local', {
-      failureRedirect: '/wrong-password', 
-      successRedirect: '/main' 
- }));
+router.get('/main', passport.authenticate('jwt', { session: false }), (req, res, next) => {
+    res.status(200).json({ success: true, msg: "You are successfully authenticated to this route!"});
+});
 
- router.post('/register', (req, res) => {
-    const checkname = req.body.username
-    User.findOne({ username: checkname })
+router.post('/login', function(req, res, next){
+
+    User.findOne({ username: req.body.username })
+        .then((user) => {
+
+            if (!user) {
+                res.status(401).json({ success: false, msg: "could not find user" });
+            }
+            
+            const isValid = utils.validPassword(req.body.password, user.hash, user.salt);
+            
+            if (isValid) {
+
+                const tokenObject = utils.issueJWT(user);
+
+                res.status(200).json({ success: true, token: tokenObject.token, expiresIn: tokenObject.expires });
+                res.redirect('main')
+
+            } else {
+
+                res.status(401).json({ success: false, msg: "you entered the wrong password" });
+
+            }
+
+        })
+        .catch((err) => {
+            next(err);
+        });
+});
+
+// Register a new user
+router.post('/register', function(req, res, next){
+    const username = req.body.username
+    User.findOne({ username: username })
         .then((user) => {
             if (!user){
-                const helper = savePassword(req.body.password);
+                const saltHash = utils.genPassword(req.body.password);
+                const salt = saltHash.salt;
+                const hash = saltHash.hash;
                 const newUser = new User({
-                username: req.body.username,
-                hash: helper.hash,
-                salt: helper.salt
+                    username: req.body.username,
+                    hash: hash,
+                    salt: salt
                 });
-
                 newUser.save()
                 .then((user) => {
-                    console.log(user);
+                    res.json({ success: true, user: user });
                 });
                 res.redirect('/');
             }
             else{
-                res.redirect('/username-taken');
+                res.json({ success: false, msg: "username-taken" });
             }
         })
         .catch((err) => {   
-            console.log(err)
+            res.json({ success: false, msg: err });
     });
-    
- });
 
-router.get('/', (req, res) => {
+});
+
+router.get('/login', (req, res) => {
     res.render('login')
 });
-
-
 router.get('/register', (req, res) => {
-    res.render('register')
-});
-
-//Old session authenticate logic
-
-// router.get('/main', (req, res) => {
-//     if(req.session.passport === undefined){
-//         res.redirect('/')
-//     }
-//     else {
-//             const id = (req.session.passport.user)
-
-//         if (req.isAuthenticated()) {
-//             User.findOne({ _id: id })
-//             .then((user) => {
-//                 var username = user.username
-//                 res.render('index',{username : username})
-//             })
-//             .catch((err) => {   
-//                 console.log(err)
-//             });
-            
-//         } else {
-//             res.send('<h1>You are not authenticated</h1><p><a href="/">Login</a></p>');
-//         }
-//     }
-    
-// });
-
-//new JWT TO DO #
-router.get('/main', (req, res) => {
-
-    res.render('main')
-    
-});
-
-router.get('/logout', (req, res) => {
-    req.logout();
-    res.redirect('/')
-});
-router.get('/wrong-password', (req, res) => {
-    res.send('<h1>Login failed</h1>');
-});
-router.get('/username-taken', (req, res) => {
-    res.send('<h1>Username already taken.</h1>');
+    res.render('login')
 });
 
 module.exports = router;

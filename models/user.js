@@ -2,16 +2,20 @@ const mongoose = require('mongoose');
 require('dotenv').config();
 const db = process.env.DB_STRING;
 
-const connectdb = mongoose.createConnection(db, {
+const connection = mongoose.createConnection(db, {
     useNewUrlParser: true,
     useUnifiedTopology: true
 });
 
 const UserSchema = new mongoose.Schema({
-    username: String,
+    username: {
+        type: String,
+        required: [true, 'Please enter username'],
+        unique: true
+    },
     hash: String,
     salt: String
 });
 
-User = connectdb.model('User', UserSchema);
-module.exports = connectdb;
+User = connection.model('User', UserSchema);
+module.exports = connection;
