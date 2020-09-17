@@ -11,10 +11,53 @@ const User = require("../models/user");
 //   })
 // );
 
+router.get("/", (req, res) => {
+  res.render("login");
+});
+
 // TODO
 function isValidUsername(username) {
   return false;
 }
+
+async function checkUsername(req, res, next) {
+  const { username } = req.body;
+
+  // check if username exists
+  try {
+    const user = await User.findOne({ username: username });
+
+    // username doesn't exist
+    if (!user) {
+      // check if username satisfy username rule
+      if (isValidUsername(username)) {
+        // ask the user to confirm the creation of a new user
+        res.status(200).send("create new user?");
+      } else {
+        // prompt user to re-enter
+        res.status(400).send("username does not comply to rules");
+      }
+    } else {
+      // username exists
+      next();
+    }
+  } catch (e) {
+    res.status(500).end();
+  }
+}
+
+router.post("/", checkUsername, (req, res) => {
+  // username exists
+  passport.authenticate("local", { failureFlash: true }, (err, user) => {
+    if (err) res.status(500).end();
+    // password incorrect, prompt user to re-enter
+    if (!user) {
+      return res.status(400).send("password incorrect");
+    }
+    // password correct, nothing happens
+    return res.status(200).send("success");
+  })(req, res);
+});
 
 // TODO: Not sure where to put this
 function createNewUser(username, password) {
@@ -30,48 +73,6 @@ function createNewUser(username, password) {
   });
   res.redirect("/welcome");
 }
-
-function checkUsername(req, res, next) {}
-
-router.post("/", (req, res) => {
-  const { username } = req.body;
-
-  // check if username exists
-  User.findOne({ username: username })
-    .then((user) => {
-      // username doesn't exist
-      if (!user) {
-        // check if username satisfy username rule
-        if (isValidUsername(username)) {
-          // ask the user to confirm the creation of a new user
-          res.status(200).send("create new user?");
-        } else {
-          // prompt user to re-enter
-          res.status(400).send("username does not comply to rules");
-        }
-      }
-      // username exists
-      else {
-        passport.authenticate("local", (err, user) => {
-          console.error(err);
-          // password incorrect, prompt user to re-enter;
-          if (!user) {
-            res.status(400).send("password incorrect");
-          }
-
-          // password correct, nothing happens
-          res.status(200).send("success");
-        });
-      }
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-});
-
-router.get("/", (req, res) => {
-  res.render("login");
-});
 
 //Old session authenticate logic
 
