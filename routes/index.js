@@ -19,7 +19,9 @@ router.post("/", (req, res) => {
     if (!user) {
       // username exists, password incorrect, prompt user to re-enter
       if (info.usernameExists) {
-        return res.status(400).end();
+        return res.status(400).json({
+          error: "Password incorrect",
+        });
       }
       // username doesn't exist, check new username
       else {
@@ -32,13 +34,15 @@ router.post("/", (req, res) => {
           // prompt user to re-enter
           info.message = "Username does not comply to rules";
           console.log(info.message);
-          return res.redirect("/");
+          return res.status(400).json({
+            error: "Username does not comply to rules",
+          });
         }
       }
     }
 
     // user authenticated
-    console.log("authenticated")
+    console.log("authenticated");
     req.logIn(user, { session: false }, (err) => {
       if (err) return res.status(500).end();
 

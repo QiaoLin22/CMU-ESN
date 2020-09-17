@@ -14,10 +14,7 @@ const authenticateUser = (username, password, done) => {
     if (validatePs(password, user.hash, user.salt)) {
       return done(null, user);
     } else {
-      return done(null, false, {
-        message: "Password incorrect",
-        usernameExists: true,
-      });
+      return done(null, false, { usernameExists: true });
     }
   });
 };
