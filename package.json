@@ -4,7 +4,7 @@
   "description": "A tutorial on session based user authentication using Passport JS",
   "main": "app.js",
   "scripts": {
-    "start": "node app.js"
+    "start": "nodemon app.js"
   },
   "keywords": [],
   "author": "",
@@ -18,8 +18,9 @@
     "express-flash-message": "^1.0.6",
     "express-flash-messages": "^0.1.1",
     "express-session": "^1.17.0",
-    "mongodb": "^2.2.33",
+    "mongodb": "^3.6.2",
     "mongoose": "^5.7.12",
+    "nodemon": "^2.0.4",
     "passport": "^0.4.0",
     "passport-local": "^1.0.0",
     "path": "^0.12.7",

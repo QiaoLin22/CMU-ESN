@@ -9,17 +9,25 @@
 body {
 	font-family: 'DM Serif Text', serif;
 	font-size: 16px;
-    background: #e5e5e5;
+    background: #ffffff;
 	margin: 10vh 5vw;
 }
 
+/* default font style */
 h1{
     font-family: 'DM Serif Display', serif;
     font-style: italic;
     font-weight: 400;
     font-size: 1.8em;
-    color: #e5e5e5;
+    color: #ffffff;
     text-align: center;
+}
+
+p{
+    font-family: 'DM Serif Display', serif;
+    font-weight: 400;
+    font-size: 1em;
+    color: black;
 }
 
 ul {
@@ -30,11 +38,15 @@ a {
 	text-decoration: none;
 }
 
+.btn{
+    cursor: pointer;
+}
+
 .btn:hover{
 	font-weight: 400;
 }
 
-/* after login page */
+/* in the Chatroom */
 /* .msg-container {
 	font-family: 'DM Serif Text', serif;
 	max-width: 900px;
@@ -46,7 +58,7 @@ a {
     cursor: pointer;
     padding: 10px 15px;
     color: black;
-    background: #e5e5e5;
+    background: #ffffff;
     border-style: solid;
     font-size: 16px;
     border-width: 2px;
@@ -147,7 +159,7 @@ a {
     border-bottom-style: solid;
     border-width: 2px;
     border-color: #000000;
-    background: #e5e5e5;
+    background: #ffffff;
 }
 
 .login-main p {
@@ -198,6 +210,10 @@ a {
 	width: 100%;
 }
 
+.login-main p {
+    color: #585858;
+}
+
 .login-main .btn {
 	font-size: 16px;
     margin-top: 20px;
@@ -208,7 +224,7 @@ a {
     border-color: #000000;
     border-width: 2px;
     justify-content: center;
-    background-color: #e5e5e5;
+    background-color: #ffffff;
     font-family: 'DM Serif Text', serif;
     letter-spacing: 0.3px;
 }
@@ -217,6 +233,51 @@ a {
     font-style: italic;
     background: black;
     color: white;
+}
+
+/* welcome mesage */
+.welcome-header{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    text-align: center;
+    padding: 15px 25px;
+    border-style: solid;
+    color: #feea2a;
+    background-color: black;
+    border-width: 2px;
+    border-color: #000000;
+    font-style: italic;
+}
+
+.welcome-header .btn{
+    font-family: 'DM Serif Text', serif;
+    cursor: pointer;
+    padding: 10px 15px;
+    color: black;
+    background: #e5e5e5;
+    border-style: solid;
+    font-size: 16px;
+    border-color: black;
+}
+
+.welcome-header .btn:hover{
+    font-style: italic;
+    cursor: pointer;
+    color: white;
+    background: black;
+}
+
+.checkbox{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.checkbox p {
+    font-style: italic;
+    color: black;
+    margin-left: 5%;
 }
 
 @media (max-width: 650px) {

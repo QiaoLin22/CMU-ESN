@@ -41,6 +41,9 @@ router.get('/', (req, res) => {
     res.render('login')
 });
 
+router.get('/welcome', (req, res) => {
+    res.render('welcome')
+});
 
 router.get('/register', (req, res) => {
     res.render('register')
