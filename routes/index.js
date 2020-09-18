@@ -1,81 +1,19 @@
-// const mongoose = require('mongoose');
-// const router = require('express').Router();   
-// const connection = require('../models/user');
-// const User = connection.models.User;
-// const utils = require('../lib/utils');
-
-// router.get('/main', passport.authenticate('jwt', { session: false }), (req, res, next) => {
-//     res.status(200).json({ success: true, msg: "You are successfully authenticated to this route!"});
-// });
-
-// router.post('/login', function(req, res, next){
-//     User.findOne({ username: req.body.username })
-//         .then((user) => {
-
-//             if (!user) {
-//                 res.status(401).json({ success: false, msg: "could not find user" });
-//             }
-            
-//             const isValid = utils.validPassword(req.body.password, user.hash, user.salt);
-            
-//             if (isValid) {
-
-//                 const tokenObject = utils.issueJWT(user);
-//                 res.cookie('jwt',tokenObject, {httpOnly:true, maxAge: 1000*60*60*24})
-//                 res.status(200).json({ success: true, user: user });
-
-//             } else {
-
-//                 res.status(401).json({ success: false, msg: "you entered the wrong password" });
-
-//             }
-
-//         })
-//         .catch((err) => {
-//             next(err);
-//         });
-// });
-
-// // Register a new user
-// router.post('/register', function(req, res, next){
-//     const username = req.body.username
-//     User.findOne({ username: username })
-//         .then((user) => {
-//             if (!user){
-//                 const saltHash = utils.genPassword(req.body.password);
-//                 const salt = saltHash.salt;
-//                 const hash = saltHash.hash;
-//                 const newUser = new User({
-//                     username: req.body.username,
-//                     hash: hash,
-//                     salt: salt
-//                 });
-//                 newUser.save()
-//                 .then((user) => {
-//                     res.json({ success: true, user: user });
-//                 });
-//                 res.redirect('/');
-//             }
-//             else{
-//                 res.json({ success: false, msg: "username-taken" });
-//             }
-//         })
-//         .catch((err) => {   
-//             res.json({ success: false, msg: err });
-//     });
-
-// });
-
-// router.get('/login', (req, res) => {
-//     res.render('login')
-// });
-// router.get('/register', (req, res) => {
-//     res.render('login')
-
+const utils = require("../lib/utils");
+const { requireAuth } = require("../middleware/authmiddleware");
 const router = require("express").Router();
-const passport = require("passport");
 const User = require("../models/user");
-const utils = require('../lib/utils');
+const passport = require("passport");
+
+const createToken = require("../lib/utils").createToken;
+
+router.get("/main", requireAuth, (req, res, next) => {
+  res
+    .status(200)
+    .json({
+      success: true,
+      msg: "You are successfully authenticated to this route!",
+    });
+});
 
 router.get("/", (req, res) => {
   res.render("login");
@@ -120,9 +58,21 @@ router.post("/", (req, res, next) => {
       if (err) return next(err);
 
       // TODO: generate jwt and return it in response
+      const token = createToken(user._id);
+      const cookieMaxAge = 3 * 24 * 60 * 60;
+      res.cookie("jwt", token, { httpOnly: true, maxAge: cookieMaxAge * 1000 });
+      return res
+        .status(201)
+        .json({
+          success: true,
+          user: user._id,
+          msg: "Token created",
+          token: token,
+        });
+
       return res.redirect("/");
     });
-  })(req, res);
+  })(req, res, next);
 });
 
 router.post("/create-user", (req, res, next) => {
@@ -144,7 +94,6 @@ router.post("/create-user", (req, res, next) => {
     })
     .catch((err) => next(err));
 });
-
 
 //new JWT TO DO #
 router.get("/main", (req, res) => {

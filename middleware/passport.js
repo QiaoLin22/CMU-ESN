@@ -44,7 +44,7 @@
 const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
 const User = require("../models/user");
-const validatePs = require("../middleware/psMiddleware").validatePs;
+const validPassword = require("../lib/utils").validPassword;
 
 const authenticateUser = (username, password, done) => {
   User.findOne({ username: username }, (err, user) => {
@@ -54,9 +54,10 @@ const authenticateUser = (username, password, done) => {
       return done(null, false, { usernameExists: false });
     }
 
-    if (validatePs(password, user.hash, user.salt)) {
+    if (validPassword(password, user.hash, user.salt)) {
       return done(null, user);
     } else {
+      console.log("password incorrect")
       return done(null, false, { usernameExists: true });
     }
   });
