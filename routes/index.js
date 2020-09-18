@@ -1,7 +1,19 @@
+const utils = require("../lib/utils");
+const { requireAuth } = require("../middleware/authmiddleware");
 const router = require("express").Router();
-const passport = require("passport");
-const genHashAndSalt = require("../middleware/psMiddleware").genPs;
 const User = require("../models/user");
+const passport = require("passport");
+
+const createToken = require("../lib/utils").createToken;
+
+router.get("/main", requireAuth, (req, res, next) => {
+  res
+    .status(200)
+    .json({
+      success: true,
+      msg: "You are successfully authenticated to this route!",
+    });
+});
 
 router.get("/", (req, res) => {
   res.render("login");
@@ -46,16 +58,28 @@ router.post("/", (req, res, next) => {
       if (err) return next(err);
 
       // TODO: generate jwt and return it in response
+      const token = createToken(user._id);
+      const cookieMaxAge = 3 * 24 * 60 * 60;
+      res.cookie("jwt", token, { httpOnly: true, maxAge: cookieMaxAge * 1000 });
+      return res
+        .status(201)
+        .json({
+          success: true,
+          user: user._id,
+          msg: "Token created",
+          token: token,
+        });
+
       return res.redirect("/");
     });
-  })(req, res);
+  })(req, res, next);
 });
 
 router.post("/create-user", (req, res, next) => {
   const { username, password } = req.body;
 
   // create new user and save to db
-  const hashAndSalt = genHashAndSalt(password);
+  const hashAndSalt = utils.genHashAndSalt(password);
   const newUser = new User({
     username: username,
     hash: hashAndSalt.hash,
@@ -70,7 +94,6 @@ router.post("/create-user", (req, res, next) => {
     })
     .catch((err) => next(err));
 });
-
 
 //new JWT TO DO #
 router.get("/main", (req, res) => {
