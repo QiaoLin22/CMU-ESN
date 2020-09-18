@@ -4,7 +4,6 @@ const path = require('path')
 const routes = require('./routes');
 
 require('dotenv').config();
-require('./config/passport')(passport);
 
 var app = express();
 app.set('view engine','ejs')

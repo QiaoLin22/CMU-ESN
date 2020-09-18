@@ -2,7 +2,6 @@ const mongoose = require('mongoose');
 const router = require('express').Router();   
 const connection = require('../models/user');
 const User = connection.models.User;
-const passport = require('passport');
 const utils = require('../lib/utils');
 
 router.get('/main', passport.authenticate('jwt', { session: false }), (req, res, next) => {
@@ -10,7 +9,6 @@ router.get('/main', passport.authenticate('jwt', { session: false }), (req, res,
 });
 
 router.post('/login', function(req, res, next){
-
     User.findOne({ username: req.body.username })
         .then((user) => {
 
@@ -23,9 +21,8 @@ router.post('/login', function(req, res, next){
             if (isValid) {
 
                 const tokenObject = utils.issueJWT(user);
-
-                res.status(200).json({ success: true, token: tokenObject.token, expiresIn: tokenObject.expires });
-                res.redirect('main')
+                res.cookie('jwt',tokenObject, {httpOnly:true, maxAge: 1000*60*60*24})
+                res.status(200).json({ success: true, user: user });
 
             } else {
 
