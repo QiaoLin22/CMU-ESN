@@ -188,7 +188,7 @@ a {
 	font-size: 0.9em;
     padding: 20px;
     border-style: none;
-    background-color: #07ebfc;
+    background-color: #dbfcff;
     width: 100%;
     font-family: 'DM Serif Text', serif;
 }
@@ -198,7 +198,7 @@ a {
 	font-size: 0.9em;
     padding: 20px;
     border-style: none;
-    background-color: #07ebfc;
+    background-color: #dbfcff;
     width: 100%;
     font-family: 'DM Serif Text', serif;
 }
@@ -240,14 +240,11 @@ a {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    text-align: center;
     padding: 15px 25px;
     border-style: solid;
-    color: #feea2a;
     background-color: black;
     border-width: 2px;
     border-color: #000000;
-    font-style: italic;
 }
 
 .welcome-header .btn{
