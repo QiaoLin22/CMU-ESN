@@ -1,10 +1,23 @@
-const mongoose = require('mongoose');
 const router = require('express').Router();   
 const connection = require('../models/user');
 const User = connection.models.User;
 const utils = require('../lib/utils');
+const { requireAuth } = require('../middleware/authmiddleware');
+const jwt = require('jsonwebtoken');
+const path = require('path');
+const fs = require('fs');
+const pathToKey = path.join(__dirname, '..', 'id_rsa_priv.pem');
+const PRIV_KEY = fs.readFileSync(pathToKey, 'utf8');
 
-router.get('/main', passport.authenticate('jwt', { session: false }), (req, res, next) => {
+// create json web token
+const maxAge = 3 * 24 * 60 * 60;
+const createToken = (id) => {
+  return jwt.sign({ id }, 'qlin22', {
+    expiresIn: maxAge
+  });
+};
+
+router.get('/main', requireAuth, (req, res, next) => {
     res.status(200).json({ success: true, msg: "You are successfully authenticated to this route!"});
 });
 
@@ -19,10 +32,9 @@ router.post('/login', function(req, res, next){
             const isValid = utils.validPassword(req.body.password, user.hash, user.salt);
             
             if (isValid) {
-
-                const tokenObject = utils.issueJWT(user);
-                res.cookie('jwt',tokenObject, {httpOnly:true, maxAge: 1000*60*60*24})
-                res.status(200).json({ success: true, user: user });
+                const token = createToken(user._id);
+                res.cookie('jwt', token, { httpOnly: true, maxAge: maxAge * 1000 });
+                res.status(201).json({ success: true,user: user._id,msg:"Token created", token:token});
 
             } else {
 
@@ -54,10 +66,10 @@ router.post('/register', function(req, res, next){
                 .then((user) => {
                     res.json({ success: true, user: user });
                 });
-                res.redirect('/');
+                res.redirect('/login');
             }
             else{
-                res.json({ success: false, msg: "username-taken" });
+                res.json({ success: false, msg: "username exists" });
             }
         })
         .catch((err) => {   
