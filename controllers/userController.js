@@ -1,4 +1,5 @@
 const User = require("../models/user");
+const utils = require("../lib/utils");
 
 class UserController {
   static createUser(req, res) {
@@ -15,7 +16,7 @@ class UserController {
       .save()
       .then((user) => {
         console.log(user);
-        res.status(201).send("success");
+        res.status(201).send({message: "success"});
       })
       .catch((err) => {
         let message = undefined;
@@ -25,7 +26,7 @@ class UserController {
         } else {
           message = Object.values(err.errors)[0].properties.message;
         }
-
+        console.log(message);
         res.status(400).json({ error: message });
       });
   }

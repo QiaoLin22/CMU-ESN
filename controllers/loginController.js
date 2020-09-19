@@ -21,7 +21,7 @@ class LoginController {
         if (isValidUsername(req.body.username)) {
           // ask the user to confirm the creation of a new user
           console.log("create new user?");
-          return res.status(200).send("create new user?");
+          return res.status(200).send({message: "create new user?"});
         } else {
           // prompt user to re-enter
           return res.status(400).json({
