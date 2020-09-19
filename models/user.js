@@ -10,7 +10,15 @@ mongoose
   .catch((e) => console.error);
 
 const UserSchema = new mongoose.Schema({
-  username: String,
+  username: {
+    type: String,
+    required: [true, "Username is required"],
+    unique: true,
+    validate: [
+      (username) => username.length >= 3,
+      "Username must be at least 3 characters long",
+    ],
+  },
   hash: String,
   salt: String,
 });

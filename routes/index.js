@@ -7,16 +7,14 @@ const passport = require("passport");
 const createToken = require("../lib/utils").createToken;
 
 router.get("/main", requireAuth, (req, res, next) => {
-  res
-    .status(200)
-    .json({
-      success: true,
-      msg: "You are successfully authenticated to this route!",
-    });
+  res.status(200).json({
+    success: true,
+    msg: "You are successfully authenticated to this route!",
+  });
 });
 
 router.get("/", (req, res) => {
-  res.render("login");
+  res.render("index");
 });
 
 // TODO
@@ -61,14 +59,12 @@ router.post("/", (req, res, next) => {
       const token = createToken(user._id);
       const cookieMaxAge = 3 * 24 * 60 * 60;
       res.cookie("jwt", token, { httpOnly: true, maxAge: cookieMaxAge * 1000 });
-      return res
-        .status(201)
-        .json({
-          success: true,
-          user: user._id,
-          msg: "Token created",
-          token: token,
-        });
+      return res.status(201).json({
+        success: true,
+        user: user._id,
+        msg: "Token created",
+        token: token,
+      });
 
       return res.redirect("/");
     });
@@ -76,24 +72,34 @@ router.post("/", (req, res, next) => {
 });
 
 router.post("/create-user", (req, res, next) => {
-  const { username, password } = req.body;
+    const { username, password } = req.body;
 
-  // create new user and save to db
-  const hashAndSalt = utils.genHashAndSalt(password);
-  const newUser = new User({
-    username: username,
-    hash: hashAndSalt.hash,
-    salt: hashAndSalt.salt,
-  });
+    // create new user and save to db
+    const hashAndSalt = utils.genHashAndSalt(password);
+    const newUser = new User({
+      username: username,
+      ...hashAndSalt,
+    });
 
-  newUser
-    .save()
-    .then((user) => {
-      console.log(user);
-      res.status(201).send("success");
-    })
-    .catch((err) => next(err));
-});
+    newUser
+      .save()
+      .then((user) => {
+        console.log(user);
+        res.status(201).send("success");
+      })
+      .catch((err) => {
+        let message = undefined;
+
+        if (err.code === 11000) {
+          message = "Username already exists";
+        } else {
+          message = Object.values(err.errors)[0].properties.message;
+        }
+
+        res.status(400).json({ error: message });
+      });
+  }
+);
 
 //new JWT TO DO #
 router.get("/main", (req, res) => {

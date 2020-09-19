@@ -1,32 +1,29 @@
-const fs = require('fs');
-const path = require('path');
-const User = require('../models/user');
-const jwt = require('jsonwebtoken')
+const fs = require("fs");
+const path = require("path");
+const User = require("../models/user");
+const jwt = require("jsonwebtoken");
 
-const pathToKey = path.join(__dirname, '..', 'id_rsa_pub.pem');
-const PUB_KEY = fs.readFileSync(pathToKey, 'utf8');
-
+const pathToKey = path.join(__dirname, "..", "id_rsa_pub.pem");
+const PUB_KEY = fs.readFileSync(pathToKey, "utf8");
 
 const requireAuth = (req, res, next) => {
-    console.log(req)
-    console.log(req.cookies)
-    const token = req.cookies.jwt;
-    console.log(token)
-    // check json web token exists & is verified
-    if (token) {
-      jwt.verify(token, 'sam908', (err, decodedToken) => {
+  const token = req.cookies.jwt;
+  console.log(token);
+  // check json web token exists & is verified
+  if (token) {
+    jwt.verify(token, "sam908", (err, decodedToken) => {
+      console.log(decodedToken);
+      if (err) {
+        console.log(err.message);
+        res.redirect("/login");
+      } else {
         console.log(decodedToken);
-        if (err) {
-          console.log(err.message);
-          res.redirect('/login');
-        } else {
-          console.log(decodedToken);
-          next();
-        }
-      });
-    } else {
-      res.redirect('/login');
-    }
-  };
-  
-  module.exports = { requireAuth };
+        next();
+      }
+    });
+  } else {
+    res.redirect("/login");
+  }
+};
+
+module.exports = { requireAuth };
