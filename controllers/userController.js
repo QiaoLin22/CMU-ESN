@@ -1,7 +1,7 @@
 const User = require("../models/user");
 
 class UserController {
-  createUser(req, res) {
+  static createUser(req, res) {
     const { username, password } = req.body;
 
     // create new user and save to db

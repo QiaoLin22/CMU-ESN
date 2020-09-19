@@ -1,8 +1,8 @@
 const { requireAuth } = require("../middleware/authmiddleware");
 const router = require("express").Router();
 
-const postIndex = require("../controllers/indexController");
-const UserController = new (require("../controllers/userController"))();
+const LoginController = require("../controllers/loginController");
+const UserController = require("../controllers/userController");
 
 router.get("/main", requireAuth, (req, res, next) => {
   res.status(200).json({
@@ -15,7 +15,7 @@ router.get("/", (req, res) => {
   res.render("index");
 });
 
-router.post("/", postIndex);
+router.post("/api/login", LoginController.login);
 
 router.post("/api/users", UserController.createUser);
 
