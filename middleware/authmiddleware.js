@@ -18,14 +18,14 @@ const requireAuth = (req, res, next) => {
         console.log(decodedToken);
         if (err) {
           console.log(err.message);
-          res.redirect('/login');
+          res.redirect('/');
         } else {
           console.log(decodedToken);
           next();
         }
       });
     } else {
-      res.redirect('/login');
+      res.redirect('/');
     }
   };
   

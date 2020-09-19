@@ -25,6 +25,7 @@ function isValidUsername(username) {
 }
 
 router.post("/", (req, res, next) => {
+  
   passport.authenticate("local", { session: false }, (err, user, info) => {
     if (err) return next(err);
 
@@ -51,7 +52,7 @@ router.post("/", (req, res, next) => {
         }
       }
     }
-
+    
     // user authenticated
     console.log("authenticated");
     req.logIn(user, { session: false }, (err) => {
