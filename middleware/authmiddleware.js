@@ -11,7 +11,7 @@ const requireAuth = (req, res, next) => {
   console.log(token);
   // check json web token exists & is verified
   if (token) {
-    jwt.verify(token, "sam908", (err, decodedToken) => {
+    jwt.verify(token, PUB_KEY,{ algorithm: 'RS256'}, (err, decodedToken) => {
       console.log(decodedToken);
       if (err) {
         console.log(err.message);
