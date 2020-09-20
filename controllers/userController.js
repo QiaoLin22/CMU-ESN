@@ -3,6 +3,13 @@ const utils = require("../lib/utils");
 
 class UserController {
   static createUser(req, res) {
+    if(req.body.password.length < 4)
+    {
+      // prompt user to re-enter
+      return res.status(400).json({
+        error: "Passwords should be at least 4 characters long",
+      });
+    }
     const { username, password } = req.body;
 
     // create new user and save to db
