@@ -1,4 +1,5 @@
-const User = require("../models/user");
+const User = require('../models/user');
+const utils = require('../lib/utils');
 
 class UserController {
   static createUser(req, res) {
@@ -15,13 +16,13 @@ class UserController {
       .save()
       .then((user) => {
         console.log(user);
-        res.status(201).send("success");
+        res.status(201).send('success');
       })
       .catch((err) => {
-        let message = undefined;
+        let message;
 
         if (err.code === 11000) {
-          message = "Username already exists";
+          message = 'Username already exists';
         } else {
           message = Object.values(err.errors)[0].properties.message;
         }
