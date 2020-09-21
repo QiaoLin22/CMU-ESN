@@ -1,361 +1,39 @@
-@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Serif+Text:ital@0;1&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&display=swap');
 
-* { 
-	box-sizing: border-box;
-	margin: 0;
-	padding: 0;
-}
+
 
 body {
-	font-family: 'DM Serif Text', serif;
-	font-size: 16px;
-    background: #ffffff;
-	margin: 10vh 5vw;
-}
-
-/* default font style */
-h1{
-    font-family: 'DM Serif Display', serif;
-    font-style: italic;
+    background-color: #f3fdff;
+    font-family: 'IBM Plex Sans', sans-serif;
     font-weight: 400;
-    font-size: 1.8em;
-    color: #ffffff;
-    text-align: center;
 }
 
-p{
-    font-family: 'DM Serif Display', serif;
-    font-weight: 400;
-    font-size: 1em;
-    color: black;
-}
-
-ul {
-	list-style: none;
-}
-
-a {
-	text-decoration: none;
-}
-
-.btn{
-    cursor: pointer;
-}
-
-.btn:hover{
-	font-weight: 400;
-}
-
-/* in the Chatroom */
-/* .msg-container {
-	font-family: 'DM Serif Text', serif;
-	max-width: 900px;
-	margin: 30px auto;
-	overflow: hidden;
-}
-.msg-container .btn{
-    font-family: 'DM Serif Text', serif;
-    cursor: pointer;
-    padding: 10px 15px;
-    color: black;
-    background: #ffffff;
-    border-style: solid;
-    font-size: 16px;
-    border-width: 2px;
-    margin-left: 20px;
-    border-color: black;
-    flex: 1;
-}
-.msg-container .btn:hover{
-    font-style: italic;
-    color: white;
-    background: black;
-}
-.msg-header {	
-	border-style: solid;
-    border-width: 2px;
-    border-color: #000000;
-    background: black;
-    padding: 20px 30px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
-.msg-main {
-	display: block;
-}
-.msg-messages {
-    padding: 25px;
-    border-left-width: 2px;
-    border-right-width: 2px;
-    border-left-color: #000000;
-    border-right-color: #000000;
-    border-left-style: solid;
-    border-right-style: solid;
-    height: 460px;
-    overflow-y: scroll;
-}
-.msg-messages .message {
-	padding: 5px;
-    margin-bottom: 15px;
-}
-.msg-messages .message .meta {
-	font-size: 1.2em;
-    font-style: italic;
-    color: #000000;
-    margin-bottom: 5px;
-}
-.msg-messages .message .meta span {
-	font-family: 'DM Serif Text', serif;
-    font-size: 0.8em;
-    color: #b5b5b5;
-}
-.msg-form-container {
-	border-style: solid;
-    border-width: 2px;
-    border-color: #000000;
-    padding: 20px 30px;
-}
-.msg-form-container form {
-	display: flex;
-}
-.msg-form-container input[type='text'] {
-	letter-spacing: 0.5px;
-	font-size: 0.9em;
-    padding: 20px;
-    border-style: none;
-    background-color: #ffea29;
-    width: 100%;
-    font-family: 'DM Serif Text', serif;
-    flex: 7;
-}
-.msg-form-container input::placeholder{
-    color: black;
-} */
-
-/* Login Page */
 .login-container {
-	max-width: 450px;
-	margin: 80px auto;
-	color: #fff;
+    margin-top: 35vh;
+}
+
+.login-container h3{
+    color: #17a2b8;
+}
+
+.login-container input {
+    border-color: #17a2b8;
+}
+
+.login-input-icon{
+    background-color: #dff2f5;
+    color: #17a2b8;
 }
 
 .login-header {
-    text-align: center;
-    padding: 15px 25px;
-    border-style: solid;
-    color: #feea2a;
-    background-color: black;
-    border-width: 2px;
-    border-color: #000000;
-    font-style: italic;
+    margin-bottom: 7%;
 }
 
-.login-main {
-	padding: 40px 30px;
-    padding-bottom: 50px;
-    border-left-style: solid;
-    border-right-style: solid;
+.login-modal-table {
     border-bottom-style: solid;
-    border-width: 2px;
-    border-color: #000000;
-    background: #ffffff;
+    border-bottom-color: #17a2b8;
 }
 
-.login-main p {
-	margin-bottom: 20px;
-}
-
-.login-main .form-control {
-	margin-bottom: 20px;
-}
-
-.login-main label {
-	display: block;
-    margin-bottom: 8px;
-    color: #000000;
-    font-family: DM Serif Text;
-    font-style: italic;
-    font-size: 1.2em;
-}
-
-.login-main input::placeholder{
-    color: black;
-}
-
-.login-main input[type='text'] {
-    letter-spacing: 0.3px;
-	font-size: 0.9em;
-    padding: 20px;
-    border-style: none;
-    background-color: #dbfcff;
-    width: 100%;
-    font-family: 'DM Serif Text', serif;
-}
-
-.login-main input[type='password'] {
-    letter-spacing: 0.5px;
-	font-size: 0.9em;
-    padding: 20px;
-    border-style: none;
-    background-color: #dbfcff;
-    width: 100%;
-    font-family: 'DM Serif Text', serif;
-}
-
-.login-main select {
-	font-size: 16px;
-	padding: 5px;
-	height: 40px;
-	width: 100%;
-}
-
-.login-main p {
-    color: #585858;
-}
-
-.login-main .btn {
-	font-size: 16px;
-    margin-top: 20px;
-    padding: 18px;
-    width: 100%;
-    color: #000000;
-    border-style: solid;
-    border-color: #000000;
-    border-width: 2px;
-    justify-content: center;
-    background-color: #ffffff;
-    font-family: 'DM Serif Text', serif;
-    letter-spacing: 0.3px;
-}
-
-.login-main .btn:hover {
-    font-style: italic;
-    background: black;
-    color: white;
-}
-
-/* welcome mesage */
-.welcome-modal {
-    position: fixed; /* Stay in place */
-    z-index: 1; /* Sit on top */
-    padding-top: 100px; /* Location of the box */
-    left: 0;
-    top: 0;
-    width: 100vw; /* Full width */
-    height: 100vh; /* Full height */
-    overflow: auto; /* Enable scroll if needed */
-    background-color: rgb(0,0,0); /* Fallback color */
-    background-color: rgba(0,0,0,0.2); /* Black w/ opacity */
-}
-
-.modal-container{
-    position: relative;
-    margin: auto;
-    width: 500px;
-    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
-    /* -webkit-animation-name: modaldown;
-    -webkit-animation-duration: 0.7s; */
-    animation-name: modaldown;
-    animation-duration: 0.7s;
-}
-
-.welcome-container{
-    /* max-width: 450px; */
-	/* margin: 80px auto; */
-	color: #fff;
-}
-
-.welcome-main {
-    padding: 30px 30px;
-    padding-bottom: 50px;
-    background: #000000;
-}
-
-.welcome-main p{
-    color: white;
-}
-
-.welcome-main .btn {
-	font-size: 16px;
-    margin-top: 20px;
-    padding: 18px;
-    width: 100%;
-    color: #000000;
-    border-style: solid;
-    border-color: #000000;
-    border-width: 2px;
-    justify-content: center;
-    background-color: #ffffff;
-    font-family: 'DM Serif Text', serif;
-    letter-spacing: 0.3px;
-}
-
-.welcome-main .btn:hover {
-    font-style: italic;
-    background: black;
-    color: white;
-    border-style: solid;
-    border-color: white;
-}
-
-.welcome-header{
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 15px 25px;
-    border-style: solid;
-    background-color: black;
-    border-width: 2px;
-    border-color: #000000;
-}
-
-.welcome-header .btn{
-    font-family: 'DM Serif Text', serif;
-    cursor: pointer;
-    padding: 10px 15px;
-    color: black;
-    background: #e5e5e5;
-    border-style: solid;
-    font-size: 16px;
-    border-color: black;
-}
-
-.welcome-header .btn:hover{
-    font-style: italic;
-    cursor: pointer;
-    color: white;
-    background: black;
-}
-
-.checkbox{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-top: 20px;
-}
-
-.checkbox p {
-    font-style: italic;
-    color: white;
-    margin-left: 5%;
-}
-
-/* Animation */
-@-webkit-keyframes modaldown {
-    from {top:-200px; opacity:0} 
-    to {top:0; opacity:1}
-}
-
-@keyframes modaldown {
-    from {top:-200px; opacity:0}
-    to {top:0; opacity:1}
-}
-
-/* Responsive */
-
-@media (max-width: 650px) {
-    h1{
-        font-size: 1.5em;
-    }
+.login-modal-row {
+    margin-top: 10px;
 }

@@ -2,63 +2,163 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
     <link rel="stylesheet" href="../css/style.css" />
     <title>Emergency Social Network</title>
   </head>
   <body>
-    <div class="login-container">
-      <header class="login-header">
-        <h1>Emergency Social Network</h1>
-      </header>
-      <main class="login-main">
-        <form action="/api/login" method="POST">
-          <div class="form-control">
-            <label for="username">Username</label>
-            <input
-              type="text"
-              name="username"
-              id="username"
-              placeholder="Enter username"
-              required
-            />
-          </div>
-          <div class="form-control">
-            <label for="password">Password</label>
-            <input
-              type="password"
-              name="password"
-              id="password"
-              placeholder="Enter password"
-              required
-            />
-          </div>
-          <button type="submit" class="btn">Submit</button>
-        </form>
-      </main>
-    </div>
-
-    <div id="welcome" class="welcome-modal welcome-container">
-      <div class="modal-container">
-        <header class="welcome-header">
-            <!-- Add user name here -->
-            <h1>Welcome Message</h1>
-            <button type="submit" class="btn" id="modalClose">X</button>
-        </header>
-        <main class="welcome-main">
-            <p>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-            </p>
-            <div class="checkbox">
-                <input type="checkbox" name="welcome-check" value="check">
-                <p>By checking this button, I agree to share my status with ESN Chatroom</p>
+    <!-- user login -->
+    <div class="container">
+      <div class="row">
+        <div class="col-lg col-md-3 col-2"></div>
+        <div class="col-lg col-md-6 col-8 login-container">
+          <header class="login-header text-center">
+            <h3>Emergency Social Network</h3>
+          </header>
+          <form action="/api/login" method="POST">
+            <div class="form-group">
+              <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                  <span class="input-group-text login-input-icon border-info" id="basic-addon1">@</span>
+                </div>
+                <input 
+                  class="form-control" 
+                  aria-label="Username" 
+                  aria-describedby="basic-addon1" 
+                  type="text"
+                  name="username"
+                  id="username"
+                  placeholder="Enter username"
+                  required>
+              </div>
             </div>
-            <button type="button" class="btn">Next</button>
-        </main>
+            <div class="form-group">
+              <div class="input-group mb-3">
+                <input 
+                  class="form-control" 
+                  aria-label="Username" 
+                  aria-describedby="basic-addon1" 
+                  type="password"
+                  name="password"
+                  id="password"
+                  placeholder="Enter password"
+                  required>
+              </div>
+            </div>
+            <button type="submit" class="btn btn-info btn-block">Submit</button>
+          </form>
+        </div>
+        <div class="col-lg col-md-3 col-2"></div>
       </div>
     </div>
 
+    <!-- Popup modal -->
+    <div class="modal fade border-info " id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Welcome Message</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="container-fluid">
+              <div class="row text-left text-info">
+                <p>Welcome to the emergeny social network. Before joining the community, please review following status that you'll share while using this application.</p>
+              </div>
+              <div class="row text-center login-modal-table">
+                <div class="col-2">
+                  <p><strong>Status</strong></p>
+                </div>
+                <div class="col-5">
+                  <p><strong>Explanation</strong></p>
+                </div>
+                <div class="col-2">
+                  <p><strong>Color Code</strong></p>
+                </div>
+                <div class="col-3">
+                  <p><strong>Possible Icon</strong></p>
+                </div>
+              </div>
+
+              <div class="row text-center login-modal-row">
+                <div class="col-2">
+                  <p><strong>OK</strong></p>
+                </div>
+                <div class="col-5">
+                  <p>I am OK: I do not need help.</p>
+                </div>
+                <div class="col-2">
+                  <p style="color: green;"><strong>Green</strong></p>
+                </div>
+                <div class="col-3">
+                  <p>Icon</p>
+                </div>
+              </div>
+
+              <div class="row text-center">
+                <div class="col-2">
+                  <p><strong>HELP</strong></p>
+                </div>
+                <div class="col-5">
+                  <p>I need help, but this is not a life threatening emergency.</p>
+                </div>
+                <div class="col-2">
+                  <p style="color: #f4d703;"><strong>Yellow</strong></p>
+                </div>
+                <div class="col-3">
+                  <p>Icon</p>
+                </div>
+              </div>
+
+              <div class="row text-center">
+                <div class="col-2">
+                  <p><strong>EMERGENCY</strong></p>
+                </div>
+                <div class="col-5">
+                  <p>I need help now: this is a life threatening emergency!</p>
+                </div>
+                <div class="col-2">
+                  <p style="color: red;"><strong>Red</strong></p>
+                </div>
+                <div class="col-3">
+                  <p>Icon</p>
+                </div>
+              </div>
+
+              <div class="row text-center">
+                <div class="col-2">
+                  <p><strong>UNDEFINED</strong></p>
+                </div>
+                <div class="col-5">
+                  <p>The user has not proved any status info.</p>
+                </div>
+                <div class="col-2"></div>
+                <div class="col-3"></div>
+              </div>
+
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
+                <label class="form-check-label text-info" for="defaultCheck1">
+                  By checking this button, I agree to share my status with ESN Chatroom
+                </label>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-info">Next</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+    <script src="js/main.js"></script>
   </body>
-  <script src="js/main.js"></script>
 </html>
