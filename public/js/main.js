@@ -1,35 +1,36 @@
-let modal = document.getElementById("welcome");
-let closeBtn = document.getElementById("modalClose");
-let nextBtn = document.getElementById("modalNext");
-let checkBox = document.getElementById("welcome-check");
-let submitBtn = document.getElementById("submit");
-
-
-
-//modal close: click on x button
-closeBtn.onclick = function() {
-    modal.style.display = "none";
+function clearInputBox(){
+  document.getElementById("username").value = "";
+  document.getElementById("password").value = "";
 }
 
-//modal next: click on next button, return to homepage
-nextBtn.onclick = function() {
-  if(checkBox.checked){
-    modal.style.display = "none";
+function checkUsernamePassword(username, password){
+  if(username.length < 3){
+    $("#alertModal").on("show.bs.modal", function() {
+      $("#alertMessage").text("Username should be at least 3 characters long");
+    })
+    $("#alertModal").modal("toggle");
+    return false;
   }
+  if(password.length < 4){
+    $("#alertModal").on("show.bs.modal", function() {
+      $("#alertMessage").text("Passwords should be at least 4 characters long");
+    })
+    $("#alertModal").modal("toggle");
+    return false;
+  }
+  return true;
 }
 
-//modal close: click on anywhere outside the modal
-window.onclick = function(event) {
-    if (event.target == modal) {
-      modal.style.display = "none";
-    }
-}
-
-submitBtn.onclick = function(){
+$("#submitBtn").on("click", function(){
   const username = document.getElementById("username").value;
   const password = document.getElementById("password").value;
+  if(!checkUsernamePassword(username, password)){
+    clearInputBox();
+    return;
+  }
+
   const data = {username, password};
-  const options = {
+  const postOptions = {
     method: 'POST',
     headers:{
      'Content-Type':'application/json'
@@ -37,7 +38,7 @@ submitBtn.onclick = function(){
     body: JSON.stringify(data)
   }
   //fetch "/api/login" request
-  fetch("/api/login", options)
+  fetch("/api/login", postOptions)
   .then(response => 
     response.json().then(message => ({
         message: message,
@@ -47,9 +48,10 @@ submitBtn.onclick = function(){
     //if both username and password are valid
     if(res.message.message == "create new user?"){
       //ask user to confirm registration
-      if(confirm("confirm registration?")){
+      $("#comfirmModal").modal("toggle");
+      $("#comfirmModal").on("click", "#comfirmBtn", function() {
         //fetch "/api/users" request to create a new user
-        fetch("/api/users", options)
+        fetch("/api/users", postOptions)
         .then(response=>
           response.json().then(message=>({
             message: message,
@@ -58,22 +60,32 @@ submitBtn.onclick = function(){
         ).then(res=> {
           //if registration is successful, popup welcome message
           if(res.message.message == "success"){
-            modal.style.display = "block";
+            $("#exampleModal").modal("toggle");
+            $("#exampleModal").on("shown.bs.modal", function() {
+              $("#modalNextBtn").on("click", function(){
+                if($("#defaultCheck1").is(":checked")){
+                  $("#exampleModal").modal("hide");
+                  clearInputBox();
+                }
+              })
+            })
           }else{
             console.log(res.status, res.message);
             alert(res.message.error);
           }
         })
-      }
+     });
     }
     else{
       if(!res.message.success){
         //if username or password is not valid
-        alert(res.message.error);
-        document.getElementById("username").value = "";
-        document.getElementById("password").value = "";
+        $("#alertModal").on("show.bs.modal", function() {
+          $("#alertMessage").text(res.message.error);
+        })
+        $("#alertModal").modal("toggle");
+        clearInputBox();
       }
     }
   }));
-}
+})
 
