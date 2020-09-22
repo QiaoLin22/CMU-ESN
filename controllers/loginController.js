@@ -25,8 +25,6 @@ class LoginController {
 
       // username does not exists
       if (!user) {
-        console.log('username does not exists');
-
         if (!isValidUsername(req.body.username)) {
           return res.status(400).json({
             error: 'Username should be at least 3 characters long',

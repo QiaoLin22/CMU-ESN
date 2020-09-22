@@ -1,19 +1,13 @@
+import { checkStatus, catchError } from './utils/ResponseHandler';
+import { showAlert, hideAlert } from './utils/Alert';
+
 const usernameEle = $('#username');
 const passwordEle = $('#password');
 const confirmModal = $('#confirmModal');
 const welcomeModal = $('#welcomeModal');
 
 const loginAlert = $('#loginAlert');
-
-function showAlert(alertElement, text, alertClass) {
-  alertElement.text(text);
-  alertElement.attr('class', `alert ${alertClass}`);
-  alertElement.attr('hidden', false);
-}
-
-function hideAlert(alertElement) {
-  alertElement.attr('hidden', true);
-}
+const confirmAlert = $('#confirmAlert');
 
 function getPostOptions() {
   return {
@@ -28,10 +22,10 @@ function getPostOptions() {
   };
 }
 
-function clearInputBox() {
-  usernameEle.val('');
-  passwordEle.val('');
-}
+// function clearInputBox() {
+//   usernameEle.val('');
+//   passwordEle.val('');
+// }
 
 function checkUsernamePassword(username, password) {
   if (username.length < 3) {
@@ -53,24 +47,17 @@ function checkUsernamePassword(username, password) {
   return true;
 }
 
-function createNewUser() {
+$('#confirmBtn').on('click', () => {
   // fetch "/api/users" request to create a new user
   fetch('/api/users', getPostOptions())
-    .then((res) => {
-      if (!res.ok) throw res;
-      return res.json();
-    })
+    .then(checkStatus)
     .then(() => {
       // if registration is successful, popup welcome message
       confirmModal.modal('hide');
       welcomeModal.modal('show');
     })
-    .catch((error) => {
-      showAlert(loginAlert, error, 'alert-danger');
-    });
-}
-
-$('#confirmBtn').on('click', createNewUser);
+    .catch((err) => catchError(err, confirmAlert));
+});
 
 $('#submitBtn').on('click', (event) => {
   event.preventDefault();
@@ -80,10 +67,7 @@ $('#submitBtn').on('click', (event) => {
 
   // fetch "/api/login" request
   fetch('/api/login', getPostOptions())
-    .then((res) => {
-      if (!res.ok) throw res;
-      return res.json();
-    })
+    .then(checkStatus)
     .then((data) => {
       if (data.message === 'create new user?') {
         // ask user to confirm registration
@@ -92,11 +76,5 @@ $('#submitBtn').on('click', (event) => {
         showAlert(loginAlert, 'Successfully logged in', 'alert-success');
       }
     })
-    .catch((err) => {
-      if (err instanceof Error) throw err;
-
-      err.json().then(({ error }) => {
-        showAlert(loginAlert, error, 'alert-danger');
-      });
-    });
+    .catch((err) => catchError(err, loginAlert));
 });

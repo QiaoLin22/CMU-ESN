@@ -219,6 +219,7 @@
       <div class="modal-dialog modal-lg">
         <div class="modal-content">
           <div class="modal-body">
+            <div class="alert" id="confirmAlert" role="alert" hidden></div>
             <div class="container-fluid">
               <div class="row text-left text-info">
                 <p>Confirm registration?</p>
@@ -233,12 +234,7 @@
             >
               No
             </button>
-            <button
-              type="button"
-              class="btn btn-info"
-              id="confirmBtn"
-              data-dismiss="modal"
-            >
+            <button type="button" class="btn btn-info" id="confirmBtn">
               Yes
             </button>
           </div>
@@ -291,6 +287,6 @@
       integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
       crossorigin="anonymous"
     ></script>
-    <script src="js/main.js"></script>
+    <script type="module" src="js/main.js"></script>
   </body>
 </html>
