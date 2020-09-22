@@ -7,7 +7,7 @@ mongoose
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
-  .catch((e) => console.error);
+  .catch((e) => console.log(e));
 
 const UserSchema = new mongoose.Schema({
   username: {
