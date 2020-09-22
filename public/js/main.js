@@ -1,6 +1,3 @@
-import { checkStatus, catchError } from './utils/ResponseHandler';
-import { showAlert, hideAlert } from './utils/Alert';
-
 const usernameEle = $('#username');
 const passwordEle = $('#password');
 const confirmModal = $('#confirmModal');
@@ -8,6 +5,41 @@ const welcomeModal = $('#welcomeModal');
 
 const loginAlert = $('#loginAlert');
 const confirmAlert = $('#confirmAlert');
+
+/** Alert */
+function showAlert(alertElement, text, alertClass) {
+  alertElement.text(text);
+  alertElement.attr('class', `alert ${alertClass}`);
+  alertElement.attr('hidden', false);
+}
+
+function hideAlert(alertElement) {
+  alertElement.attr('hidden', true);
+}
+
+/** Response Handler */
+function checkStatus(res) {
+  if (!res.ok) throw res;
+  return res.json();
+}
+
+function catchError(err, alertElement) {
+  if (err instanceof Error) {
+    if (alertElement) {
+      showAlert(
+        alertElement,
+        'Error occurred when connecting to server',
+        'alert-danger'
+      );
+    }
+  }
+
+  err.json().then(({ error }) => {
+    if (alertElement) {
+      showAlert(alertElement, error, 'alert-danger');
+    }
+  });
+}
 
 function getPostOptions() {
   return {

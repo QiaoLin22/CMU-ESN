@@ -15,7 +15,6 @@ class UserController {
     newUser
       .save()
       .then((user) => {
-        console.log(user);
         res.status(201).send({ message: 'success' });
       })
       .catch((err) => {

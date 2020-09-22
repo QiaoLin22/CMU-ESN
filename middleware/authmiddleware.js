@@ -7,16 +7,12 @@ const PUB_KEY = fs.readFileSync(pathToKey, 'utf8');
 
 const requireAuth = (req, res, next) => {
   const token = req.cookies.jwt;
-  console.log(token);
   // check json web token exists & is verified
   if (token) {
     jwt.verify(token, PUB_KEY, { algorithm: 'RS256' }, (err, decodedToken) => {
-      console.log(decodedToken);
       if (err) {
-        console.log(err.message);
         res.redirect('/login');
       } else {
-        console.log(decodedToken);
         next();
       }
     });

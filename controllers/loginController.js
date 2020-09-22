@@ -18,7 +18,6 @@ function isNotBannedUsername(username) {
 class LoginController {
   static login(req, res, next) {
     const { username, password } = req.body;
-    console.log(username);
 
     User.findOne({ username: username }, (err, user) => {
       if (err) return next(err);
