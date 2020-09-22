@@ -1,9 +1,10 @@
-const mongoose = require("mongoose");
-require("dotenv").config();
-const db_string = process.env.DB_STRING;
+const mongoose = require('mongoose');
+require('dotenv').config();
+
+const dbString = process.env.DB_STRING;
 
 mongoose
-  .connect(db_string, {
+  .connect(dbString, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
@@ -12,16 +13,16 @@ mongoose
 const UserSchema = new mongoose.Schema({
   username: {
     type: String,
-    required: [true, "Username is required"],
+    required: [true, 'Username is required'],
     unique: true,
     validate: [
       (username) => username.length >= 3,
-      "Username must be at least 3 characters long",
+      'Username must be at least 3 characters long',
     ],
   },
   hash: String,
   salt: String,
 });
 
-User = mongoose.model("User", UserSchema);
+const User = mongoose.model('User', UserSchema);
 module.exports = User;

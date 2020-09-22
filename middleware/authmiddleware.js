@@ -1,28 +1,23 @@
-const fs = require("fs");
-const path = require("path");
-const User = require("../models/user");
-const jwt = require("jsonwebtoken");
+const fs = require('fs');
+const path = require('path');
+const jwt = require('jsonwebtoken');
 
-const pathToKey = path.join(__dirname, "..", "id_rsa_pub.pem");
-const PUB_KEY = fs.readFileSync(pathToKey, "utf8");
+const pathToKey = path.join(__dirname, '..', 'id_rsa_pub.pem');
+const PUB_KEY = fs.readFileSync(pathToKey, 'utf8');
 
 const requireAuth = (req, res, next) => {
   const token = req.cookies.jwt;
-  console.log(token);
   // check json web token exists & is verified
   if (token) {
-    jwt.verify(token, PUB_KEY,{ algorithm: 'RS256'}, (err, decodedToken) => {
-      console.log(decodedToken);
+    jwt.verify(token, PUB_KEY, { algorithm: 'RS256' }, (err, decodedToken) => {
       if (err) {
-        console.log(err.message);
-        res.redirect("/login");
+        res.redirect('/login');
       } else {
-        console.log(decodedToken);
         next();
       }
     });
   } else {
-    res.redirect("/login");
+    res.redirect('/login');
   }
 };
 
