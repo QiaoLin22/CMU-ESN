@@ -3,6 +3,7 @@ const utils = require('../lib/utils');
 
 class UserController {
   static createUser(req, res) {
+    if (req.body.password.length < 4) {
     const { username, password } = req.body;
 
     // create new user and save to db
@@ -16,7 +17,7 @@ class UserController {
       .save()
       .then((user) => {
         console.log(user);
-        res.status(201).send('success');
+        res.status(201).send({ message: 'success' });
       })
       .catch((err) => {
         let message;
@@ -26,7 +27,6 @@ class UserController {
         } else {
           message = Object.values(err.errors)[0].properties.message;
         }
-
         res.status(400).json({ error: message });
       });
   }
