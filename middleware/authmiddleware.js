@@ -11,13 +11,13 @@ const requireAuth = (req, res, next) => {
   if (token) {
     jwt.verify(token, PUB_KEY, { algorithm: 'RS256' }, (err, decodedToken) => {
       if (err) {
-        res.redirect('/login');
+        res.redirect('/');
       } else {
         next();
       }
     });
   } else {
-    res.redirect('/login');
+    res.redirect('/');
   }
 };
 
