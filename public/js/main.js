@@ -1,91 +1,112 @@
-function clearInputBox(){
-  document.getElementById("username").value = "";
-  document.getElementById("password").value = "";
+const usernameEle = $('#username');
+const passwordEle = $('#password');
+const confirmModal = $('#confirmModal');
+const welcomeModal = $('#welcomeModal');
+
+const loginAlert = $('#loginAlert');
+const confirmAlert = $('#confirmAlert');
+
+/** Alert */
+function showAlert(alertElement, text, alertClass) {
+  alertElement.text(text);
+  alertElement.attr('class', `alert ${alertClass}`);
+  alertElement.attr('hidden', false);
 }
 
-function checkUsernamePassword(username, password){
-  if(username.length < 3){
-    $("#alertModal").on("show.bs.modal", function() {
-      $("#alertMessage").text("Username should be at least 3 characters long");
-    })
-    $("#alertModal").modal("toggle");
+function hideAlert(alertElement) {
+  alertElement.attr('hidden', true);
+}
+
+/** Response Handler */
+function checkStatus(res) {
+  if (!res.ok) throw res;
+  return res.json();
+}
+
+function catchError(err, alertElement) {
+  if (err instanceof Error) {
+    if (alertElement) {
+      showAlert(
+        alertElement,
+        'Error occurred when connecting to server',
+        'alert-danger'
+      );
+    }
+  }
+
+  err.json().then(({ error }) => {
+    if (alertElement) {
+      showAlert(alertElement, error, 'alert-danger');
+    }
+  });
+}
+
+function getPostOptions() {
+  return {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      username: usernameEle.val(),
+      password: passwordEle.val(),
+    }),
+  };
+}
+
+// function clearInputBox() {
+//   usernameEle.val('');
+//   passwordEle.val('');
+// }
+
+function checkUsernamePassword(username, password) {
+  if (username.length < 3) {
+    showAlert(
+      loginAlert,
+      'Username should be at least 3 characters long',
+      'alert-danger'
+    );
     return false;
   }
-  if(password.length < 4){
-    $("#alertModal").on("show.bs.modal", function() {
-      $("#alertMessage").text("Passwords should be at least 4 characters long");
-    })
-    $("#alertModal").modal("toggle");
+  if (password.length < 4) {
+    showAlert(
+      loginAlert,
+      'Passwords should be at least 4 characters long',
+      'alert-danger'
+    );
     return false;
   }
   return true;
 }
 
-$("#submitBtn").on("click", function(){
-  const username = document.getElementById("username").value;
-  const password = document.getElementById("password").value;
-  if(!checkUsernamePassword(username, password)){
-    clearInputBox();
-    return;
-  }
-
-  const data = {username, password};
-  const postOptions = {
-    method: 'POST',
-    headers:{
-     'Content-Type':'application/json'
-    },
-    body: JSON.stringify(data)
-  }
-  //fetch "/api/login" request
-  fetch("/api/login", postOptions)
-  .then(response => 
-    response.json().then(message => ({
-        message: message,
-        status: response.status
+$('#confirmBtn').on('click', () => {
+  // fetch "/api/users" request to create a new user
+  fetch('/api/users', getPostOptions())
+    .then(checkStatus)
+    .then(() => {
+      // if registration is successful, popup welcome message
+      confirmModal.modal('hide');
+      welcomeModal.modal('show');
     })
-  ).then(res => {
-    //if both username and password are valid
-    if(res.message.message == "create new user?"){
-      //ask user to confirm registration
-      $("#comfirmModal").modal("toggle");
-      $("#comfirmModal").on("click", "#comfirmBtn", function() {
-        //fetch "/api/users" request to create a new user
-        fetch("/api/users", postOptions)
-        .then(response=>
-          response.json().then(message=>({
-            message: message,
-            status: response.status
-          }))
-        ).then(res=> {
-          //if registration is successful, popup welcome message
-          if(res.message.message == "success"){
-            $("#exampleModal").modal("toggle");
-            $("#exampleModal").on("shown.bs.modal", function() {
-              $("#modalNextBtn").on("click", function(){
-                if($("#defaultCheck1").is(":checked")){
-                  $("#exampleModal").modal("hide");
-                  clearInputBox();
-                }
-              })
-            })
-          }else{
-            console.log(res.status, res.message);
-            alert(res.message.error);
-          }
-        })
-     });
-    }
-    else{
-      if(!res.message.success){
-        //if username or password is not valid
-        $("#alertModal").on("show.bs.modal", function() {
-          $("#alertMessage").text(res.message.error);
-        })
-        $("#alertModal").modal("toggle");
-        clearInputBox();
-      }
-    }
-  }));
-})
+    .catch((err) => catchError(err, confirmAlert));
+});
 
+$('#submitBtn').on('click', (event) => {
+  event.preventDefault();
+  hideAlert(loginAlert);
+
+  if (!checkUsernamePassword(usernameEle.val(), passwordEle.val())) return;
+
+  // fetch "/api/login" request
+  fetch('/api/login', getPostOptions())
+    .then(checkStatus)
+    .then((data) => {
+      if (data.message === 'create new user?') {
+        // ask user to confirm registration
+        confirmModal.modal('show');
+      } else {
+        showAlert(loginAlert, 'Successfully logged in', 'alert-success');
+      }
+    })
+    .catch((err) => catchError(err, loginAlert));
+});

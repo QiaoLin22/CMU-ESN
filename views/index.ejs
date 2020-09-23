@@ -2,9 +2,17 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, shrink-to-fit=no"
+    />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z"
+      crossorigin="anonymous"
+    />
     <link rel="stylesheet" href="../css/style.css" />
     <title>Emergency Social Network</title>
   </head>
@@ -17,55 +25,80 @@
           <header class="login-header text-center">
             <h3>Emergency Social Network</h3>
           </header>
+          <div class="alert" id="loginAlert" role="alert" hidden></div>
+          <form id="loginForm">
             <div class="form-group">
               <div class="input-group mb-3">
                 <div class="input-group-prepend">
-                  <span class="input-group-text login-input-icon border-info" id="basic-addon1">@</span>
+                  <span
+                    class="input-group-text login-input-icon border-info"
+                    id="basic-addon1"
+                    >@</span
+                  >
                 </div>
-                <input 
-                  class="form-control" 
-                  aria-label="Username" 
-                  aria-describedby="basic-addon1" 
+                <div class="invalid-feedback">Please choose a username</div>
+
+                <input
+                  class="form-control"
+                  aria-label="Username"
+                  aria-describedby="basic-addon1"
                   type="text"
+                  minlength="3"
                   name="username"
                   id="username"
                   placeholder="Enter username"
-                  required>
+                  required
+                />
               </div>
             </div>
             <div class="form-group">
               <div class="input-group mb-3">
-                <input 
-                  class="form-control" 
-                  aria-label="Username" 
-                  aria-describedby="basic-addon1" 
+                <input
+                  class="form-control"
+                  aria-label="Password"
+                  aria-describedby="basic-addon1"
                   type="password"
+                  minlength="4"
                   name="password"
                   id="password"
                   placeholder="Enter password"
-                  required>
+                  required
+                />
+                <div class="invalid-feedback">Please choose a password</div>
               </div>
             </div>
-            <button type="submit" class="btn btn-info btn-block" id = "submitBtn">Submit</button>
+            <button type="submit" class="btn btn-info btn-block" id="submitBtn">
+              Submit
+            </button>
+          </form>
         </div>
         <div class="col-lg col-md-3 col-2"></div>
       </div>
     </div>
 
-    <!-- Popup modal -->
-    <div class="modal fade border-info " id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <!-- Welcome modal -->
+    <div
+      class="modal fade border-info"
+      id="welcomeModal"
+      tabindex="-1"
+      data-backdrop="static"
+      data-keyboard="false"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true"
+    >
       <div class="modal-dialog modal-lg">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Welcome Message</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
+            <h5 class="modal-title">Welcome Message</h5>
           </div>
           <div class="modal-body">
             <div class="container-fluid">
               <div class="row text-left text-info">
-                <p>Welcome to the emergency social network. Before joining the community, please review the following status that you'll share while using this application.</p>
+                <p>
+                  Welcome to the emergency social network. Before joining the
+                  community, please review the following status that you'll
+                  share while using this application.
+                </p>
               </div>
               <div class="row text-center login-modal-table">
                 <div class="col-2">
@@ -90,7 +123,7 @@
                   <p>I am OK: I do not need help.</p>
                 </div>
                 <div class="col-2">
-                  <p style="color: green;"><strong>Green</strong></p>
+                  <p style="color: green"><strong>Green</strong></p>
                 </div>
                 <div class="col-3">
                   <p>Icon</p>
@@ -102,10 +135,12 @@
                   <p><strong>HELP</strong></p>
                 </div>
                 <div class="col-5">
-                  <p>I need help, but this is not a life threatening emergency.</p>
+                  <p>
+                    I need help, but this is not a life threatening emergency.
+                  </p>
                 </div>
                 <div class="col-2">
-                  <p style="color: #f4d703;"><strong>Yellow</strong></p>
+                  <p style="color: #f4d703"><strong>Yellow</strong></p>
                 </div>
                 <div class="col-3">
                   <p>Icon</p>
@@ -120,7 +155,7 @@
                   <p>I need help now: this is a life threatening emergency!</p>
                 </div>
                 <div class="col-2">
-                  <p style="color: red;"><strong>Red</strong></p>
+                  <p style="color: red"><strong>Red</strong></p>
                 </div>
                 <div class="col-3">
                   <p>Icon</p>
@@ -138,27 +173,52 @@
                 <div class="col-3"></div>
               </div>
 
-              <div class="form-check">
-                <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
-                <label class="form-check-label text-info" for="defaultCheck1">
-                  By checking this button, I acknowledge that I understand the status rules mentioned above.
-                </label>
-              </div>
+              <form id="acknowledgementForm">
+                <div class="form-check">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    value=""
+                    id="acknowledgementCheck"
+                    required
+                  />
+                  <label
+                    class="form-check-label text-info"
+                    for="acknowledgementCheck"
+                  >
+                    By checking this button, I acknowledge that I understand the
+                    status rules mentioned above.
+                  </label>
+                </div>
+              </form>
             </div>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-info" id = "modalNextBtn">Next</button>
+            <button
+              type="submit"
+              class="btn btn-info"
+              id="welcomeNextBtn"
+              form="acknowledgementForm"
+            >
+              Next
+            </button>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Comfirm modal -->
-    <div class="modal fade border-info " id="comfirmModal" tabindex="-1" aria-labelledby="comfirmModalLabel" aria-hidden="true">
+    <!-- Confirm modal -->
+    <div
+      class="modal fade border-info"
+      id="confirmModal"
+      tabindex="-1"
+      aria-labelledby="confirmModalLabel"
+      aria-hidden="true"
+    >
       <div class="modal-dialog modal-lg">
         <div class="modal-content">
           <div class="modal-body">
+            <div class="alert" id="confirmAlert" role="alert" hidden></div>
             <div class="container-fluid">
               <div class="row text-left text-info">
                 <p>Confirm registration?</p>
@@ -166,35 +226,66 @@
             </div>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
-            <button type="button" class="btn btn-info" id="comfirmBtn" data-dismiss="modal">Yes</button>
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-dismiss="modal"
+            >
+              No
+            </button>
+            <button type="button" class="btn btn-info" id="confirmBtn">
+              Yes
+            </button>
           </div>
         </div>
       </div>
     </div>
 
     <!-- Alert modal -->
-    <div class="modal fade border-info " id="alertModal" tabindex="-1" aria-labelledby="alertModalLabel" aria-hidden="true">
+    <div
+      class="modal fade border-info"
+      id="alertModal"
+      tabindex="-1"
+      aria-labelledby="alertModalLabel"
+      aria-hidden="true"
+    >
       <div class="modal-dialog modal-lg">
         <div class="modal-content">
           <div class="modal-body">
             <div class="container-fluid">
               <div class="row text-left text-info">
-                <p id="alertMessage" ></p>
+                <p id="alertMessage"></p>
               </div>
             </div>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-dismiss="modal"
+            >
+              Close
+            </button>
           </div>
         </div>
       </div>
     </div>
 
-    
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
-    <script src="js/main.js"></script>
+    <script
+      src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+      integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+      integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+      integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
+      crossorigin="anonymous"
+    ></script>
+    <script type="module" src="js/main.js"></script>
   </body>
 </html>
