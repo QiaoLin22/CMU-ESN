@@ -10,11 +10,12 @@ class UserController {
     const newUser = new User({
       username: username,
       ...hashAndSalt,
+      online: false
     });
 
     newUser
       .save()
-      .then((user) => {
+      .then(() => {
         res.status(201).send({ message: 'success' });
       })
       .catch((err) => {

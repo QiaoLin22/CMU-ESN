@@ -110,3 +110,4 @@ $('#submitBtn').on('click', (event) => {
     })
     .catch((err) => catchError(err, loginAlert));
 });
+
