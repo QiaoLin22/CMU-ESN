@@ -10,7 +10,17 @@ mongoose
   })
   .catch((e) => console.log(e));
 
-const MessageSchema = new mongoose.Schema({});
+const MessageSchema = new mongoose.Schema({
+  username: {
+    type: String,
+    required: [true, 'Username is required'],
+  },
+  time: String,
+  message: {
+    type: String,
+    required: [true, 'Message is required'],
+  },
+});
 
 const Message = mongoose.model('Message', MessageSchema);
 module.exports = Message;

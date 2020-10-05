@@ -12,9 +12,9 @@ router.get('/main', requireAuth, (req, res) => {
   res.render('main');
 });
 
-// router.get('/main/public', requireAuth, (req, res) => {
-//   res.render('chat');
-// });
+router.get('/main/public', requireAuth, (req, res) => {
+  res.render('chat');
+});
 
 router.get('/', (req, res) => {
   res.render('index');
