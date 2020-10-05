@@ -1,7 +1,10 @@
 const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
+const socketServer = require('socket.io')(5000);
 const routes = require('./routes');
+const User = require('./models/user');
+const Message = require('./models/message');
 
 require('dotenv').config();
 
@@ -17,3 +20,13 @@ app.use(cookieParser());
 app.use(routes);
 
 app.listen(3000);
+
+socketServer.on('connection', (socket) => {
+  console.log(`${socket.id} connected`);
+
+  socket.on('joinRoom', (roomName) => {
+    socket.join(roomName);
+  });
+
+  // load previous message
+});

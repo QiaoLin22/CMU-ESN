@@ -3,18 +3,17 @@ const { requireAuth } = require('../middleware/authmiddleware');
 
 const LoginController = require('../controllers/loginController');
 const UserController = require('../controllers/userController');
+const MessageController = require('../controllers/messageController');
 
 router.get('/main', requireAuth, (req, res) => {
-  // res.status(200).json({
-  //   success: true,
-  //   msg: 'You are successfully authenticated to this route!',
-  // });
   res.render('main');
 });
 
 router.get('/main/public', requireAuth, (req, res) => {
   res.render('chat');
 });
+
+router.get('/messages/public', MessageController.getMessage);
 
 router.get('/', (req, res) => {
   res.render('index');
@@ -23,5 +22,7 @@ router.get('/', (req, res) => {
 router.post('/api/login', LoginController.login);
 
 router.post('/api/users', UserController.createUser);
+
+router.post('/messages/public', MessageController.createMessage);
 
 module.exports = router;

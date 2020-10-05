@@ -15,7 +15,7 @@ const MessageSchema = new mongoose.Schema({
     type: String,
     required: [true, 'Username is required'],
   },
-  time: String,
+  timestamp: String,
   message: {
     type: String,
     required: [true, 'Message is required'],
