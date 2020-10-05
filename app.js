@@ -3,8 +3,6 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const socketServer = require('socket.io')(5000);
 const routes = require('./routes');
-const User = require('./models/user');
-const Message = require('./models/message');
 
 require('dotenv').config();
 
@@ -28,5 +26,10 @@ socketServer.on('connection', (socket) => {
     socket.join(roomName);
   });
 
-  // load previous message
+  socket.emit('displayHistoricalMsg');
+
+  socket.on('disconnect', () => {
+    console.log(`${socket.id} disconnected`);
+  });
+
 });

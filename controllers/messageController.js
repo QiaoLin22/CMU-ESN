@@ -1,5 +1,8 @@
 const moment = require('moment');
+// const io = require('socket.io-client');
 const Message = require('../models/message');
+
+// const socket = io.connect('http://localhost:5000');
 
 class messageController {
   static createMessage(req, res) {
@@ -14,6 +17,7 @@ class messageController {
     newMessage
       .save()
       .then(() => {
+        // socket.emit('displayMsg', newMessage);
         res.status(201).send({ message: 'successfully create a message' });
       })
       .catch((e) => {

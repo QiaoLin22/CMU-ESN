@@ -45,6 +45,64 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
   integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.3/socket.io.js"></script>
-<script type="module" src="js/chat.js"></script>
 
+<script>
+  const socket = io('http://localhost:5000');
+
+  const chatForm = $('#chatForm');
+  const chatMessages = $('.chat-messages');
+  const msgEle = $('#msg');
+
+  function outputMessage(message) {
+    const msg = document.createElement('div');
+    msg.classList.add('message');
+    msg.innerHTML = `<p class="meta">${message.username}<span>${message.timestamp}</span></p><p class="text"> ${message.message} </p>`;
+    chatMessages.append(msg);
+  }
+
+  function getMessages(){
+    fetch('/messages/public', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then((messages) => {
+        return messages.json();
+      })
+      .then((json) => {
+        json.forEach((message) => {outputMessage(message)});
+      })
+      .catch((e) => {console.log(e)});
+  }
+
+  socket.emit('joinRoom', 'public');
+  socket.on('displayHistoricalMsg', () => {
+    getMessages();
+  });
+
+  // input Message
+  $('#submitBtn').on('click', (element) => {
+    element.preventDefault();
+    
+    fetch('/messages/public', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        username: 'test',
+        message: msgEle.val(),
+      }),
+    })
+    .then(() => {
+      // socket.on('displayMsg', (newMsg) => {
+      //   outputMessage(newMsg);
+      // });
+      msgEle.val('');
+    })
+    .catch((e) => {console.log(e)});
+  });
+
+</script>
 </html>

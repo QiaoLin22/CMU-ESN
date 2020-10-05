@@ -74,14 +74,15 @@ body {
 .chat-container {
     width: 100%;
     height: 70vh;
-    overflow: hidden;
-    border-width: 2px;
-    border-style: solid;
-    border-radius: 20px;
+    overflow: scroll;
 }
 
 .chat-messages {
     overflow-y: scroll;
+}
+
+.message .meta {
+    font-weight: bold;
 }
 
 /* bootstrap style override */
