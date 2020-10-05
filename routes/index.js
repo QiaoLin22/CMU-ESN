@@ -6,8 +6,12 @@ const UserController = require('../controllers/userController');
 const LogoutController = require('../controllers/logoutController');
 
 router.get('/main', requireAuth, (req, res) => {
-  res.render('main')
+  res.render('main');
 });
+
+// router.get('/main/public', requireAuth, (req, res) => {
+//   res.render('chat');
+// });
 
 router.get('/', (req, res) => {
   res.render('index');
