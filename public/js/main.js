@@ -105,9 +105,8 @@ $('#submitBtn').on('click', (event) => {
         // ask user to confirm registration
         confirmModal.modal('show');
       } else {
-        showAlert(loginAlert, 'Successfully logged in', 'alert-success');
+        showAlert(loginAlert, 'Successfully logged in', 'alert-success');    
       }
     })
     .catch((err) => catchError(err, loginAlert));
 });
-

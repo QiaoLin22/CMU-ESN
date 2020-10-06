@@ -53,16 +53,15 @@
   <script>
     const socket = io.connect('http://127.0.0.1:5000')
     const messages = document.getElementById('messages')
-    socket.on('users', (data) =>{
+    /*socket.on('users', (data) =>{
       if(data.length){
-                        data.forEach(element => {
-                            let message = document.createElement('div')
-                            message.innerText = element.username+ "  "+"  online status: " + element.online
-                            messages.appendChild(message)
-                        });
-                        
-                    }    
-    });
+        data.forEach(element => {
+        let message = document.createElement('div')
+        message.innerText = element.username+ "  "+"  online status: " + element.online
+        messages.appendChild(message)
+       });
+      }    
+    });*/
   </script>
   </body>
   <script

@@ -29,6 +29,18 @@ class UserController {
         res.status(400).json({ error: message });
       });
   }
+
+  static retrieveUsers(req, res, next){
+    User.find({online:true},(err, online_users)=>{
+      if(err) return next(err);
+      User.find({online:false},(err, offline_users)=>{
+        if(err) return next(err);
+        console.log("get");
+        res.json({online: online_users,
+                offline: offline_users});
+      }).sort({username:1})
+    }).sort({username:1});
+  }
 }
 
 module.exports = UserController;

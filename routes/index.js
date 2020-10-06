@@ -25,4 +25,7 @@ router.get('/api/logout', LogoutController.logout,(req,res) => {
 
 router.post('/api/users', UserController.createUser);
 
+router.get('/api/users', UserController.retrieveUsers);
+
+
 module.exports = router;
