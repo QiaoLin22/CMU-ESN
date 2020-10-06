@@ -49,7 +49,6 @@
 <script>
   const socket = io('http://localhost:5000');
 
-  const chatForm = $('#chatForm');
   const chatMessages = $('.chat-messages');
   const msgEle = $('#msg');
 
@@ -60,7 +59,21 @@
     chatMessages.append(msg);
   }
 
-  function getMessages(){
+  function addZero(i) {
+    if (i < 10) {
+      i = "0" + i;
+    }
+    return i;
+  }
+
+  function getTimeStamp() {
+    let d = new Date();
+    let h = addZero(d.getHours());
+    let m = addZero(d.getMinutes());
+    return (" " + h + ":" + m).toString() ;
+  }
+
+  function loadMessages(){
     fetch('/messages/public', {
       method: 'GET',
       headers: {
@@ -77,28 +90,34 @@
   }
 
   socket.emit('joinRoom', 'public');
+
   socket.on('displayHistoricalMsg', () => {
-    getMessages();
+    loadMessages();
   });
 
-  // input Message
+  socket.on('output', (newMsg) => {
+        outputMessage(newMsg);
+  });
+
+  // input new Message
   $('#submitBtn').on('click', (element) => {
     element.preventDefault();
-    
+    let timestamp = getTimeStamp();
+    let newMsg = {
+      username: 'test', 
+      timestamp: timestamp, 
+      message: msgEle.val()
+    };
+
     fetch('/messages/public', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({
-        username: 'test',
-        message: msgEle.val(),
-      }),
+      body: JSON.stringify(newMsg),
     })
     .then(() => {
-      // socket.on('displayMsg', (newMsg) => {
-      //   outputMessage(newMsg);
-      // });
+      socket.emit('input', newMsg);
       msgEle.val('');
     })
     .catch((e) => {console.log(e)});

@@ -28,6 +28,10 @@ socketServer.on('connection', (socket) => {
 
   socket.emit('displayHistoricalMsg');
 
+  socket.on('input', (message) => {
+    socketServer.emit('output', message);
+  });
+
   socket.on('disconnect', () => {
     console.log(`${socket.id} disconnected`);
   });
