@@ -24,45 +24,31 @@
 
           <ul class="list-group list-group-flush directory-category">
             <ui><h6>Channels</h6></ui>
-            <li class="list-group-item list-group-item-action"># Public</li>
+            <li class="list-group-item list-group-item-action"><a href="/main/public"># Public</a></li>
           </ul>
 
           <ul class="list-group list-group-flush directory-category">
             <ui><h6>Direct Messages</h6></ui>
-            <div id="online-list">
-              <div class="online-item">
-                <li class="list-group-item list-group-item-action">online-private</li>
+            <div class="online-offline-list">
+              
+              <div id="online-list">
+                  <li class="list-group-item list-group-item-action">online-private</li>
+
+              </div>
+
+              <div id="offline-list">
+                <li class="list-group-item list-group-item-action offline-list-item">offline-private</li>
               </div>
             </div>
 
-            <div id="offline-list">
-              <li class="list-group-item list-group-item-action offline-list-item">offline-private</li>
-            </div>
+            <br>
+            <a href="/logout" class="btn btn-info btn-block">Log out</a>
           </ul>
 
         </div>
         <div class="col-lg col-md-3 col-1"></div>
       </div>
     </div>
-    <a href="/api/logout" id = "logoutBtn" class="btn btn-primary">Log out</a>
-    <div id = "messages" class="card-block">
-
-    </div>
-  </body>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.3/socket.io.js"></script>
-  <script>
-    const socket = io.connect('http://127.0.0.1:5000')
-    const messages = document.getElementById('messages')
-    /*socket.on('users', (data) =>{
-      if(data.length){
-        data.forEach(element => {
-        let message = document.createElement('div')
-        message.innerText = element.username+ "  "+"  online status: " + element.online
-        messages.appendChild(message)
-       });
-      }    
-    });*/
-  </script>
   </body>
   <script
     src="https://code.jquery.com/jquery-3.5.1.slim.min.js"

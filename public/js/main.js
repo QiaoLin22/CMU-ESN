@@ -54,6 +54,15 @@ function getPostOptions() {
   };
 }
 
+function getGetOptions() {
+  return {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  };
+}
+
 // function clearInputBox() {
 //   usernameEle.val('');
 //   passwordEle.val('');
@@ -110,3 +119,29 @@ $('#submitBtn').on('click', (event) => {
     })
     .catch((err) => catchError(err, loginAlert));
 });
+
+function outputUser(data, online) {
+  const user = document.createElement('div');
+  user.classList.add('online-item');
+  if(online){
+    user.innerHTML = `<li class="list-group-item list-group-item-action">${data.username}</li>`;
+    $('#online-list').append(user);
+  }
+  else{
+    user.innerHTML = `<li class="list-group-item list-group-item-action offline-list-item">${data.username}</li>`;
+    $('#offline-list').append(user);
+  }
+}
+
+fetch('/api/users', getGetOptions())
+.then(checkStatus)
+.then((data) => {
+  console.log(data);
+  data.online.forEach(element => {
+    outputUser(element, true); 
+  });
+  data.offline.forEach(element => {
+    outputUser(element,false); 
+  });
+})
+.catch((e) => {console.log(e)});
