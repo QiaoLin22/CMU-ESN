@@ -3,7 +3,8 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const socketServer = require('socket.io')(5000);
 const routes = require('./routes');
-
+const User = require('./models/user');
+const UserController = require('./controllers/userController');
 require('dotenv').config();
 
 const app = express();
@@ -22,6 +23,7 @@ app.listen(3000);
 socketServer.on('connection', (socket) => {
   console.log(`${socket.id} connected`);
 
+
   socket.on('joinRoom', (roomName) => {
     socket.join(roomName);
   });
@@ -36,3 +38,4 @@ socketServer.on('connection', (socket) => {
     console.log(`${socket.id} disconnected`);
   });
 });
+

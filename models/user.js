@@ -22,6 +22,10 @@ const UserSchema = new mongoose.Schema({
   },
   hash: String,
   salt: String,
+  online:{
+    type: Boolean,
+    default: false
+   }
 });
 
 const User = mongoose.model('User', UserSchema);
