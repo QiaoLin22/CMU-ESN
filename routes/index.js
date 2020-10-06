@@ -17,6 +17,8 @@ router.get('/main/public', requireAuth, (req, res) => {
 
 router.get('/messages/public', MessageController.getMessage);
 
+router.get('/api/users', UserController.retrieveUsers);
+
 router.get('/', (req, res) => {
   res.render('index');
 });
@@ -28,7 +30,7 @@ router.get('/api/logout', LogoutController.logout,(req,res) => {
 });
 
 router.post('/api/users', UserController.createUser);
-router.get('/api/users', UserController.retrieveUsers);
+
 router.post('/messages/public', MessageController.createMessage);
 
 

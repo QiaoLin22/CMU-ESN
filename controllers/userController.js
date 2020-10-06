@@ -35,7 +35,6 @@ class UserController {
       if(err) return next(err);
       User.find({online:false},(err, offline_users)=>{
         if(err) return next(err);
-        console.log("get");
         res.json({online: online_users,
                 offline: offline_users});
       }).sort({username:1})
