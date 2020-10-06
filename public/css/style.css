@@ -8,6 +8,8 @@ body {
     font-weight: 400;
 }
 
+/* login page */
+
 .login-container {
     margin-top: 35vh;
 }
@@ -36,4 +38,54 @@ body {
 
 .login-modal-row {
     margin-top: 10px;
+}
+
+/* ESN Directory page */
+.directory-container h4{
+    color: #17a2b8;
+}
+
+.directory-container h6{
+    color: #17a2b8;
+}
+
+.directory-category {
+    margin-top: 1.5rem;
+}
+
+.online-offline-list {
+    overflow: scroll;
+    height: 50vh;
+}
+
+.online-item:hover {
+    color: cadetblue;
+}
+
+.offline-list-item {
+    color: #a7bdc1;
+}
+
+.offline-list-item:hover {
+    color: #a7bdc1;
+}
+
+/* chat page */
+.chat-container {
+    width: 100%;
+    height: 70vh;
+    overflow: scroll;
+}
+
+.chat-messages {
+    overflow-y: scroll;
+}
+
+.message .meta {
+    font-weight: bold;
+}
+
+/* bootstrap style override */
+.list-group-item {
+    border-width: 0px;
 }

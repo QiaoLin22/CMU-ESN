@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no" />
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous" />
+  <link rel="stylesheet" href="../css/style.css" />
+  <title>Main page</title>
+</head>
+
+<body>
+  <div class="container">
+    <div class="row mt-5">
+      <div class="col-lg col-md-3 col-sm-2"></div>
+
+      <div class="col-lg col-md-6 col-sm-8">
+        <div class="row chat-container border-info mb-2">
+          <div class="chat-messages mb-3"></div>
+        </div>
+        
+        <div class="row">
+          <form id="chatForm">
+            <div class="form-group">
+              <div class="input-group mb-3">
+                <input id="msg" type="text" placeholder="Enter message" required autocomplete="off" />
+                <div class="input-group-prepend">
+                  <button type="submit" class="btn btn-info btn-block" id="submitBtn"> > </button>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div class="col-lg col-md-3 col-sm-2"></div>
+    </div>
+  </div>
+</body>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+  integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+  integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+  integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.3/socket.io.js"></script>
+
+<script>
+  const socket = io('http://localhost:5000');
+
+  const chatMessages = $('.chat-messages');
+  const msgEle = $('#msg');
+
+  function outputMessage(message) {
+    const msg = document.createElement('div');
+    msg.classList.add('message');
+    msg.innerHTML = `<p class="meta">${message.username}<span>${message.timestamp}</span></p><p class="text"> ${message.message} </p>`;
+    chatMessages.append(msg);
+  }
+
+  function addZero(i) {
+    if (i < 10) {
+      i = "0" + i;
+    }
+    return i;
+  }
+
+  function getTimeStamp() {
+    let d = new Date();
+    let h = addZero(d.getHours());
+    let m = addZero(d.getMinutes());
+    return (" " + h + ":" + m).toString() ;
+  }
+
+  function loadMessages(){
+    fetch('/messages/public', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then((messages) => {
+        return messages.json();
+      })
+      .then((json) => {
+        json.forEach((message) => {outputMessage(message)});
+      })
+      .catch((e) => {console.log(e)});
+  }
+
+  socket.emit('joinRoom', 'public');
+
+  socket.on('displayHistoricalMsg', () => {
+    loadMessages();
+  });
+
+  socket.on('output', (newMsg) => {
+        outputMessage(newMsg);
+  });
+
+  // input new Message
+  $('#submitBtn').on('click', (element) => {
+    element.preventDefault();
+    let timestamp = getTimeStamp();
+    let newMsg = {
+      // TODO: get username
+      username: 'test', 
+      timestamp: timestamp, 
+      message: msgEle.val()
+    };
+
+    fetch('/messages/public', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(newMsg),
+    })
+    .then(() => {
+      socket.emit('input', newMsg);
+      msgEle.val('');
+    })
+    .catch((e) => {console.log(e)});
+  });
+
+</script>
+</html>
