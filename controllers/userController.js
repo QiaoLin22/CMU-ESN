@@ -10,7 +10,7 @@ class UserController {
     const newUser = new User({
       username: username,
       ...hashAndSalt,
-      online: false
+      online: false,
     });
 
     newUser
@@ -31,15 +31,13 @@ class UserController {
   }
 
   static retrieveUsers(req, res, next){
-    User.find({online:true},(err, online_users)=>{
+    User.find({ online: true }, (err, online_users) => {
       if(err) return next(err);
-      User.find({online:false},(err, offline_users)=>{
+      User.find({ online: false }, (err, offline_users) => {
         if(err) return next(err);
-        console.log("get");
-        res.json({online: online_users,
-                offline: offline_users});
-      }).sort({username:1})
-    }).sort({username:1});
+        res.json({ online: online_users, offline: offline_users });
+      }).sort({ username: 1 });
+    }).sort({ username: 1 });
   }
 }
 
