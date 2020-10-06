@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const { requireAuth } = require('../middleware/authmiddleware');
+const { getUsername } = require('../middleware/getUsername');
 
 const LoginController = require('../controllers/loginController');
 const UserController = require('../controllers/userController');
@@ -11,8 +12,9 @@ router.get('/main', requireAuth, (req, res) => {
   res.render('main');
 });
 
-router.get('/main/public', requireAuth, (req, res) => {
-  res.render('chat');
+router.get('/main/public', requireAuth, getUsername, (req, res) => {
+  const authUsername = res.locals.username;
+  res.render('chat', { username: authUsername });
 });
 
 router.get('/messages/public', MessageController.getMessage);
@@ -25,13 +27,12 @@ router.get('/', (req, res) => {
 
 router.post('/api/login', LoginController.login);
 
-router.get('/api/logout', LogoutController.logout,(req,res) => {
-  res.redirect('/')
+router.get('/api/logout', LogoutController.logout, (req,res) => {
+  res.redirect('/');
 });
 
 router.post('/api/users', UserController.createUser);
 
 router.post('/messages/public', MessageController.createMessage);
-
 
 module.exports = router;

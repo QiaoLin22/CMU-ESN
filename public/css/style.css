@@ -1,6 +1,13 @@
 @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&display=swap');
 
-
+/* color palette */
+/* 
+    background -> #f3fdff 
+    button -> #17a2b8 
+    shadow -> #a7bdc1
+    header -> #18a2b8
+    line-break -> #71bcc7
+*/
 
 body {
     background-color: #f3fdff;
@@ -60,6 +67,7 @@ body {
 
 .online-item:hover {
     color: cadetblue;
+    cursor: pointer;
 }
 
 .offline-list-item {
@@ -68,21 +76,73 @@ body {
 
 .offline-list-item:hover {
     color: #a7bdc1;
+    cursor: pointer;
 }
 
 /* chat page */
-.chat-container {
-    width: 100%;
-    height: 70vh;
-    overflow: scroll;
+.chat-header {
+    height: 10vh;
+    position: sticky;
+    background-color: #9edee8;
+    border-bottom-style: solid;
+    border-bottom-width: 2px;
+    border-bottom-color: #71bcc7;
+    box-shadow: 0px 8px 20px 0px #6ea4ad21;
+    align-items: center;
 }
 
-.chat-messages {
+.chat-header h6 {
+    color: #07869a;
+}
+
+.chat-header a {
+    color: #07869a;
+}
+
+.chat-header a:hover {
+    color: #07869a;
+    text-decoration: none;
+}
+
+.chat-container {
+    height: 80vh;
     overflow-y: scroll;
+    background-color: white;
+}
+
+.chat-footer {
+    height: 10vh;
+    border-top-style: solid;
+    border-top-width: 2px;
+    border-top-color: #71bcc7;
+    background-color: #d2edf1;
+    align-items: center;
+}
+
+.chat-footer input {
+    border-color: #17a2b8;
+    border-radius: 5%;
+    border-style: solid;
+    border-width: 1px;
+}
+
+.input-container {
+    display: flex;
+}
+
+.message p {
+    margin-bottom: 0.8rem;
 }
 
 .message .meta {
     font-weight: bold;
+    color: #07869a;
+}
+
+.message p span {
+    font-weight: 400;
+    color: rgb(187 210 214);
+    font-size: 0.8rem;
 }
 
 /* bootstrap style override */

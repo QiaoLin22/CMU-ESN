@@ -12,31 +12,36 @@
 
 <body>
   <div class="container">
-    <div class="row mt-5">
+    <div class="row">
       <div class="col-lg col-md-3 col-sm-2"></div>
 
       <div class="col-lg col-md-6 col-sm-8">
-        <div class="row chat-container border-info mb-2">
-          <div class="chat-messages mb-3"></div>
+        <div class="row chat-header">
+          <h6 class="mt-1"><a href="/main" class="mr-3 ml-3"><</a> # Public</h6>
+        </div>
+
+        <div class="row chat-container p-4">
+          <div class="chat-messages"></div>
         </div>
         
-        <div class="row">
-          <form id="chatForm">
-            <div class="form-group">
-              <div class="input-group mb-3">
-                <input id="msg" type="text" placeholder="Enter message" required autocomplete="off" />
-                <div class="input-group-prepend">
+        <div class="row chat-footer">
+            <form id="chatForm">
+              <div class="input-container">
+                <input class="mr-1 ml-1" id="msg" type="text" placeholder="Enter message" required autocomplete="off" />
                   <button type="submit" class="btn btn-info btn-block" id="submitBtn"> > </button>
-                </div>
               </div>
-            </div>
-          </form>
+            </form>
         </div>
+
+        <!-- use only for passing the username -->
+        <input id="username-data" value="<%= username %>" style="display: none;"/>
+
       </div>
 
       <div class="col-lg col-md-3 col-sm-2"></div>
     </div>
   </div>
+
 </body>
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
   integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
@@ -51,11 +56,12 @@
 
   const chatMessages = $('.chat-messages');
   const msgEle = $('#msg');
+  const username = $('#username-data');
 
   function outputMessage(message) {
     const msg = document.createElement('div');
     msg.classList.add('message');
-    msg.innerHTML = `<p class="meta">${message.username}<span>${message.timestamp}</span></p><p class="text"> ${message.message} </p>`;
+    msg.innerHTML = `<p class="meta mb-1"> ${message.username} <span class="ml-3"> ${message.timestamp} </span></p> <p class="text"> ${message.message} </p>`;
     chatMessages.append(msg);
   }
 
@@ -70,7 +76,7 @@
     let d = new Date();
     let h = addZero(d.getHours());
     let m = addZero(d.getMinutes());
-    return (" " + h + ":" + m).toString() ;
+    return (h + ":" + m);
   }
 
   function loadMessages(){
@@ -102,11 +108,11 @@
   // input new Message
   $('#submitBtn').on('click', (element) => {
     element.preventDefault();
-    let timestamp = getTimeStamp();
+
     let newMsg = {
       // TODO: get username
-      username: 'test', 
-      timestamp: timestamp, 
+      username: username.val(), 
+      timestamp: getTimeStamp(), 
       message: msgEle.val()
     };
 

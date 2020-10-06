@@ -40,6 +40,5 @@ socketServer.on('connection', (socket) => {
     console.log(`${socket.id} disconnected`);
     socketServer.emit('displayUsers');
   });
-
 });
 
