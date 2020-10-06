@@ -10,11 +10,12 @@ class UserController {
     const newUser = new User({
       username: username,
       ...hashAndSalt,
+      online: false,
     });
 
     newUser
       .save()
-      .then((user) => {
+      .then(() => {
         res.status(201).send({ message: 'success' });
       })
       .catch((err) => {
@@ -27,6 +28,16 @@ class UserController {
         }
         res.status(400).json({ error: message });
       });
+  }
+
+  static retrieveUsers(req, res, next){
+    User.find({ online: true }, (err, online_users) => {
+      if(err) return next(err);
+      User.find({ online: false }, (err, offline_users) => {
+        if(err) return next(err);
+        res.json({ online: online_users, offline: offline_users });
+      }).sort({ username: 1 });
+    }).sort({ username: 1 });
   }
 }
 
