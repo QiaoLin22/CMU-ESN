@@ -21,34 +21,21 @@ app.use(routes);
 app.listen(3000);
 
 socketServer.on('connection', (socket) => {
-    User.find()
-    .then((res) => {
-        socket.emit('users',res)
-    })
-    .catch((err) => {
-         console.log(err);
-    }) 
+  console.log(`${socket.id} connected`);
 
-    socket.on('login', () => {
-        User.find()
-        .then((res) => {
-            socketServer.emit('users',res)
-        })
-        .catch((err) => {
-            console.log(err);
-        }) 
-    });
-    socket.on('logout', () => {
-        User.find()
-        .then((res) => {
-            socketServer.emit('users',res)
-        })
-        .catch((err) => {
-            console.log(err);
-        }) 
-    });
-})
-    
-        
+  socket.on('joinRoom', (roomName) => {
+    socket.join(roomName);
+  });
 
+  socket.emit('displayHistoricalMsg');
+
+  socket.on('input', (message) => {
+    socketServer.emit('output', message);
+  });
+
+  socket.on('disconnect', () => {
+    console.log(`${socket.id} disconnected`);
+  });
+
+});
 

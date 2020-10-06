@@ -27,9 +27,14 @@
     "ejs": "^3.1.5",
     "express": "^4.17.1",
     "jsonwebtoken": "^8.5.1",
+<<<<<<< HEAD
     "mongodb": "^3.6.2",
+=======
+    "moment": "^2.29.0",
+>>>>>>> b8bb036a9401e9a9e72a8600e6825d52764570a3
     "mongoose": "^5.10.5",
-    "socket.io": "^2.3.0"
+    "socket.io": "^2.3.0",
+    "socket.io-client": "^2.3.1"
   },
   "devDependencies": {
     "eslint": "^7.9.0",

@@ -4,14 +4,18 @@ const { requireAuth } = require('../middleware/authmiddleware');
 const LoginController = require('../controllers/loginController');
 const UserController = require('../controllers/userController');
 const LogoutController = require('../controllers/logoutController');
+const MessageController = require('../controllers/messageController');
+
 
 router.get('/main', requireAuth, (req, res) => {
   res.render('main');
 });
 
-// router.get('/main/public', requireAuth, (req, res) => {
-//   res.render('chat');
-// });
+router.get('/main/public', requireAuth, (req, res) => {
+  res.render('chat');
+});
+
+router.get('/messages/public', MessageController.getMessage);
 
 router.get('/', (req, res) => {
   res.render('index');
@@ -24,5 +28,7 @@ router.get('/api/logout', LogoutController.logout,(req,res) => {
 });
 
 router.post('/api/users', UserController.createUser);
+
+router.post('/messages/public', MessageController.createMessage);
 
 module.exports = router;
