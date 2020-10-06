@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken');
 const fs = require('fs');
 const path = require('path');
 const io = require('socket.io-client');
+
 const socket = io.connect('http://127.0.0.1:5000')
 
 const pathToKey = path.join(__dirname, '..', 'id_rsa_pub.pem');

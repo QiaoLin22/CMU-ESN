@@ -25,8 +25,8 @@ router.get('/', (req, res) => {
 
 router.post('/api/login', LoginController.login);
 
-router.get('/api/logout', LogoutController.logout,(req,res) => {
-  res.redirect('/')
+router.get('/api/logout', LogoutController.logout, (req,res) => {
+  res.redirect('/');
 });
 
 router.post('/api/users', UserController.createUser);
