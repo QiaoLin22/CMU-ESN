@@ -1,8 +1,10 @@
 const router = require('express').Router();
+const { authenticateUser } = require('../middleware/authMiddleware');
+
 const MessageController = require('../controllers/messageController');
 
-router.post('/public', MessageController.createMessage);
+router.post('/public', authenticateUser, MessageController.createMessage);
 
-router.get('/public', MessageController.getMessage);
+router.get('/public', authenticateUser, MessageController.getMessage);
 
 module.exports = router;
