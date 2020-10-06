@@ -24,24 +24,22 @@
 
           <ul class="list-group list-group-flush directory-category">
             <ui><h6>Channels</h6></ui>
-            <li class="list-group-item list-group-item-action"><a href="/main/public"># Public</a></li>
+            <li class="list-group-item list-group-item-action">
+              <a href="/main/public"># Public</a>
+            </li>
           </ul>
 
           <ul class="list-group list-group-flush directory-category">
             <ui><h6>Direct Messages</h6></ui>
             <div class="online-offline-list">
-              
-              <div id="online-list">                
-              </div>
+              <div id="online-list"></div>
 
-              <div id="offline-list">
-              </div>
+              <div id="offline-list"></div>
             </div>
 
-            <br>
+            <br />
             <a href="/logout" class="btn btn-info btn-block">Log out</a>
           </ul>
-
         </div>
         <div class="col-lg col-md-3 col-1"></div>
       </div>
@@ -65,7 +63,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.3/socket.io.js"></script>
   <script>
     const socket = io('http://localhost:5000');
-  
+
     function getGetOptions() {
       return {
         method: 'GET',
@@ -77,30 +75,32 @@
     function outputUser(data, online) {
       const user = document.createElement('div');
       user.classList.add('online-item');
-      if(online){
+      if (online) {
         user.innerHTML = `<li class="list-group-item list-group-item-action">${data.username}</li>`;
         $('#online-list').append(user);
-      }else{
+      } else {
         user.innerHTML = `<li class="list-group-item list-group-item-action offline-list-item">${data.username}</li>`;
         $('#offline-list').append(user);
       }
     }
 
-    function retrieveUsers(){
+    function retrieveUsers() {
       fetch('/api/users', getGetOptions())
-      .then((res)=>{
-        return res.json();
-      })
-      .then((data) => {
-        console.log(data);
-        data.online.forEach(element => {
-          outputUser(element, true); 
+        .then((res) => {
+          return res.json();
+        })
+        .then((data) => {
+          console.log(data);
+          data.online.forEach((element) => {
+            outputUser(element, true);
+          });
+          data.offline.forEach((element) => {
+            outputUser(element, false);
+          });
+        })
+        .catch((e) => {
+          console.log(e);
         });
-        data.offline.forEach(element => {
-          outputUser(element,false); 
-        });
-      })
-      .catch((e) => {console.log(e)});
     }
 
     socket.on('displayUsers', () => {
@@ -108,9 +108,5 @@
       $('#online-list').empty();
       retrieveUsers();
     });
-  
-
-   
-  
   </script>
 </html>

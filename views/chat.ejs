@@ -74,7 +74,7 @@
   }
 
   function loadMessages(){
-    fetch('/messages/public', {
+    fetch('/api/messages/public', {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -110,7 +110,7 @@
       message: msgEle.val()
     };
 
-    fetch('/messages/public', {
+    fetch('/api/messages/public', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

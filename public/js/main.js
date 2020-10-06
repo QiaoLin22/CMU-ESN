@@ -54,8 +54,6 @@ function getPostOptions() {
   };
 }
 
-
-
 // function clearInputBox() {
 //   usernameEle.val('');
 //   passwordEle.val('');
@@ -99,17 +97,16 @@ $('#submitBtn').on('click', (event) => {
 
   if (!checkUsernamePassword(usernameEle.val(), passwordEle.val())) return;
 
-  // fetch "/api/login" request
-  fetch('/api/login', getPostOptions())
+  // fetch "/api/users/login" request
+  fetch('/api/users/login', getPostOptions())
     .then(checkStatus)
     .then((data) => {
       if (data.message === 'create new user?') {
         // ask user to confirm registration
         confirmModal.modal('show');
       } else {
-        showAlert(loginAlert, 'Successfully logged in', 'alert-success');    
+        showAlert(loginAlert, 'Successfully logged in', 'alert-success');
       }
     })
     .catch((err) => catchError(err, loginAlert));
 });
-

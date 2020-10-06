@@ -1,37 +1,20 @@
 const router = require('express').Router();
-const { requireAuth } = require('../middleware/authmiddleware');
+const { authenticateUser } = require('../middleware/authMiddleware');
 
-const LoginController = require('../controllers/loginController');
-const UserController = require('../controllers/userController');
-const LogoutController = require('../controllers/logoutController');
-const MessageController = require('../controllers/messageController');
-
-
-router.get('/main', requireAuth, (req, res) => {
+router.get('/main', authenticateUser, (req, res) => {
   res.render('main');
 });
 
-router.get('/main/public', requireAuth, (req, res) => {
+router.get('/main/public', authenticateUser, (req, res) => {
   res.render('chat');
 });
-
-router.get('/messages/public', MessageController.getMessage);
-
-router.get('/api/users', UserController.retrieveUsers);
 
 router.get('/', (req, res) => {
   res.render('index');
 });
 
-router.post('/api/login', LoginController.login);
-
-router.get('/api/logout', LogoutController.logout,(req,res) => {
-  res.redirect('/')
+router.get('/main', authenticateUser, (req, res) => {
+  res.render('main');
 });
-
-router.post('/api/users', UserController.createUser);
-
-router.post('/messages/public', MessageController.createMessage);
-
 
 module.exports = router;

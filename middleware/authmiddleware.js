@@ -5,7 +5,7 @@ const jwt = require('jsonwebtoken');
 const pathToKey = path.join(__dirname, '..', 'id_rsa_pub.pem');
 const PUB_KEY = fs.readFileSync(pathToKey, 'utf8');
 
-const requireAuth = (req, res, next) => {
+const authenticateUser = (req, res, next) => {
   const token = req.cookies.jwt;
   // check json web token exists & is verified
   if (token) {
@@ -14,6 +14,7 @@ const requireAuth = (req, res, next) => {
         res.redirect('/');
       } else {
         // res.json(decodedToken.id);
+        console.log(decodedToken);
         next();
       }
     });
@@ -22,4 +23,4 @@ const requireAuth = (req, res, next) => {
   }
 };
 
-module.exports = { requireAuth };
+module.exports = { authenticateUser };
