@@ -25,7 +25,9 @@ router.get('/', (req, res) => {
   res.render('index');
 });
 
-router.post('/api/login', LoginController.login);
+router.post('/api/login', LoginController.login, (req,res) => {
+  res.redirect('/main')
+});
 
 router.get('/api/logout', LogoutController.logout, (req,res) => {
   res.redirect('/');
