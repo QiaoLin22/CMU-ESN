@@ -16,24 +16,102 @@
     <title>Main page</title>
   </head>
   <body>
-    <a href="/api/logout" id = "logoutBtn" class="btn btn-primary">Log out</a>
-    <div id = "messages" class="card-block">
+    <div class="container directory-container">
+      <div class="row mt-5">
+        <div class="col-lg col-md-3 col-1"></div>
+        <div class="col-lg col-md-6 col-10">
+          <h4 class="login-header text-left">ESN Chatroom</h4>
 
+          <ul class="list-group list-group-flush directory-category">
+            <ui><h6>Channels</h6></ui>
+            <li class="list-group-item list-group-item-action"><a href="/main/public"># Public</a></li>
+          </ul>
+
+          <ul class="list-group list-group-flush directory-category">
+            <ui><h6>Direct Messages</h6></ui>
+            <div class="online-offline-list">
+
+              <div id="online-list">                
+              </div>
+
+              <div id="offline-list">
+              </div>
+              
+            </div>
+
+            <br>
+            <a href="/logout" class="btn btn-info btn-block">Log out</a>
+          </ul>
+
+        </div>
+        <div class="col-lg col-md-3 col-1"></div>
+      </div>
     </div>
   </body>
+  <script
+    src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+    integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+    crossorigin="anonymous"
+  ></script>
+  <script
+    src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+    integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
+    crossorigin="anonymous"
+  ></script>
+  <script
+    src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+    integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
+    crossorigin="anonymous"
+  ></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.3/socket.io.js"></script>
   <script>
-    const socket = io.connect('http://127.0.0.1:5000')
-    const messages = document.getElementById('messages')
-    socket.on('users', (data) =>{
-      if(data.length){
-                        data.forEach(element => {
-                            let message = document.createElement('div')
-                            message.innerText = element.username+ "  "+"  online status: " + element.online
-                            messages.appendChild(message)
-                        });
-                        
-                    }    
+    const socket = io('http://localhost:5000');
+  
+    function getGetOptions() {
+      return {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      };
+    }
+    function outputUser(data, online) {
+      const user = document.createElement('div');
+      user.classList.add('online-item');
+      if(online){
+        user.innerHTML = `<li class="list-group-item list-group-item-action">${data.username}</li>`;
+        $('#online-list').append(user);
+      }else{
+        user.innerHTML = `<li class="list-group-item list-group-item-action offline-list-item">${data.username}</li>`;
+        $('#offline-list').append(user);
+      }
+    }
+
+    function retrieveUsers(){
+      fetch('/api/users', getGetOptions())
+      .then((res)=>{
+        return res.json();
+      })
+      .then((data) => {
+        console.log(data);
+        data.online.forEach(element => {
+          outputUser(element, true); 
+        });
+        data.offline.forEach(element => {
+          outputUser(element,false); 
+        });
+      })
+      .catch((e) => {console.log(e)});
+    }
+
+    socket.on('displayUsers', () => {
+      $('#offline-list').empty();
+      $('#online-list').empty();
+      retrieveUsers();
     });
+  
+
+   
+  
   </script>
 </html>

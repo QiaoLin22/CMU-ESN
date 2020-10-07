@@ -4,7 +4,7 @@ const cookieParser = require('cookie-parser');
 const socketServer = require('socket.io')(5000);
 const routes = require('./routes');
 const User = require('./models/user');
-
+const UserController = require('./controllers/userController');
 require('dotenv').config();
 
 const app = express();
@@ -21,34 +21,24 @@ app.use(routes);
 app.listen(3000);
 
 socketServer.on('connection', (socket) => {
-    User.find()
-    .then((res) => {
-        socket.emit('users',res)
-    })
-    .catch((err) => {
-         console.log(err);
-    }) 
+  console.log(`${socket.id} connected`);
 
-    socket.on('login', () => {
-        User.find()
-        .then((res) => {
-            socketServer.emit('users',res)
-        })
-        .catch((err) => {
-            console.log(err);
-        }) 
-    });
-    socket.on('logout', () => {
-        User.find()
-        .then((res) => {
-            socketServer.emit('users',res)
-        })
-        .catch((err) => {
-            console.log(err);
-        }) 
-    });
-})
-    
-        
+  socketServer.emit('displayUsers');
 
+
+  socket.on('joinRoom', (roomName) => {
+    socket.join(roomName);
+  });
+
+  socket.emit('displayHistoricalMsg');
+
+  socket.on('input', (message) => {
+    socketServer.emit('output', message);
+  });
+
+  socket.on('disconnect', () => {
+    console.log(`${socket.id} disconnected`);
+    socketServer.emit('displayUsers');
+  });
+});
 
