@@ -1,115 +1,66 @@
-const usernameEle = $('#username');
-const passwordEle = $('#password');
-const confirmModal = $('#confirmModal');
-const welcomeModal = $('#welcomeModal');
+/* global io */
+const socket = io('http://localhost:5000');
 
-const loginAlert = $('#loginAlert');
-const confirmAlert = $('#confirmAlert');
+const logoutBtn = $('#logoutBtn');
 
-/** Alert */
-function showAlert(alertElement, text, alertClass) {
-  alertElement.text(text);
-  alertElement.attr('class', `alert ${alertClass}`);
-  alertElement.attr('hidden', false);
-}
-
-function hideAlert(alertElement) {
-  alertElement.attr('hidden', true);
-}
-
-/** Response Handler */
-function checkStatus(res) {
-  if (!res.ok) throw res;
-  return res.json();
-}
-
-function catchError(err, alertElement) {
-  if (err instanceof Error) {
-    if (alertElement) {
-      showAlert(
-        alertElement,
-        'Error occurred when connecting to server',
-        'alert-danger'
-      );
-    }
-  }
-  
-  err.json().then(({ error }) => {
-    if (alertElement) {
-      showAlert(alertElement, error, 'alert-danger');
-    }
-  });
-}
-
-function getPostOptions() {
+function getGetOptions() {
   return {
-    method: 'POST',
+    method: 'GET',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({
-      username: usernameEle.val(),
-      password: passwordEle.val(),
-    }),
   };
 }
 
-
-
-// function clearInputBox() {
-//   usernameEle.val('');
-//   passwordEle.val('');
-// }
-
-function checkUsernamePassword(username, password) {
-  if (username.length < 3) {
-    showAlert(
-      loginAlert,
-      'Username should be at least 3 characters long',
-      'alert-danger'
-    );
-    return false;
+function outputUser(data, online) {
+  const user = document.createElement('div');
+  user.classList.add('online-item');
+  if (online) {
+    user.innerHTML = `<li class="list-group-item list-group-item-action">${data.username}</li>`;
+    $('#online-list').append(user);
+  } else {
+    user.innerHTML = `<li class="list-group-item list-group-item-action offline-list-item">${data.username}</li>`;
+    $('#offline-list').append(user);
   }
-  if (password.length < 4) {
-    showAlert(
-      loginAlert,
-      'Passwords should be at least 4 characters long',
-      'alert-danger'
-    );
-    return false;
-  }
-  return true;
 }
 
-$('#confirmBtn').on('click', () => {
-  // fetch "/api/users" request to create a new user
-  fetch('/api/users', getPostOptions())
-    .then(checkStatus)
-    .then(() => {
-      // if registration is successful, popup welcome message
-      confirmModal.modal('hide');
-      welcomeModal.modal('show');
+function retrieveUsers() {
+  fetch('/api/users', getGetOptions())
+    .then((res) => {
+      return res.json();
     })
-    .catch((err) => catchError(err, confirmAlert));
-});
-
-$('#submitBtn').on('click', (event) => {
-  event.preventDefault();
-  hideAlert(loginAlert);
-
-  if (!checkUsernamePassword(usernameEle.val(), passwordEle.val())) return;
-
-  // fetch "/api/login" request
-  fetch('/api/login', getPostOptions())
-    .then(checkStatus)
     .then((data) => {
-      if (data.message === 'create new user?') {
-        // ask user to confirm registration
-        confirmModal.modal('show');
-      } else {
-        showAlert(loginAlert, 'Successfully logged in', 'alert-success'); 
-      }
+      data.users.forEach((user) => {
+        outputUser(user, user.online);
+      });
     })
-    .catch((err) => catchError(err, loginAlert));
+    .catch((e) => {
+      console.log(e);
+    });
+}
+
+socket.on('updateDirectory', () => {
+  console.log('updateDirectory');
+  $('#offline-list').empty();
+  $('#online-list').empty();
+  retrieveUsers();
 });
 
+$(document).ready(retrieveUsers);
+
+logoutBtn.on('click', () => {
+  fetch('/api/users/logout', {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ online: false }),
+  }).then((res) => {
+    console.log('yikes');
+    if (res.ok) {
+      // delete jwt
+      document.cookie = 'jwt=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+      window.location.href = '/';
+    }
+  });
+});

@@ -24,25 +24,27 @@
 
           <ul class="list-group list-group-flush directory-category">
             <ui><h6>Channels</h6></ui>
-            <li class="list-group-item list-group-item-action"><a href="/main/public"># Public</a></li>
+            <li class="list-group-item list-group-item-action">
+              <a href="/public-wall"># Public</a>
+            </li>
           </ul>
 
           <ul class="list-group list-group-flush directory-category">
             <ui><h6>Direct Messages</h6></ui>
             <div class="online-offline-list">
+              <div id="online-list"></div>
 
-              <div id="online-list">                
-              </div>
-
-              <div id="offline-list">
-              </div>
-              
+              <div id="offline-list"></div>
             </div>
 
+<<<<<<< HEAD
             <br>
             <a href="/api/logout" class="btn btn-info btn-block">Log out</a>
+=======
+            <br />
+            <button id="logoutBtn" class="btn btn-info btn-block">Log out</a>
+>>>>>>> 08f74c40f6ec6fdc0e82deae160347798389f368
           </ul>
-
         </div>
         <div class="col-lg col-md-3 col-1"></div>
       </div>
@@ -64,6 +66,7 @@
     crossorigin="anonymous"
   ></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.3/socket.io.js"></script>
+<<<<<<< HEAD
   <script>
     const socket = io('http://localhost:5000');
   
@@ -112,4 +115,7 @@
   
 
   </script>
+=======
+  <script type="module" src="js/main.js"></script>
+>>>>>>> 08f74c40f6ec6fdc0e82deae160347798389f368
 </html>
