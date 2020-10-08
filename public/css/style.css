@@ -10,142 +10,147 @@
 */
 
 body {
-    background-color: #f3fdff;
-    font-family: 'IBM Plex Sans', sans-serif;
-    font-weight: 400;
+  background-color: #f3fdff;
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-weight: 400;
 }
 
 /* login page */
 
 .login-container {
-    margin-top: 35vh;
+  margin-top: 35vh;
 }
 
-.login-container h3{
-    color: #17a2b8;
+.login-container h3 {
+  color: #17a2b8;
 }
 
 .login-container input {
-    border-color: #17a2b8;
+  border-color: #17a2b8;
 }
 
-.login-input-icon{
-    background-color: #dff2f5;
-    color: #17a2b8;
+.login-input-icon {
+  background-color: #dff2f5;
+  color: #17a2b8;
 }
 
 .login-header {
-    margin-bottom: 7%;
+  margin-bottom: 7%;
 }
 
 .login-modal-table {
-    border-bottom-style: solid;
-    border-bottom-color: #17a2b8;
+  border-bottom-style: solid;
+  border-bottom-color: #17a2b8;
 }
 
 .login-modal-row {
-    margin-top: 10px;
+  margin-top: 10px;
 }
 
 /* ESN Directory page */
-.directory-container h4{
-    color: #17a2b8;
+.directory-container h4 {
+  color: #17a2b8;
 }
 
-.directory-container h6{
-    color: #17a2b8;
+.directory-container h6 {
+  color: #17a2b8;
 }
 
 .directory-category {
-    margin-top: 1.5rem;
+  margin-top: 1.5rem;
 }
 
 .online-offline-list {
-    overflow: scroll;
-    height: 50vh;
+  overflow: scroll;
+  height: 50vh;
 }
 
 .online-item:hover {
-    color: cadetblue;
-    cursor: pointer;
+  color: cadetblue;
+  cursor: pointer;
 }
 
 .offline-list-item {
-    color: #a7bdc1;
+  color: #a7bdc1;
 }
 
 .offline-list-item:hover {
-    color: #a7bdc1;
-    cursor: pointer;
+  color: #a7bdc1;
+  cursor: pointer;
 }
 
 /* chat page */
 .chat-header {
-    height: 10vh;
-    position: sticky;
-    background-color: #9edee8;
-    border-bottom-style: solid;
-    border-bottom-width: 2px;
-    border-bottom-color: #71bcc7;
-    box-shadow: 0px 8px 20px 0px #6ea4ad21;
-    align-items: center;
+  height: 10vh;
+  position: sticky;
+  background-color: #9edee8;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #71bcc7;
+  box-shadow: 0px 8px 20px 0px #6ea4ad21;
+  align-items: center;
 }
 
 .chat-header h6 {
-    color: #07869a;
+  color: #07869a;
 }
 
 .chat-header a {
-    color: #07869a;
+  color: #07869a;
 }
 
 .chat-header a:hover {
-    color: #07869a;
-    text-decoration: none;
+  color: #07869a;
+  text-decoration: none;
 }
 
 .chat-container {
-    height: 80vh;
-    overflow-y: scroll;
-    background-color: white;
+  height: 80vh;
+  overflow-y: scroll;
+  background-color: white;
 }
 
 .chat-footer {
-    height: 10vh;
-    border-top-style: solid;
-    border-top-width: 2px;
-    border-top-color: #71bcc7;
-    background-color: #d2edf1;
-    align-items: center;
+  height: 10vh;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #71bcc7;
+  background-color: #d2edf1;
+  /* align-items: center; */
 }
 
+/* .chat-footer #chatForm {
+  width: 100%;
+} */
+
 .chat-footer input {
-    border-color: #17a2b8;
-    border-radius: 5%;
-    border-style: solid;
-    border-width: 1px;
+  border-color: #17a2b8;
+  border-radius: 5%;
+  border-style: solid;
+  border-width: 1px;
 }
 
 .input-container {
-    display: flex;
+  /* width: 100%; */
+  /* display: flex; */
 }
 
 .message p {
-    margin-bottom: 0.8rem;
+  margin-bottom: 0.8rem;
 }
 
 .message .meta {
-    font-weight: bold;
-    color: #07869a;
+  font-weight: bold;
+  color: #07869a;
 }
 
 .message p span {
-    font-weight: 400;
-    color: rgb(187 210 214);
-    font-size: 0.8rem;
+  font-weight: 400;
+  color: rgb(187 210 214);
+  font-size: 0.8rem;
 }
 
 /* bootstrap style override */
 .list-group-item {
-    border-width: 0px;
+  border-width: 0px;
 }
