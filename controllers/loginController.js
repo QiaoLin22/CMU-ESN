@@ -1,10 +1,8 @@
-const io = require('socket.io-client');
 const User = require('../models/user');
 const { validPassword } = require('../lib/utils');
 const { createToken } = require('../lib/utils');
 const reservedUsernames = require('../lib/reserved_usernames.json').usernames;
 
-const socket = io.connect('http://127.0.0.1:5000');
 function isValidUsername(username) {
   return username.length >= 3;
 }
@@ -16,17 +14,18 @@ function isValidPassword(password) {
 function isNotBannedUsername(username) {
   return !reservedUsernames.includes(username);
 }
-function changeLoginStatus(username) {
+function changeLoginStatus(username, io) {
   User.updateOne(
     { username: username }, // Filter
     { $set: { online: true } } // Update
   )
     .then((obj) => {
       console.log(`Updated online status: ${obj}`);
-      socket.emit('updateDirectory');
+      io.emit('updateDirectory');
     })
     .catch((err) => {
       console.log(err);
+      throw err;
     });
 }
 
@@ -68,7 +67,7 @@ class LoginController {
           httpOnly: true,
           maxAge: cookieMaxAge * 1000,
         });
-        changeLoginStatus(username);
+        changeLoginStatus(username, req.io);
         return res.location('/main').end();
       } else {
         return res.status(400).json({

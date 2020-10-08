@@ -41,6 +41,7 @@ function retrieveUsers() {
 }
 
 socket.on('updateDirectory', () => {
+  console.log('updateDirectory');
   $('#offline-list').empty();
   $('#online-list').empty();
   retrieveUsers();

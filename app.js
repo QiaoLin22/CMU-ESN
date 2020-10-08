@@ -1,7 +1,7 @@
 const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
-const socketServer = require('socket.io')(5000);
+const io = require('socket.io')(5000);
 // const User = require('./models/user');
 // const UserController = require('./controllers/userController');
 require('dotenv').config();
@@ -21,7 +21,7 @@ app.use(cookieParser());
 
 // pass io to following middleware/router
 app.use((req, res, next) => {
-  req.io = socketServer;
+  req.io = io;
   next();
 });
 
@@ -31,7 +31,7 @@ app.use('/api/messages', messagesRouter);
 
 app.listen(3000);
 
-socketServer.on('connection', (socket) => {
+io.on('connection', (socket) => {
   console.log(`${socket.id} connected`);
 
   socket.on('joinRoom', (roomName) => {
@@ -41,11 +41,11 @@ socketServer.on('connection', (socket) => {
   socket.emit('displayHistoricalMsg');
 
   socket.on('input', (message) => {
-    socketServer.emit('output', message);
+    io.emit('output', message);
   });
 
   socket.on('disconnect', () => {
     console.log(`${socket.id} disconnected`);
-    socketServer.emit('displayUsers');
+    io.emit('displayUsers');
   });
 });
