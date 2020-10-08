@@ -34,8 +34,6 @@ app.listen(3000);
 socketServer.on('connection', (socket) => {
   console.log(`${socket.id} connected`);
 
-  socketServer.emit('displayUsers');
-
   socket.on('joinRoom', (roomName) => {
     socket.join(roomName);
   });

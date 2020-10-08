@@ -13,8 +13,7 @@ const authenticateUser = (req, res, next) => {
       if (err) {
         res.redirect('/');
       } else {
-        // res.json(decodedToken.id);
-        console.log(decodedToken);
+        res.locals.userId = decodedToken.id;
         next();
       }
     });

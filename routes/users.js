@@ -11,8 +11,6 @@ router.post('/', authenticateUser, UserController.createUser);
 
 router.post('/login', LoginController.login);
 
-router.get('/logout', authenticateUser, LogoutController.logout, (req, res) => {
-  res.redirect('/');
-});
+router.put('/logout', authenticateUser, LogoutController.logout);
 
 module.exports = router;
