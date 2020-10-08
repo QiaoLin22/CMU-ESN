@@ -61,10 +61,9 @@ class LoginController {
       // user exists, check if password is correct
       if (validPassword(password, user.hash, user.salt)) {
         // generate jwt and return it in response
-        const token = createToken(user._id);
+        const token = createToken(user);
         const cookieMaxAge = 3 * 24 * 60 * 60;
         res.cookie('jwt', token, {
-          httpOnly: true,
           maxAge: cookieMaxAge * 1000,
         });
         changeLoginStatus(username, req.io);

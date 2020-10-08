@@ -2,8 +2,7 @@ const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const io = require('socket.io')(5000);
-// const User = require('./models/user');
-// const UserController = require('./controllers/userController');
+
 require('dotenv').config();
 
 const indexRouter = require('./routes/index');
@@ -32,16 +31,10 @@ app.use('/api/messages', messagesRouter);
 app.listen(3000);
 
 io.on('connection', (socket) => {
-  console.log(`${socket.id} connected`);
+  // console.log(`${socket.id} connected`);
 
   socket.on('joinRoom', (roomName) => {
     socket.join(roomName);
-  });
-
-  socket.emit('displayHistoricalMsg');
-
-  socket.on('input', (message) => {
-    io.emit('output', message);
   });
 
   socket.on('disconnect', () => {

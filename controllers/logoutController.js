@@ -1,31 +1,19 @@
-const jwt = require('jsonwebtoken');
-const fs = require('fs');
-const path = require('path');
-const io = require('socket.io-client');
 const User = require('../models/user');
 
-const socket = io.connect('http://127.0.0.1:5000');
-
-const pathToKey = path.join(__dirname, '..', 'id_rsa_pub.pem');
-const PUB_KEY = fs.readFileSync(pathToKey, 'utf8');
-
 class LogoutController {
-  static logout(req, res, next) {
-    const token = req.cookies.jwt;
-    jwt.verify(token, PUB_KEY, { algorithm: 'RS256' }, (err, decodedToken) => {
-      const { id } = decodedToken;
-      User.updateOne(
-        { _id: id }, // Filter
-        { $set: { online: false } } // Update
-      )
-        .then(() => {
-          socket.emit('logout');
-        })
-        .catch(() => {
-          console.log(err);
-        });
-    });
-    next();
+  static logout(req, res) {
+    const { username } = res.locals;
+    User.updateOne(
+      { username }, // Filter
+      { $set: { online: false } } // Update
+    )
+      .then(() => {
+        req.io.emit('updateDirectory');
+        res.status(200).end();
+      })
+      .catch((err) => {
+        res.status(400).json({ error: err.message });
+      });
   }
 }
 

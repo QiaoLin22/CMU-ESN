@@ -30,7 +30,6 @@ function retrieveUsers() {
       return res.json();
     })
     .then((data) => {
-      console.log(data);
       data.users.forEach((user) => {
         outputUser(user, user.online);
       });
@@ -55,5 +54,13 @@ logoutBtn.on('click', () => {
     headers: {
       'Content-Type': 'application/json',
     },
+    body: JSON.stringify({ online: false }),
+  }).then((res) => {
+    console.log('yikes');
+    if (res.ok) {
+      // delete jwt
+      document.cookie = 'jwt=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+      window.location.href = '/';
+    }
   });
 });

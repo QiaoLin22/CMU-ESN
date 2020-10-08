@@ -116,8 +116,12 @@ body {
   border-top-width: 2px;
   border-top-color: #71bcc7;
   background-color: #d2edf1;
-  align-items: center;
+  /* align-items: center; */
 }
+
+/* .chat-footer #chatForm {
+  width: 100%;
+} */
 
 .chat-footer input {
   border-color: #17a2b8;
@@ -127,7 +131,8 @@ body {
 }
 
 .input-container {
-  display: flex;
+  /* width: 100%; */
+  /* display: flex; */
 }
 
 .message p {

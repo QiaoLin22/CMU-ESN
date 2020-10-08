@@ -16,6 +16,7 @@ class UserController {
     newUser
       .save()
       .then(() => {
+        req.io.emit('updateDirectory');
         res.status(201).send({ message: 'success' });
       })
       .catch((err) => {
