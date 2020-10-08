@@ -16,6 +16,7 @@ class UserController {
     newUser
       .save()
       .then(() => {
+        req.io.emit('updateDirectory');
         res.status(201).send({ message: 'success' });
       })
       .catch((err) => {
@@ -30,14 +31,16 @@ class UserController {
       });
   }
 
-  static retrieveUsers(req, res, next){
-    User.find({ online: true }, (err, online_users) => {
-      if(err) return next(err);
-      User.find({ online: false }, (err, offline_users) => {
-        if(err) return next(err);
-        res.json({ online: online_users, offline: offline_users });
-      }).sort({ username: 1 });
-    }).sort({ username: 1 });
+  static retrieveUsers(req, res, next) {
+    User.find(
+      {},
+      { username: 1, online: 1 },
+      { sort: { online: -1, username: 1 } },
+      (err, users) => {
+        if (err) return next(err);
+        return res.status(200).json({ users });
+      }
+    );
   }
 }
 

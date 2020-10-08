@@ -1,9 +1,8 @@
-const io = require('socket.io-client');
 const User = require('../models/user');
 const { validPassword } = require('../lib/utils');
 const { createToken } = require('../lib/utils');
 const reservedUsernames = require('../lib/reserved_usernames.json').usernames;
-const socket = io.connect('http://127.0.0.1:5000')
+
 function isValidUsername(username) {
   return username.length >= 3;
 }
@@ -15,18 +14,19 @@ function isValidPassword(password) {
 function isNotBannedUsername(username) {
   return !reservedUsernames.includes(username);
 }
-function changeLoginStatus(username) {
+function changeLoginStatus(username, io) {
   User.updateOne(
-            { "username": username}, // Filter
-            {$set: {"online": true}}, // Update
-       )
-      .then((obj) => {
-         console.log('Updated online status: ' + obj);
-         socket.emit('login')
-   })
-  .catch((err) => {
-     console.log(err);
-}) 
+    { username: username }, // Filter
+    { $set: { online: true } } // Update
+  )
+    .then((obj) => {
+      console.log(`Updated online status: ${obj}`);
+      io.emit('updateDirectory');
+    })
+    .catch((err) => {
+      console.log(err);
+      throw err;
+    });
 }
 
 class LoginController {
@@ -61,16 +61,13 @@ class LoginController {
       // user exists, check if password is correct
       if (validPassword(password, user.hash, user.salt)) {
         // generate jwt and return it in response
-        const token = createToken(user._id);
+        const token = createToken(user);
         const cookieMaxAge = 3 * 24 * 60 * 60;
         res.cookie('jwt', token, {
-          httpOnly: true,
           maxAge: cookieMaxAge * 1000,
         });
-        changeLoginStatus(username)
-        return res.status(200).json({
-          user: user._id,
-        });
+        changeLoginStatus(username, req.io);
+        return res.location('/main').end();
       } else {
         return res.status(400).json({
           error: 'Password incorrect',
