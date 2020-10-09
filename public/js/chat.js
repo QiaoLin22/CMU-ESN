@@ -33,7 +33,7 @@ function loadMessages() {
     });
 }
 
-$(document).ready(loadMessages);
+jQuery(loadMessages);
 
 socket.on('new message', (newMsg) => {
   outputMessage(newMsg);

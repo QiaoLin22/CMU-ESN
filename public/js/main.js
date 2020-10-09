@@ -46,7 +46,7 @@ socket.on('updateDirectory', () => {
   retrieveUsers();
 });
 
-$(document).ready(retrieveUsers);
+jQuery(retrieveUsers);
 
 logoutBtn.on('click', () => {
   fetch('/api/users/logout', {
