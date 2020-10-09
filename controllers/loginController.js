@@ -67,7 +67,7 @@ class LoginController {
           maxAge: cookieMaxAge * 1000,
         });
         changeLoginStatus(username, req.io);
-        return res.location('/main').end();
+        return res.location('/main').json();
       } else {
         return res.status(400).json({
           error: 'Password incorrect',
