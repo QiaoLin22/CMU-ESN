@@ -7,7 +7,7 @@ const LogoutController = require('../controllers/logoutController');
 
 router.get('/', authenticateUser, UserController.retrieveUsers);
 
-router.post('/', authenticateUser, UserController.createUser);
+router.post('/', UserController.createUser);
 
 router.post('/login', LoginController.login);
 
