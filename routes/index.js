@@ -1,8 +1,8 @@
 const router = require('express').Router();
 const { authenticateUser } = require('../middleware/authMiddleware');
 
-router.get('/', (req, res) => {
-  res.render('index');
+router.get('/', authenticateUser, (req, res) => {
+  res.redirect('/main');
 });
 
 router.get('/main', authenticateUser, (req, res) => {
