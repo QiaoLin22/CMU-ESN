@@ -54,7 +54,6 @@ logoutBtn.on('click', () => {
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ online: false }),
   }).then((res) => {
     console.log('yikes');
     if (res.ok) {
