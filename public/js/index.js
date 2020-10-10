@@ -85,13 +85,7 @@ $('#confirmBtn').on('click', () => {
     .catch((err) => catchError(err, confirmAlert));
 });
 
-$('#submitBtn').on('click', (event) => {
-  event.preventDefault();
-  hideAlert(loginAlert);
-
-  if (!checkUsernamePassword(usernameEle.val(), passwordEle.val())) return;
-
-  // fetch "/api/users/login" request
+function loginRequest() {
   fetch('/api/users/login', getPostOptions())
     .then(checkStatus)
     .then((data) => {
@@ -101,4 +95,21 @@ $('#submitBtn').on('click', (event) => {
       }
     })
     .catch((err) => catchError(err, loginAlert));
+}
+
+$('#submitBtn').on('click', (event) => {
+  event.preventDefault();
+  hideAlert(loginAlert);
+
+  if (!checkUsernamePassword(usernameEle.val(), passwordEle.val())) return;
+
+  // fetch "/api/users/login" request
+  loginRequest();
+});
+
+$('#welcomeNextBtn').on('click', (event) => {
+  if ($('#acknowledgementForm')[0].checkValidity()) {
+    event.preventDefault();
+    loginRequest();
+  }
 });
