@@ -1,12 +1,9 @@
-const User = require('../models/user');
+const { updateOnlineStatus } = require('../models/user');
 
 class LogoutController {
   static logout(req, res) {
     const { username } = res.locals;
-    User.updateOne(
-      { username }, // Filter
-      { $set: { online: false } } // Update
-    )
+    updateOnlineStatus(username, false)
       .then(() => {
         req.io.emit('updateDirectory');
         res.status(200).end();

@@ -1,24 +1,12 @@
-const User = require('../models/user');
-const { validPassword } = require('../lib/utils');
-const { createToken } = require('../lib/utils');
-const reservedUsernames = require('../lib/reserved_usernames.json').usernames;
+const {
+  updateOnlineStatus,
+  findUserByUsername,
+  validateUsernamePassword,
+} = require('../models/user');
+const { validPassword, createToken } = require('../lib/utils');
 
-function isValidUsername(username) {
-  return username.length >= 3;
-}
-
-function isValidPassword(password) {
-  return password.length >= 4;
-}
-
-function isNotBannedUsername(username) {
-  return !reservedUsernames.includes(username);
-}
 function changeLoginStatus(username, io) {
-  User.updateOne(
-    { username: username }, // Filter
-    { $set: { online: true } } // Update
-  )
+  updateOnlineStatus()
     .then((obj) => {
       console.log(`Updated online status: ${obj}`);
       io.emit('updateDirectory');
@@ -30,32 +18,22 @@ function changeLoginStatus(username, io) {
 }
 
 class LoginController {
-  static login(req, res, next) {
+  static async login(req, res, next) {
     const { username, password } = req.body;
 
-    User.findOne({ username: username }, (err, user) => {
-      if (err) return next(err);
+    try {
+      const user = await findUserByUsername(username);
+      // if (err) return next(err);
 
       // username does not exists
       if (!user) {
-        if (!isValidUsername(req.body.username)) {
-          return res.status(400).json({
-            error: 'Username should be at least 3 characters long',
-          });
+        try {
+          validateUsernamePassword(username, password);
+          // ask the user to confirm the creation of a new user
+          res.status(200).send({ message: 'create new user?' });
+        } catch (err) {
+          res.status(400).json({ error: err.message });
         }
-        if (!isNotBannedUsername(req.body.username)) {
-          return res.status(400).json({
-            error: 'Username is reserved',
-          });
-        }
-        if (!isValidPassword(req.body.password)) {
-          return res.status(400).json({
-            error: 'Passwords should be at least 4 characters long',
-          });
-        }
-
-        // ask the user to confirm the creation of a new user
-        return res.status(200).send({ message: 'create new user?' });
       }
 
       // user exists, check if password is correct
@@ -67,13 +45,16 @@ class LoginController {
           maxAge: cookieMaxAge * 1000,
         });
         changeLoginStatus(username, req.io);
-        return res.location('/main').json({});
+        res.location('/main').json({});
       } else {
-        return res.status(400).json({
+        res.status(400).json({
           error: 'Password incorrect',
         });
       }
-    });
+    } catch (err) {
+      console.log(err);
+      next(err);
+    }
   }
 }
 
