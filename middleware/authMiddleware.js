@@ -8,7 +8,7 @@ let PUB_KEY;
 try {
   PUB_KEY = fs.readFileSync(pathToKey, 'utf8');
 } catch (e) {
-  PUB_KEY = process.env.JWT_PUB_KEY;
+  PUB_KEY = process.env.JWT_PUB_KEY.replace(/\\n/gm, '\n');
 }
 
 const authenticateUser = (req, res, next) => {
