@@ -3,7 +3,13 @@ const path = require('path');
 const jwt = require('jsonwebtoken');
 
 const pathToKey = path.join(__dirname, '..', 'id_rsa_pub.pem');
-const PUB_KEY = fs.readFileSync(pathToKey, 'utf8');
+
+let PUB_KEY;
+try {
+  PUB_KEY = fs.readFileSync(pathToKey, 'utf8');
+} catch (e) {
+  PUB_KEY = process.env.JWT_PUB_KEY.replace(/\\n/gm, '\n');
+}
 
 const authenticateUser = (req, res, next) => {
   const token = req.cookies.jwt;
