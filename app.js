@@ -1,7 +1,9 @@
+const PORT = process.env.PORT || 80;
+
 const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
-const io = require('socket.io')(5000);
+const socketIO = require('socket.io');
 
 require('dotenv').config();
 
@@ -18,17 +20,21 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
-// pass io to following middleware/router
-app.use((req, res, next) => {
-  req.io = io;
-  next();
-});
-
 app.use('/', indexRouter);
 app.use('/api/users', usersRouter);
 app.use('/api/messages', messagesRouter);
 
-app.listen(process.env.PORT || 3000);
+const server = app.listen(PORT);
+
+const io = socketIO(server);
+// console.log(io);
+
+// pass io to following middleware/router
+app.use((req, res, next) => {
+  console.log(io);
+  res.io = io;
+  next();
+});
 
 io.on('connection', (socket) => {
   // console.log(`${socket.id} connected`);

@@ -1,5 +1,5 @@
 /* global io */
-const socket = io('http://localhost:5000');
+const socket = io();
 
 const logoutBtn = $('#logoutBtn');
 

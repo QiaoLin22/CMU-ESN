@@ -66,7 +66,8 @@ class LoginController {
         res.cookie('jwt', token, {
           maxAge: cookieMaxAge * 1000,
         });
-        changeLoginStatus(username, req.io);
+        console.log(res.io);
+        changeLoginStatus(username, res.io);
         return res.location('/main').json({});
       } else {
         return res.status(400).json({
