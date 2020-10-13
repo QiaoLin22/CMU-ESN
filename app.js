@@ -28,7 +28,7 @@ app.use('/', indexRouter);
 app.use('/api/users', usersRouter);
 app.use('/api/messages', messagesRouter);
 
-app.listen(3000);
+app.listen(process.env.PORT || 3000);
 
 io.on('connection', (socket) => {
   // console.log(`${socket.id} connected`);
