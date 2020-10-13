@@ -5,8 +5,8 @@ const {
 } = require('../models/user');
 const { validPassword, createToken } = require('../lib/utils');
 
-function changeLoginStatus(username, io) {
-  updateOnlineStatus()
+function changeLoginStatus(username, io, online) {
+  updateOnlineStatus(username, online)
     .then((obj) => {
       console.log(`Updated online status: ${obj}`);
       io.emit('updateDirectory');
@@ -44,7 +44,7 @@ class LoginLogoutController {
         res.cookie('jwt', token, {
           maxAge: cookieMaxAge * 1000,
         });
-        changeLoginStatus(username, req.io);
+        changeLoginStatus(username, req.io, true);
         res.location('/main').json({});
       } else {
         res.status(400).json({

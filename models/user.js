@@ -35,7 +35,7 @@ function createNewUser(username, hash, salt) {
     online: false,
   });
 
-  return newUser.save().exec();
+  return newUser.save();
 }
 
 function retrieveUsers() {
@@ -43,18 +43,18 @@ function retrieveUsers() {
     {},
     { username: 1, online: 1 },
     { sort: { online: -1, username: 1 } }
-  ).exec();
+  );
 }
 
 function findUserByUsername(username) {
-  return User.findOne({ username: username }).exec();
+  return User.findOne({ username: username });
 }
 
 function updateOnlineStatus(username, online) {
   return User.updateOne(
     { username: username }, // Filter
     { $set: { online: online } } // Update
-  ).exec();
+  );
 }
 
 function validateUsernamePassword(username, password) {

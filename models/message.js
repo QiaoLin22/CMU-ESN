@@ -45,7 +45,7 @@ function createNewMessage(username, message) {
 }
 
 function getHistoricalMessages() {
-  return Message.find({}).exec();
+  return Message.find({});
 }
 
 module.exports = { createNewMessage, getHistoricalMessages };
