@@ -1,0 +1,19 @@
+version: 2.1
+jobs:
+  build:
+    docker: # run the steps with Docker
+      - image: circleci/node:latest
+    steps:
+      - checkout
+      - restore_cache: # restore the dependency cache
+          key: dependency-cache-{{ checksum "package.json" }}
+      - run:
+          name: install-npm
+          command: npm install
+      - save_cache: # save the dependency cache
+          key: dependency-cache-{{ checksum "package.json" }}
+          paths:
+            - ./node_modules
+      - run:
+          name: lint
+          command: npm run lint
