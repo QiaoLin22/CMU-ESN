@@ -26,4 +26,26 @@ const MessageSchema = new mongoose.Schema({
 });
 
 const Message = mongoose.model('Message', MessageSchema);
-module.exports = Message;
+
+function createNewMessage(username, message) {
+  const newMessage = new Message({
+    username: username,
+    timestamp: new Date(Date.now()).toISOString(),
+    message: message,
+  });
+
+  return new Promise((resolve, reject) => {
+    newMessage
+      .save()
+      .then(() => {
+        resolve(newMessage);
+      })
+      .catch(() => reject(Error('Unable to create new message')));
+  });
+}
+
+function getHistoricalMessages() {
+  return Message.find({});
+}
+
+module.exports = { createNewMessage, getHistoricalMessages };
