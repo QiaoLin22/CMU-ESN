@@ -34,14 +34,7 @@ function createNewMessage(username, message) {
     message: message,
   });
 
-  return new Promise((resolve, reject) => {
-    newMessage
-      .save()
-      .then(() => {
-        resolve(newMessage);
-      })
-      .catch(() => reject(Error('Unable to create new message')));
-  });
+  return newMessage.save();
 }
 
 function getHistoricalMessages() {
