@@ -1,17 +1,25 @@
-const PORT = process.env.PORT || 80;
+require('dotenv').config();
 
 const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
-const socketIO = require('socket.io');
 
-require('dotenv').config();
+const app = express();
+const server = require('http').createServer(app);
+const io = require('socket.io').listen(server);
 
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 const messagesRouter = require('./routes/messages');
 
-const app = express();
+const PORT = process.env.PORT || 3000;
+
+// pass io to following middleware/router
+app.use((req, res, next) => {
+  req.io = io;
+  next();
+});
+
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 app.use(express.static(path.join(__dirname, 'public')));
@@ -24,17 +32,7 @@ app.use('/', indexRouter);
 app.use('/api/users', usersRouter);
 app.use('/api/messages', messagesRouter);
 
-const server = app.listen(PORT);
-
-const io = socketIO(server);
-// console.log(io);
-
-// pass io to following middleware/router
-app.use((req, res, next) => {
-  console.log(io);
-  res.io = io;
-  next();
-});
+server.listen(PORT);
 
 io.on('connection', (socket) => {
   // console.log(`${socket.id} connected`);
