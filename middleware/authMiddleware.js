@@ -2,6 +2,8 @@ const fs = require('fs');
 const path = require('path');
 const jwt = require('jsonwebtoken');
 
+const { findUserByUsername } = require('../models/user');
+
 const pathToKey = path.join(__dirname, '..', 'id_rsa_pub.pem');
 
 let PUB_KEY;
@@ -28,4 +30,34 @@ const authenticateUser = (req, res, next) => {
   }
 };
 
-module.exports = { authenticateUser };
+const verifyRoomId = (req, res, next) => {
+  const { roomId } = req.params;
+  const { username } = res.locals;
+
+  const usernameIndex = roomId.indexOf(username);
+  let otherUsername;
+
+  if (usernameIndex > -1) {
+    if (usernameIndex === 0) {
+      otherUsername = roomId.substring(username.length);
+    } else {
+      otherUsername = roomId.substring(0, usernameIndex);
+    }
+
+    if (username === otherUsername) {
+      res.status(400).send('room id is not valid');
+    } else {
+      findUserByUsername(otherUsername).then((user) => {
+        if (user) {
+          next();
+        } else {
+          res.status(400).send('room id is not valid');
+        }
+      });
+    }
+  } else {
+    res.status(400).send('room id is not valid');
+  }
+};
+
+module.exports = { authenticateUser, verifyRoomId };

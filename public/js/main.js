@@ -18,6 +18,11 @@ function getGetOptions() {
 function outputUser(data, online) {
   const user = document.createElement('div');
   user.classList.add('online-item');
+  if (data.username === username) {
+    user.style.cursor = 'not-allowed';
+    user.style.pointerEvents = 'none';
+  }
+
   if (online) {
     user.innerHTML = `<li class="list-group-item list-group-item-action">${data.username}</li>`;
     $('#online-list').append(user);
