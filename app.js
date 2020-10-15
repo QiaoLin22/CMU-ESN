@@ -37,7 +37,8 @@ server.listen(PORT);
 io.on('connection', (socket) => {
   // console.log(`${socket.id} connected`);
 
-  socket.on('joinRoom', (roomName) => {
+  socket.on('joinRoom', () => {
+    
     socket.join(roomName);
   });
 

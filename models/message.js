@@ -27,18 +27,19 @@ const MessageSchema = new mongoose.Schema({
 
 const Message = mongoose.model('Message', MessageSchema);
 
-function createNewMessage(username, message) {
+function createNewMessage(username, message, roomID) {
   const newMessage = new Message({
     username: username,
     timestamp: new Date(Date.now()).toISOString(),
     message: message,
+    roomID: roomID,
   });
 
   return newMessage.save();
 }
 
-function getHistoricalMessages() {
-  return Message.find({});
+function getHistoricalMessages(roomID) {
+  return Message.find({roomID: roomID});
 }
 
-module.exports = { createNewMessage, getHistoricalMessages };
+module.exports = { createNewMessage, getHistoricalMessages};

@@ -5,9 +5,9 @@ const {
 
 class messageController {
   static createMessage(req, res) {
-    const { username, message } = req.body;
+    const { username, message, roomID } = req.body;
 
-    createNewMessage(username, message)
+    createNewMessage(username, message, roomID)
       .then((newMessage) => {
         req.io.emit('new message', newMessage);
         res.status(201).send({ message: 'successfully create a message' });
@@ -19,8 +19,12 @@ class messageController {
   }
 
   static getMessage(req, res) {
-    getHistoricalMessages().then((messages) => res.send(messages));
+    const {roomID } = req.body;
+    getHistoricalMessages(roomID).then((messages) => res.send(messages));
   }
+
+  
+
 }
 
 module.exports = messageController;
