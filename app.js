@@ -34,12 +34,25 @@ app.use('/api/messages', messagesRouter);
 
 server.listen(PORT);
 
+const { retrieveUsers } = require('./models/user');
+
 io.on('connection', (socket) => {
   // console.log(`${socket.id} connected`);
 
-  socket.on('joinRoom', () => {
-    
-    socket.join(roomName);
+  socket.on('join room', async (username) => {
+    const userList = await retrieveUsers();
+
+    userList.forEach((user) => {
+      const otherUsername = user.username;
+      if (otherUsername !== username) {
+        const roomId =
+          username < otherUsername
+            ? `${username}${otherUsername}`
+            : `${otherUsername}${username}`;
+        // console.log(roomId);
+        socket.join(roomId);
+      }
+    });
   });
 
   socket.on('disconnect', () => {

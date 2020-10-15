@@ -23,23 +23,29 @@ const MessageSchema = new mongoose.Schema({
     type: String,
     required: [true, 'Message is required'],
   },
+  roomId: {
+    type: String,
+    required: [true, 'Room ID is required'],
+    default: undefined,
+  },
 });
 
 const Message = mongoose.model('Message', MessageSchema);
 
-function createNewMessage(username, message, roomID) {
+function createNewMessage(username, message, roomId) {
+  console.log(roomId);
   const newMessage = new Message({
     username: username,
     timestamp: new Date(Date.now()).toISOString(),
     message: message,
-    roomID: roomID,
+    roomId: roomId,
   });
 
   return newMessage.save();
 }
 
-function getHistoricalMessages(roomID) {
-  return Message.find({roomID: roomID});
+function getHistoricalMessages(roomId) {
+  return Message.find({ roomId: roomId });
 }
 
-module.exports = { createNewMessage, getHistoricalMessages};
+module.exports = { createNewMessage, getHistoricalMessages };

@@ -19,12 +19,9 @@ class messageController {
   }
 
   static getMessage(req, res) {
-    const {roomID } = req.body;
-    getHistoricalMessages(roomID).then((messages) => res.send(messages));
+    const { roomId } = req.params;
+    getHistoricalMessages(roomId).then((messages) => res.send(messages));
   }
-
-  
-
 }
 
 module.exports = messageController;

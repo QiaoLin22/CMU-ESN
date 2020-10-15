@@ -13,4 +13,8 @@ router.get('/public-wall', authenticateUser, (req, res) => {
   res.render('chat', { username: res.locals.username });
 });
 
+router.get('/private-chat/:roomId', authenticateUser, (req, res) => {
+  res.render('chat', { username: res.locals.username });
+});
+
 module.exports = router;

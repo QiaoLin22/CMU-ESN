@@ -1,6 +1,9 @@
 /* global io */
 const socket = io();
 
+const username = $('#username-data').val();
+socket.emit('join room', username);
+
 const logoutBtn = $('#logoutBtn');
 
 function getGetOptions() {
@@ -22,6 +25,15 @@ function outputUser(data, online) {
     user.innerHTML = `<li class="list-group-item list-group-item-action offline-list-item">${data.username}</li>`;
     $('#offline-list').append(user);
   }
+
+  user.addEventListener('click', (event) => {
+    const otherUsername = event.target.innerHTML;
+    const roomId =
+      username < otherUsername
+        ? `${username}${otherUsername}`
+        : `${otherUsername}${username}`;
+    window.location.href = `/private-chat/${roomId}`;
+  });
 }
 
 function retrieveUsers() {

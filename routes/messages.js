@@ -7,8 +7,8 @@ router.post('/public', authenticateUser, MessageController.createMessage);
 
 router.get('/public', authenticateUser, MessageController.getMessage);
 
-router.get('/private', authenticateUser, MessageController.getMessage);
+router.get('/private/:roomId', authenticateUser, MessageController.getMessage);
 
-router.post('/private/{roomID}', authenticateUser, MessageController.createMessage);
+router.post('/private', authenticateUser, MessageController.createMessage);
 
 module.exports = router;
