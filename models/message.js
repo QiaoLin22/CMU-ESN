@@ -26,7 +26,6 @@ const MessageSchema = new mongoose.Schema({
   roomId: {
     type: String,
     required: [true, 'Room ID is required'],
-    default: undefined,
   },
 });
 

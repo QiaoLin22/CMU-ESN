@@ -9,9 +9,10 @@ const roomId = (() => {
   const urlList = window.location.href.split('/');
   const lastStr = urlList[urlList.length - 1];
 
-  return lastStr === 'public' ? undefined : lastStr;
+  return lastStr === 'public-wall' ? "public" : lastStr;
 })();
 
+$('#roomId-data').text(roomId);
 const chatContainer = $('.chat-container');
 const chatMessages = $('.chat-messages');
 const msgEle = $('#msg');
@@ -28,11 +29,10 @@ function outputMessage(message) {
   chatContainer.scrollTop(chatContainer[0].scrollHeight);
 }
 
-function loadMessages() {
-  const publicOrPrivate = !roomId ? 'public' : 'private';
 
-  console.log(publicOrPrivate);
-  fetch(`/api/messages/${publicOrPrivate}/${roomId}`, {
+function loadMessages() {
+  const fetchURL =  roomId === "public" ? '/api/messages/public' : `/api/messages/private/${roomId}`;
+  fetch(fetchURL, {
     method: 'GET',
   })
     .then((res) => res.json())
@@ -46,10 +46,19 @@ function loadMessages() {
     });
 }
 
+
 jQuery(loadMessages);
 
-socket.on('new message', (newMsg) => {
-  outputMessage(newMsg);
+socket.on('new public message', (newMsg) => {
+  if(roomId === "public"){
+    outputMessage(newMsg);
+  }
+});
+
+socket.on('new private message', (newMsg) => {
+  if(newMsg.roomId === roomId){
+    outputMessage(newMsg);
+  }
 });
 
 // input new Message
@@ -63,8 +72,7 @@ $('#submitBtn').on('click', (element) => {
     roomId: roomId,
   };
 
-  const publicOrPrivate = !roomId ? 'public' : 'private';
-
+  const publicOrPrivate = roomId === "public" ? 'public' : 'private';
   fetch(`/api/messages/${publicOrPrivate}`, {
     method: 'POST',
     headers: {
