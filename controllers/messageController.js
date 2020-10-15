@@ -5,9 +5,8 @@ const {
 
 class messageController {
   static createMessage(req, res) {
-    const { username, message, roomID } = req.body;
-
-    createNewMessage(username, message, roomID)
+    const { username, message, roomId } = req.body;
+    createNewMessage(username, message, roomId)
       .then((newMessage) => {
         req.io.emit('new message', newMessage);
         res.status(201).send({ message: 'successfully create a message' });

@@ -33,7 +33,6 @@ const MessageSchema = new mongoose.Schema({
 const Message = mongoose.model('Message', MessageSchema);
 
 function createNewMessage(username, message, roomId) {
-  console.log(roomId);
   const newMessage = new Message({
     username: username,
     timestamp: new Date(Date.now()).toISOString(),
