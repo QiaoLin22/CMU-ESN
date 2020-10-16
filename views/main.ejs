@@ -36,7 +36,25 @@
 
               <div id="offline-list"></div>
             </div>
-
+            <br>
+            <div class="dropdown">
+              <a class="btn btn-info dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Status
+              </a>
+            
+              <div class="dropdown-menu" aria-labelledby="dropdownMenuLink" >
+                <a class="dropdown-item status-btn" href="#" >OK</a>
+                <a class="dropdown-item status-btn" href="#">Help</a>
+                <a class="dropdown-item status-btn" href="#">Emergency</a>
+                <a class="dropdown-item status-btn" href="#">Undefined</a>
+              </div>
+            </div>
+            <!-- use only for passing the username -->
+            <input
+            id="username-data"
+            value="<%= username %>"
+            style="display: none"
+            />
             <br />
             <button id="logoutBtn" class="btn btn-info btn-block">Log out</a>
           </ul>

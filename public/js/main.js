@@ -2,6 +2,13 @@
 const socket = io();
 
 const logoutBtn = $('#logoutBtn');
+const username = $('#username-data').val();
+const ok = $(".status-btn:nth-child(1)");
+const help = $(".status-btn:nth-child(2)");
+const emergency = $(".status-btn:nth-child(3)");
+const undefined = $(".status-btn:nth-child(4)");
+
+
 
 function getGetOptions() {
   return {
@@ -16,10 +23,10 @@ function outputUser(data, online) {
   const user = document.createElement('div');
   user.classList.add('online-item');
   if (online) {
-    user.innerHTML = `<li class="list-group-item list-group-item-action">${data.username}</li>`;
+    user.innerHTML = `<li class="list-group-item list-group-item-action">${data.username+' '+data.status}</li>`;
     $('#online-list').append(user);
   } else {
-    user.innerHTML = `<li class="list-group-item list-group-item-action offline-list-item">${data.username}</li>`;
+    user.innerHTML = `<li class="list-group-item list-group-item-action offline-list-item">${data.username}</>`;
     $('#offline-list').append(user);
   }
 }
@@ -63,3 +70,27 @@ logoutBtn.on('click', () => {
     }
   });
 });
+
+function updateStatus(status,username) {
+  status.on('click', () => {
+    let newStatus = {
+      username: username,
+      status:status.text()
+    }
+    fetch('/api/users', {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(newStatus)
+    }).catch((e) => {
+      console.log(e);
+    });
+  })
+}
+updateStatus(ok,username)
+updateStatus(help,username)
+updateStatus(emergency,username)
+updateStatus(undefined,username)
+
+
