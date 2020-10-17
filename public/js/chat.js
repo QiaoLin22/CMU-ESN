@@ -11,7 +11,7 @@ function outputMessage(message,status) {
 
   const msg = document.createElement('div');
   msg.classList.add('message');
-  msg.innerHTML = `<p class="meta mb-1"> ${message.username} <span>${`${`${data.username} ${icon}`}`}</span> <span class="ml-3"> ${timestamp} </span></p> <p class="text"> ${message.message} </p>`;
+  msg.innerHTML = `<p class="meta mb-1"> ${message.username} <span></span> <span class="ml-3"> ${timestamp} </span></p> <p class="text"> ${message.message} </p>`;
   chatMessages.append(msg);
 
   // scroll to the bottom
@@ -57,11 +57,11 @@ function retrieveStatus() {
       data.users.forEach((user) => {
         statusMap.set(user.username,user.status)
       });
+      return statusMap
     })
     .catch((e) => {
       console.log(e);
     });
-    return statusMap
 }
 
 jQuery(loadMessages);
