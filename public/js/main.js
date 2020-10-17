@@ -88,6 +88,8 @@ function updateStatus(status,username) {
     });
   })
 }
+
+
 updateStatus(ok,username)
 updateStatus(help,username)
 updateStatus(emergency,username)
