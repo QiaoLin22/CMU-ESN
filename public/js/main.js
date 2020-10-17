@@ -32,7 +32,7 @@ function outputUser(data, online, status) {
   const user = document.createElement('div');
   user.classList.add('online-item');
   if (online) {
-    user.innerHTML = `<li class="list-group-item list-group-item-action">${`${`${data.username} ${icon}`}`}</li>`;
+    user.innerHTML = `<li class="list-group-item list-group-item-action online-list-item">${`${`${data.username} ${icon}`}`}</li>`;
     $('#online-list').append(user);
   } else {
     user.innerHTML = `<li class="list-group-item list-group-item-action offline-list-item">${`${`${data.username} ${icon}`}`}</>`;

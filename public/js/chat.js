@@ -94,7 +94,6 @@ $('#submitBtn').on('click', (element) => {
   element.preventDefault();
 
   const newMsg = {
-    // TODO: get username
     username: username.val(),
     message: msgEle.val(),
   };

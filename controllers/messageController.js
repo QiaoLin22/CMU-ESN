@@ -12,10 +12,9 @@ class messageController {
     createNewMessage(username, message)
       .then((newMessage) => {
         getStatusByUsername(username).then((status) => {
-          req.io.emit('new message', newMessage,status);
+          req.io.emit('new message', newMessage, status);
           res.status(201).send({ message: 'successfully create a message' });
-        })
-        
+        });
       })
       .catch((e) => {
         console.log(e);
