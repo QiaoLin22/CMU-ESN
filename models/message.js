@@ -23,29 +23,27 @@ const MessageSchema = new mongoose.Schema({
     type: String,
     required: [true, 'Message is required'],
   },
+  roomId: {
+    type: String,
+    required: [true, 'Room ID is required'],
+  },
 });
 
 const Message = mongoose.model('Message', MessageSchema);
 
-function createNewMessage(username, message) {
+function createNewMessage(username, message, roomId) {
   const newMessage = new Message({
     username: username,
     timestamp: new Date(Date.now()).toISOString(),
     message: message,
+    roomId: roomId,
   });
 
-  return new Promise((resolve, reject) => {
-    newMessage
-      .save()
-      .then(() => {
-        resolve(newMessage);
-      })
-      .catch(() => reject(Error('Unable to create new message')));
-  });
+  return newMessage.save();
 }
 
-function getHistoricalMessages() {
-  return Message.find({});
+function getHistoricalMessages(roomId) {
+  return Message.find({ roomId: roomId });
 }
 
 module.exports = { createNewMessage, getHistoricalMessages };
