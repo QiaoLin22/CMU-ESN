@@ -1,10 +1,21 @@
 /* global io */
 const socket = io();
 
+const username = $('#username-data').val();
+socket.emit('join room', username);
+
+const roomId = (() => {
+  // check if this is private chat
+  const urlList = window.location.href.split('/');
+  const lastStr = urlList[urlList.length - 1];
+
+  return lastStr === 'public-wall' ? "public" : lastStr;
+})();
+
+$('#roomId-data').text(roomId);
 const chatContainer = $('.chat-container');
 const chatMessages = $('.chat-messages');
 const msgEle = $('#msg');
-const username = $('#username-data');
 
 function outputMessage(message) {
   const timestamp = new Date(message.timestamp).toLocaleString();
@@ -18,8 +29,10 @@ function outputMessage(message) {
   chatContainer.scrollTop(chatContainer[0].scrollHeight);
 }
 
+
 function loadMessages() {
-  fetch('/api/messages/public', {
+  const fetchURL =  roomId === "public" ? '/api/messages/public' : `/api/messages/private/${roomId}`;
+  fetch(fetchURL, {
     method: 'GET',
   })
     .then((res) => res.json())
@@ -33,10 +46,19 @@ function loadMessages() {
     });
 }
 
+
 jQuery(loadMessages);
 
-socket.on('new message', (newMsg) => {
-  outputMessage(newMsg);
+socket.on('new public message', (newMsg) => {
+  if(roomId === "public"){
+    outputMessage(newMsg);
+  }
+});
+
+socket.on('new private message', (newMsg) => {
+  if(newMsg.roomId === roomId){
+    outputMessage(newMsg);
+  }
 });
 
 // input new Message
@@ -45,11 +67,13 @@ $('#submitBtn').on('click', (element) => {
 
   const newMsg = {
     // TODO: get username
-    username: username.val(),
+    username: username,
     message: msgEle.val(),
+    roomId: roomId,
   };
 
-  fetch('/api/messages/public', {
+  const publicOrPrivate = roomId === "public" ? 'public' : 'private';
+  fetch(`/api/messages/${publicOrPrivate}`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

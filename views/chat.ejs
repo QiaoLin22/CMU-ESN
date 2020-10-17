@@ -28,7 +28,8 @@
         <div class="col-lg col-md-6 col-sm-8">
           <div class="row chat-header">
             <h6 class="mt-1">
-              <a href="/main" class="mr-3 ml-3"><</a> # Public
+              <a href="/main" class="mr-3 ml-3" ><</a>
+              <span id = "roomId-data"></span>
             </h6>
           </div>
 
@@ -66,6 +67,7 @@
             value="<%= username %>"
             style="display: none"
           />
+
         </div>
 
         <div class="col-lg col-md-3 col-sm-2"></div>
@@ -88,5 +90,5 @@
     crossorigin="anonymous"
   ></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.3/socket.io.js"></script>
-  <script type="module" src="js/chat.js"></script>
+  <script type="module" src="/js/chat.js"></script>
 </html>
