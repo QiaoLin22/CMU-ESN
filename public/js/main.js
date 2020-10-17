@@ -5,6 +5,10 @@ const username = $('#username-data').val();
 socket.emit('join room', username);
 
 const logoutBtn = $('#logoutBtn');
+const ok = $('.status-btn:nth-child(1)');
+const help = $('.status-btn:nth-child(2)');
+const emergency = $('.status-btn:nth-child(3)');
+const na = $('.status-btn:nth-child(4)');
 
 function getGetOptions() {
   return {
@@ -15,7 +19,18 @@ function getGetOptions() {
   };
 }
 
-function outputUser(data, online) {
+function outputUser(data, online, status) {
+  let icon = '';
+  if (status === 'OK') {
+    icon = '<i class="far fa-check-circle ml-1" style="color: #18b87e"></i>';
+  } else if (status === 'Help') {
+    icon = '<i class="fas fa-info-circle ml-1" style="color: #ffd500"></i>';
+  } else if (status === 'Emergency') {
+    icon = '<i class="fas fa-first-aid ml-1" style="color: #fb5252"></i>';
+  } else if (status === undefined || status === 'Undefined') {
+    icon = '<i class="far fa-question-circle ml-1" style="color: #d8d8d8"></i>';
+  }
+
   const user = document.createElement('div');
   user.classList.add('online-item');
   if (data.username === username) {
@@ -24,15 +39,18 @@ function outputUser(data, online) {
   }
 
   if (online) {
-    user.innerHTML = `<li class="list-group-item list-group-item-action">${data.username}</li>`;
+    user.innerHTML = `<li class="list-group-item list-group-item-action online-list-item">${`${`${data.username}${icon}`}`}</li>`;
     $('#online-list').append(user);
   } else {
-    user.innerHTML = `<li class="list-group-item list-group-item-action offline-list-item">${data.username}</li>`;
+    user.innerHTML = `<li class="list-group-item list-group-item-action offline-list-item">${`${`${data.username}${icon}`}`}</>`;
     $('#offline-list').append(user);
   }
 
   user.addEventListener('click', (event) => {
-    const otherUsername = event.target.innerHTML;
+    const otherUsername = event.target.innerText;
+    console.log(username);
+    console.log(otherUsername);
+
     const roomId =
       username < otherUsername
         ? `${username}${otherUsername}`
@@ -47,8 +65,9 @@ function retrieveUsers() {
       return res.json();
     })
     .then((data) => {
+      console.log(data);
       data.users.forEach((user) => {
-        outputUser(user, user.online);
+        outputUser(user, user.online, user.status);
       });
     })
     .catch((e) => {
@@ -71,9 +90,7 @@ logoutBtn.on('click', () => {
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ online: false }),
   }).then((res) => {
-    console.log('yikes');
     if (res.ok) {
       // delete jwt
       document.cookie = 'jwt=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
@@ -81,3 +98,26 @@ logoutBtn.on('click', () => {
     }
   });
 });
+
+function updateStatus(status) {
+  status.on('click', () => {
+    const newStatus = {
+      username: username,
+      status: status.text(),
+    };
+    console.log(newStatus);
+    fetch('/api/users', {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(newStatus),
+    }).catch((e) => {
+      console.log(e);
+    });
+  });
+}
+updateStatus(ok);
+updateStatus(help);
+updateStatus(emergency);
+updateStatus(na);
