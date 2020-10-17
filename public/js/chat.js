@@ -6,7 +6,7 @@ const chatMessages = $('.chat-messages');
 const msgEle = $('#msg');
 const username = $('#username-data');
 
-function outputMessage(message) {
+function outputMessage(message,status) {
   const timestamp = new Date(message.timestamp).toLocaleString();
 
   const msg = document.createElement('div');
@@ -18,14 +18,28 @@ function outputMessage(message) {
   chatContainer.scrollTop(chatContainer[0].scrollHeight);
 }
 
-function loadMessages() {
+function getGetOptions() {
+  return {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  };
+}
+
+async function loadMessages() {
+  const statusMap = await retrieveStatus()
+  console.log(statusMap)
   fetch('/api/messages/public', {
     method: 'GET',
   })
     .then((res) => res.json())
     .then((json) => {
       json.forEach((message) => {
-        outputMessage(message);
+        const status = statusMap.get(message.username)
+        console.log(status)
+        console.log(message.username)
+        outputMessage(message,status);
       });
     })
     .catch((e) => {
@@ -33,10 +47,29 @@ function loadMessages() {
     });
 }
 
+function retrieveStatus() {
+  let statusMap = new Map()
+  fetch('/api/users', getGetOptions())
+    .then((res) => {
+      return res.json();
+    })
+    .then((data) => {
+      data.users.forEach((user) => {
+        statusMap.set(user.username,user.status)
+      });
+    })
+    .catch((e) => {
+      console.log(e);
+    });
+    return statusMap
+}
+
 jQuery(loadMessages);
 
-socket.on('new message', (newMsg) => {
-  outputMessage(newMsg);
+socket.on('new message', async(newMsg) => {
+  const statusMap = await retrieveStatus()
+  const status = statusMap.get(newMsg.username)
+  outputMessage(newMsg,status);
 });
 
 // input new Message
@@ -63,3 +96,5 @@ $('#submitBtn').on('click', (element) => {
       console.log(e);
     });
 });
+
+

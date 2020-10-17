@@ -15,6 +15,18 @@ body {
   font-weight: 400;
 }
 
+a {
+  color: #17a2b8;
+}
+
+a:active {
+  color: #17a2b8;
+}
+
+a:hover {
+  color: #07869a;
+}
+
 /* login page */
 
 .login-container {
@@ -77,6 +89,24 @@ body {
 .offline-list-item:hover {
   color: #a7bdc1;
   cursor: pointer;
+}
+
+.direct-msg {
+  display: flex;
+  justify-content: space-between;
+}
+
+.direct-msg span {
+  align-self: center;
+}
+
+.dropdown-container {
+  background: #18a2b84f;
+  border: none;
+}
+
+.status-btn {
+  color: #1b5058;
 }
 
 /* chat page */

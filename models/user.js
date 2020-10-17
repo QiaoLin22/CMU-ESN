@@ -51,7 +51,7 @@ function createNewUser(username, hash, salt) {
 function retrieveUsers() {
   return User.find(
     {},
-    { username: 1, online: 1 ,status: 1},
+    { username: 1, online: 1, status: 1 },
     { sort: { online: -1, username: 1 } }
   );
 }

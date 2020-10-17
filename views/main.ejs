@@ -13,6 +13,10 @@
       crossorigin="anonymous"
     />
     <link rel="stylesheet" href="../css/style.css" />
+    <script
+      src="https://use.fontawesome.com/releases/v5.15.1/js/all.js"
+      data-auto-a11y="true"
+    ></script>
     <title>Main page</title>
   </head>
   <body>
@@ -30,38 +34,41 @@
           </ul>
 
           <ul class="list-group list-group-flush directory-category">
-            <ui><h6>Direct Messages</h6></ui>
+            <ui>
+              <div class="direct-msg mb-3">
+                <span><h6>Direct Messages</h6></span>
+                <span class="dropdown">
+                  <a class="btn btn-info dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Status
+                  </a>
+                  <div class="dropdown-menu dropdown-menu-right dropdown-container mt-2 pt-3 pb-3" aria-labelledby="dropdownMenuLink" >
+                    <a class="dropdown-item status-btn" href="#">OK<i class="far fa-check-circle ml-2" style="color: #18b87e"></i></a>
+                    <a class="dropdown-item status-btn" href="#">Help<i class="fas fa-info-circle ml-2" style="color: #fff28f"></i></a>
+                    <a class="dropdown-item status-btn" href="#">Emergency<i class="fas fa-first-aid ml-2" style="color: #fb5252"></i></a>
+                    <a class="dropdown-item status-btn" href="#">Undefined<i class="far fa-question-circle ml-2" style="color: white"></i></a>
+                  </div>
+                </span>
+              </div>
+            </ui>
             <div class="online-offline-list">
               <div id="online-list"></div>
 
               <div id="offline-list"></div>
             </div>
             <br>
-            <div class="dropdown">
-              <a class="btn btn-info dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Status
-              </a>
-            
-              <div class="dropdown-menu" aria-labelledby="dropdownMenuLink" >
-                <a class="dropdown-item status-btn" href="#" >OK</a>
-                <a class="dropdown-item status-btn" href="#">Help</a>
-                <a class="dropdown-item status-btn" href="#">Emergency</a>
-                <a class="dropdown-item status-btn" href="#">Undefined</a>
-              </div>
-            </div>
-            <!-- use only for passing the username -->
-            <input
-            id="username-data"
-            value="<%= username %>"
-            style="display: none"
-            />
-            <br />
             <button id="logoutBtn" class="btn btn-info btn-block">Log out</a>
           </ul>
         </div>
         <div class="col-lg col-md-3 col-1"></div>
       </div>
     </div>
+    <!-- use only for passing the username -->
+    <input
+      id="username-data"
+      value="<%= username %>"
+      style="display: none"
+    />
+
   </body>
   <script
     src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
