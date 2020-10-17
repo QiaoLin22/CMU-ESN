@@ -3,12 +3,15 @@ const {
   createNewMessage,
 } = require('../models/message');
 
+const { getStatusByUsername } = require('../models/user');
+
 class messageController {
   static createMessage(req, res) {
     const { username, message } = req.body;
 
     createNewMessage(username, message)
       .then((newMessage) => {
+        // const status = getStatusByUsername(username);
         req.io.emit('new message', newMessage);
         res.status(201).send({ message: 'successfully create a message' });
       })
