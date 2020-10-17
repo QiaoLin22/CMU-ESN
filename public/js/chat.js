@@ -6,12 +6,22 @@ const chatMessages = $('.chat-messages');
 const msgEle = $('#msg');
 const username = $('#username-data');
 
-function outputMessage(message,status) {
-  const timestamp = new Date(message.timestamp).toLocaleString();
+function outputMessage(message, status) {
+  let icon = '';
+  if (status === 'OK') {
+    icon = '<i class="far fa-check-circle ml-1" style="color: #18b87e"></i>';
+  } else if (status === 'Help') {
+    icon = '<i class="fas fa-info-circle ml-1" style="color: #ffd500"></i>';
+  } else if (status === 'Emergency') {
+    icon = '<i class="fas fa-first-aid ml-1" style="color: #fb5252"></i>';
+  } else if (status === undefined || status === 'Undefined') {
+    icon = '<i class="far fa-question-circle ml-1" style="color: #d8d8d8"></i>';
+  }
 
+  const timestamp = new Date(message.timestamp).toLocaleString();
   const msg = document.createElement('div');
   msg.classList.add('message');
-  msg.innerHTML = `<p class="meta mb-1"> ${message.username} <span></span> <span class="ml-3"> ${timestamp} </span></p> <p class="text"> ${message.message} </p>`;
+  msg.innerHTML = `<p class="meta mb-1"> ${message.username} <span>${icon}</span> <span class="ml-3"> ${timestamp} </span></p> <p class="text"> ${message.message} </p>`;
   chatMessages.append(msg);
 
   // scroll to the bottom
@@ -27,8 +37,9 @@ function getGetOptions() {
   };
 }
 
-async function loadMessages() {
-  const statusMap = await retrieveStatus()
+function loadMessages() {
+  chatMessages.empty();
+  const statusMap = retrieveStatus();
   console.log(statusMap)
   fetch('/api/messages/public', {
     method: 'GET',
@@ -36,10 +47,9 @@ async function loadMessages() {
     .then((res) => res.json())
     .then((json) => {
       json.forEach((message) => {
-        const status = statusMap.get(message.username)
-        console.log(status)
-        console.log(message.username)
-        outputMessage(message,status);
+        // console.log(statusMap.get(message.username));
+        // console.log(message.username);
+        outputMessage(message, statusMap.get(message.username));
       });
     })
     .catch((e) => {
@@ -48,28 +58,35 @@ async function loadMessages() {
 }
 
 function retrieveStatus() {
-  let statusMap = new Map()
+  const statusMap = new Map();
   fetch('/api/users', getGetOptions())
     .then((res) => {
       return res.json();
     })
     .then((data) => {
       data.users.forEach((user) => {
-        statusMap.set(user.username,user.status)
+        statusMap.set(user.username, user.status);
       });
-      return statusMap
     })
     .catch((e) => {
       console.log(e);
     });
+  return statusMap;
 }
 
 jQuery(loadMessages);
 
-socket.on('new message', async(newMsg) => {
-  const statusMap = await retrieveStatus()
-  const status = statusMap.get(newMsg.username)
-  outputMessage(newMsg,status);
+socket.on('new message', (newMsg,status) => {
+  outputMessage(newMsg,status.status);
+});
+
+socket.on('updateMsgStatus', () => {
+  loadMessages();
+  // const statusMap = retrieveStatus();
+  // console.log(statusMap);
+  // const status = statusMap.get(username);
+  // console.log(status);
+  // console.log(username);
 });
 
 // input new Message

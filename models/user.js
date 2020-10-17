@@ -76,6 +76,10 @@ function updateStatusIcon(username, status){
   );
 }
 
+function getStatusByUsername(username){
+  return User.findOne({ username: username }, { status: 1 });
+}
+
 function validateUsernamePassword(username, password) {
   if (!username.length >= 3)
     throw Error('Username should be at least 3 characters long');
@@ -92,5 +96,6 @@ module.exports = {
   findUserByUsername,
   updateOnlineStatus,
   validateUsernamePassword,
-  updateStatusIcon
+  updateStatusIcon,
+  getStatusByUsername
 };
