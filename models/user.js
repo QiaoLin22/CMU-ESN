@@ -25,7 +25,7 @@ const UserSchema = new mongoose.Schema({
   },
   status: {
     type: String,
-    default: undefined
+    default: undefined,
   },
   timestamp: {
     type: String,
@@ -67,16 +67,16 @@ function updateOnlineStatus(username, online) {
   );
 }
 
-function updateStatusIcon(username, status){
-  let timestamp =  new Date(Date.now()).toISOString();
+function updateStatusIcon(username, status) {
+  const timestamp = new Date(Date.now()).toISOString();
   return User.updateOne(
     { username: username },
     { $set: { status: status } },
-    { $set: { timestamp: timestamp}}
+    { $set: { timestamp: timestamp } }
   );
 }
 
-function getStatusByUsername(username){
+function getStatusByUsername(username) {
   return User.findOne({ username: username }, { status: 1 });
 }
 
@@ -97,5 +97,5 @@ module.exports = {
   updateOnlineStatus,
   validateUsernamePassword,
   updateStatusIcon,
-  getStatusByUsername
+  getStatusByUsername,
 };

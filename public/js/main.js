@@ -1,8 +1,10 @@
 /* global io */
 const socket = io();
 
+const username = $('#username-data').val();
+socket.emit('join room', username);
+
 const logoutBtn = $('#logoutBtn');
-const username = $('#username-data');
 const ok = $('.status-btn:nth-child(1)');
 const help = $('.status-btn:nth-child(2)');
 const emergency = $('.status-btn:nth-child(3)');
@@ -31,13 +33,30 @@ function outputUser(data, online, status) {
 
   const user = document.createElement('div');
   user.classList.add('online-item');
+  if (data.username === username) {
+    user.style.cursor = 'not-allowed';
+    user.style.pointerEvents = 'none';
+  }
+
   if (online) {
-    user.innerHTML = `<li class="list-group-item list-group-item-action online-list-item">${`${`${data.username} ${icon}`}`}</li>`;
+    user.innerHTML = `<li class="list-group-item list-group-item-action online-list-item">${`${`${data.username}${icon}`}`}</li>`;
     $('#online-list').append(user);
   } else {
-    user.innerHTML = `<li class="list-group-item list-group-item-action offline-list-item">${`${`${data.username} ${icon}`}`}</>`;
+    user.innerHTML = `<li class="list-group-item list-group-item-action offline-list-item">${`${`${data.username}${icon}`}`}</>`;
     $('#offline-list').append(user);
   }
+
+  user.addEventListener('click', (event) => {
+    const otherUsername = event.target.innerText;
+    console.log(username);
+    console.log(otherUsername);
+
+    const roomId =
+      username < otherUsername
+        ? `${username}${otherUsername}`
+        : `${otherUsername}${username}`;
+    window.location.href = `/private-chat/${roomId}`;
+  });
 }
 
 function retrieveUsers() {
@@ -46,6 +65,7 @@ function retrieveUsers() {
       return res.json();
     })
     .then((data) => {
+      console.log(data);
       data.users.forEach((user) => {
         outputUser(user, user.online, user.status);
       });
@@ -71,7 +91,6 @@ logoutBtn.on('click', () => {
       'Content-Type': 'application/json',
     },
   }).then((res) => {
-    console.log('yikes');
     if (res.ok) {
       // delete jwt
       document.cookie = 'jwt=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
@@ -82,10 +101,11 @@ logoutBtn.on('click', () => {
 
 function updateStatus(status) {
   status.on('click', () => {
-    let newStatus = {
-      username: username.val(),
+    const newStatus = {
+      username: username,
       status: status.text(),
     };
+    console.log(newStatus);
     fetch('/api/users', {
       method: 'PUT',
       headers: {
