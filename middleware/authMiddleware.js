@@ -22,7 +22,6 @@ const authenticateUser = (req, res, next) => {
         res.redirect('/');
       } else {
         res.locals.username = decodedToken.username;
-        console.log(decodedToken.username);
         next();
       }
     });
