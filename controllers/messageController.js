@@ -54,6 +54,10 @@ class messageController {
       }
     });
   }
+  static updateReadStatus(req, res){
+    const { roomId } = req.params;
+    updateAllToRead(roomId).then(()=>res.status(200).end());
+  }
 }
 
 module.exports = messageController;

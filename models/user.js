@@ -25,7 +25,7 @@ const UserSchema = new mongoose.Schema({
   },
   status: {
     type: String,
-    default: undefined,
+    default: 'Undefined',
   },
   timestamp: {
     type: String,

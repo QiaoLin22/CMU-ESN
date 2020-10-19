@@ -29,4 +29,9 @@ router.get(
   MessageController.checkUnreadMessage
 );
 
+router.put('/:roomId/read',
+authenticateUser,
+MessageController.updateReadStatus
+);
+
 module.exports = router;
