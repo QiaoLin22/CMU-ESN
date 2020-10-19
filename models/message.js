@@ -33,6 +33,11 @@ const MessageSchema = new mongoose.Schema({
     type: String,
     enum: ['OK', 'Emergency', 'Help', 'Undefined'],
   },
+  read:{
+    type: Boolean,
+    required:[true, 'Read status is required'],
+    default: false,
+  }
 });
 
 const Message = mongoose.model('Message', MessageSchema);
@@ -47,6 +52,7 @@ async function createNewMessage(username, message, roomId) {
     message: message,
     roomId: roomId,
     status: status.status,
+    read: false,
   });
 
   console.log(newMessage);
@@ -58,4 +64,13 @@ function getHistoricalMessages(roomId) {
   return Message.find({ roomId: roomId });
 }
 
-module.exports = { createNewMessage, getHistoricalMessages };
+function checkUnreadMessage(username, otherUsername){
+  const roomId =
+  username < otherUsername
+    ? `${username}${otherUsername}`
+    : `${otherUsername}${username}`;
+  console.log("model"+roomId);
+  return Message.find({roomId: roomId, read: false});
+}
+
+module.exports = { createNewMessage, getHistoricalMessages, checkUnreadMessage };
