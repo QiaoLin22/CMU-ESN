@@ -41,7 +41,7 @@ function createNewUser(username, hash, salt) {
     hash,
     salt,
     online: false,
-    status: 'undefined',
+    status: 'Undefined',
     timestamp: new Date(Date.now()).toISOString(),
   });
 

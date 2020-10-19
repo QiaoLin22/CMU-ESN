@@ -33,11 +33,11 @@ const MessageSchema = new mongoose.Schema({
     type: String,
     enum: ['OK', 'Emergency', 'Help', 'Undefined'],
   },
-  read:{
+  read: {
     type: Boolean,
-    required:[true, 'Read status is required'],
+    required: [true, 'Read status is required'],
     default: false,
-  }
+  },
 });
 
 const Message = mongoose.model('Message', MessageSchema);
@@ -45,7 +45,6 @@ const Message = mongoose.model('Message', MessageSchema);
 async function createNewMessage(username, message, roomId) {
   const status = await getStatusByUsername(username);
 
-  console.log(status);
   const newMessage = new Message({
     username: username,
     timestamp: new Date(Date.now()).toISOString(),
@@ -55,22 +54,32 @@ async function createNewMessage(username, message, roomId) {
     read: false,
   });
 
-  console.log(newMessage);
-
   return newMessage.save();
 }
 
-function getHistoricalMessages(roomId) {
+async function getHistoricalMessages(roomId) {
   return Message.find({ roomId: roomId });
 }
 
-function checkUnreadMessage(username, otherUsername){
-  const roomId =
-  username < otherUsername
-    ? `${username}${otherUsername}`
-    : `${otherUsername}${username}`;
-  console.log("model"+roomId);
-  return Message.find({roomId: roomId, read: false});
+function updateAllToRead(roomId) {
+  return Message.updateMany({ roomId: roomId }, { read: true });
 }
 
-module.exports = { createNewMessage, getHistoricalMessages, checkUnreadMessage };
+function checkUnreadMessage(username, otherUsername) {
+  const roomId =
+    username < otherUsername
+      ? `${username}${otherUsername}`
+      : `${otherUsername}${username}`;
+  return Message.find({
+    roomId: roomId,
+    read: false,
+    username: { $ne: username },
+  });
+}
+
+module.exports = {
+  createNewMessage,
+  getHistoricalMessages,
+  checkUnreadMessage,
+  updateAllToRead,
+};

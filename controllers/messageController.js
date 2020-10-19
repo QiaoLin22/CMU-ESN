@@ -2,8 +2,8 @@ const {
   getHistoricalMessages,
   createNewMessage,
   checkUnreadMessage,
+  updateAllToRead,
 } = require('../models/message');
-const user = require('../models/user');
 
 class messageController {
   static createPublicMessage(req, res) {
@@ -38,20 +38,18 @@ class messageController {
 
   static getPrivateMessage(req, res) {
     const { roomId } = req.params;
-    getHistoricalMessages(roomId).then((messages) => res.send(messages));
+    updateAllToRead(roomId).then(() =>
+      getHistoricalMessages(roomId).then((messages) => res.send(messages))
+    );
   }
 
-  static checkUnreadMessage(req, res){
-    console.log(req);
-    console.log("controller");
-    const {otherUsername} = req.params;
-    const {username} = res.locals;
-    console.log(username);
-    checkUnreadMessage(username, otherUsername).then((data)=>{
-      console.log(data);
-      if(data.length === 0){
+  static checkUnreadMessage(req, res) {
+    const { otherUsername } = req.params;
+    const { username } = res.locals;
+    checkUnreadMessage(username, otherUsername).then((data) => {
+      if (data.length === 0) {
         res.send(false);
-      }else{
+      } else {
         res.send(true);
       }
     });

@@ -23,6 +23,10 @@ router.post(
   MessageController.createPrivateMessage
 );
 
-router.get('/private/:otherUsername', authenticateUser, MessageController.checkUnreadMessage);
+router.get(
+  '/unread/:otherUsername',
+  authenticateUser,
+  MessageController.checkUnreadMessage
+);
 
 module.exports = router;

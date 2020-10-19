@@ -48,8 +48,6 @@ function outputUser(data, online, status) {
 
   user.addEventListener('click', (event) => {
     const otherUsername = event.target.innerText;
-    console.log(username);
-    console.log(otherUsername);
 
     const roomId =
       username < otherUsername
@@ -59,18 +57,15 @@ function outputUser(data, online, status) {
   });
 }
 
-
-function checkUnreadMessage(otherUsername){
-  fetch(`/api/messages/private/${otherUsername}`, getGetOptions())
-  .then((res) => {
-    console.log(res)
-    return res.json()
-  })
-  .then((json) => {
-    console.log(json);
-    return json;
-  })
-}
+// function checkUnreadMessage(otherUsername) {
+//   fetch(`/api/messages/unread/${otherUsername}`, getGetOptions())
+//     .then((res) => {
+//       return res.json();
+//     })
+//     .then((json) => {
+//       return json;
+//     });
+// }
 
 function retrieveUsers() {
   fetch('/api/users', getGetOptions())
@@ -79,9 +74,14 @@ function retrieveUsers() {
     })
     .then((data) => {
       data.users.forEach((user) => {
-        const unreadStatus = checkUnreadMessage(user.username);
-        console.log(unreadStatus);
-        outputUser(user, user.online, user.status);
+        fetch(`/api/messages/unread/${user.username}`, getGetOptions())
+          .then((res) => {
+            return res.json();
+          })
+          .then((json) => {
+            console.log(`User: ${user.username}: ${json}`);
+            outputUser(user, user.online, user.status);
+          });
       });
     })
     .catch((e) => {
