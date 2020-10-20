@@ -43,7 +43,7 @@ class messageController {
     );
   }
 
-  static checkMessage(req, res) {
+  static checkExistingUnreadMessage(req, res) {
     const { otherUsername } = req.params;
     const { username } = res.locals;
     checkUnreadMessage(username, otherUsername).then((data) => {

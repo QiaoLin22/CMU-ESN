@@ -16,7 +16,7 @@
     "devStart": "nodemon app.js -e js,ejs,css",
     "start": "node app.js",
     "lint": "eslint",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest --runInBand ./test"
   },
   "dependencies": {
     "base64url": "^3.0.1",
@@ -39,7 +39,9 @@
     "eslint-plugin-import": "^2.22.0",
     "eslint-plugin-prettier": "^3.1.4",
     "husky": "^4.3.0",
+    "jest": "^26.5.3",
     "lint-staged": "^10.4.0",
+    "mongodb-memory-server": "^6.9.2",
     "nodemon": "^2.0.4",
     "prettier": "^2.1.2"
   },
@@ -51,5 +53,8 @@
   "lint-staged": {
     "*.js": "eslint --fix",
     "!(*.ejs)": "prettier --write"
+  },
+  "jest": {
+    "testEnvironment": "node"
   }
 }
