@@ -74,12 +74,18 @@ function updateReadStatus (roomId) {
   });
 }
 
+function displayNotification(username){
+  alert('hello')
+}
+
 socket.on('new private message', (newMsg) => {
   if (newMsg.roomId === roomId) {
     if (newMsg.username != username) {
       updateReadStatus(roomId);
     }
     outputMessage(newMsg);
+  }else {
+    displayNotification(newMsg.username)
   }
 });
 

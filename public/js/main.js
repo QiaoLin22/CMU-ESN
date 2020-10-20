@@ -47,25 +47,21 @@ function outputUser(data, online, status, hasUnread) {
 
   if (online) {
     user.innerHTML = `<li class="list-group-item list-group-item-action online-list-item" >${`${`${data.username}${icon}${readIcon}`}`}</li>`;
-    if(hasUnread){
-      document.getElementById(roomId).style.display = "block";
-    }else {
-      document.getElementById(roomId).style.display = "none";
-    }
     $('#online-list').append(user);
   } else {
     user.innerHTML = `<li class="list-group-item list-group-item-action offline-list-item">${`${`${data.username}${icon}${readIcon}`}`}</>`;
     $('#offline-list').append(user);
-    if(hasUnread){
-      document.getElementById(roomId).style.display = "block";
-    }else {
-      document.getElementById(roomId).style.display = "none";
-    }
+  }
+  if(hasUnread){
+    document.getElementById(roomId).style.display = "block";
+  }else {
+    document.getElementById(roomId).style.display = "none";
   }
 
   user.addEventListener('click', () => {
     window.location.href = `/private-chat/${roomId}`;
   });
+  
 }
 
 // function checkUnreadMessage(otherUsername) {
