@@ -55,14 +55,6 @@ function outputUser(data, online, status) {
   }
 
   user.addEventListener('click', () => {
-    // const otherUsername = event.target.innerText;
-    // console.log(username);
-    // console.log(otherUsername);
-
-    // const roomId =
-    //   username < otherUsername
-    //     ? `${username}${otherUsername}`
-    //     : `${otherUsername}${username}`;
     window.location.href = `/private-chat/${roomId}`;
   });
 }
