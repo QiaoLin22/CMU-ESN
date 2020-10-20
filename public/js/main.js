@@ -31,7 +31,15 @@ function outputUser(data, online, status) {
     icon = '<i class="far fa-question-circle ml-1" style="color: #d8d8d8"></i>';
   }
 
+  let readIcon = `<i class="fas fa-circle" style="color: red; display: none;"></i>`;
+
+  const otherUsername = data.username;
+  const roomId =
+      username < otherUsername
+        ? `${username}${otherUsername}`
+        : `${otherUsername}${username}`;
   const user = document.createElement('div');
+
   user.classList.add('online-item');
   if (data.username === username) {
     user.style.cursor = 'not-allowed';
@@ -39,22 +47,26 @@ function outputUser(data, online, status) {
   }
 
   if (online) {
-    user.innerHTML = `<li class="list-group-item list-group-item-action online-list-item">${`${`${data.username}${icon}`}`}</li>`;
+    user.innerHTML = `<li class="list-group-item list-group-item-action online-list-item" id=${roomId}>${`${`${data.username}${icon}${readIcon}`}`}</li>`;
     $('#online-list').append(user);
   } else {
-    user.innerHTML = `<li class="list-group-item list-group-item-action offline-list-item">${`${`${data.username}${icon}`}`}</>`;
+    user.innerHTML = `<li class="list-group-item list-group-item-action offline-list-item" id=${roomId}>${`${`${data.username}${icon}${readIcon}`}`}</>`;
     $('#offline-list').append(user);
   }
 
-  user.addEventListener('click', (event) => {
-    const otherUsername = event.target.innerText;
-    console.log(username);
-    console.log(otherUsername);
+  // if (checkUnreadMessage(roomId)) {
+    
+  // }
 
-    const roomId =
-      username < otherUsername
-        ? `${username}${otherUsername}`
-        : `${otherUsername}${username}`;
+  user.addEventListener('click', () => {
+    // const otherUsername = event.target.innerText;
+    // console.log(username);
+    // console.log(otherUsername);
+
+    // const roomId =
+    //   username < otherUsername
+    //     ? `${username}${otherUsername}`
+    //     : `${otherUsername}${username}`;
     window.location.href = `/private-chat/${roomId}`;
   });
 }
@@ -74,6 +86,7 @@ function retrieveUsers() {
       console.log(e);
     });
 }
+
 
 socket.on('updateDirectory', () => {
   console.log('updateDirectory');
