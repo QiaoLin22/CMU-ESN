@@ -75,7 +75,7 @@ function updateReadStatus (roomId) {
 }
 
 function displayNotification(username){
-  alert('hello')
+  alert(username + " just sent you a private message!");
 }
 
 socket.on('new private message', (newMsg) => {
@@ -84,7 +84,7 @@ socket.on('new private message', (newMsg) => {
       updateReadStatus(roomId);
     }
     outputMessage(newMsg);
-  }else {
+  } else {
     displayNotification(newMsg.username)
   }
 });
