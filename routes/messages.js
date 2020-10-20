@@ -26,12 +26,12 @@ router.post(
 router.get(
   '/unread/:otherUsername',
   authenticateUser,
-  MessageController.checkUnreadMessage
+  MessageController.checkMessage
 );
 
 router.put('/:roomId/read',
-authenticateUser,
-MessageController.updateReadStatus
+  authenticateUser,
+  MessageController.updateReadStatus
 );
 
 module.exports = router;

@@ -68,14 +68,15 @@ socket.on('new public message', (newMsg) => {
   }
 });
 
-function updateReadStatus(roomId){
+function updateReadStatus (roomId) {
   fetch(`/api/messages/${roomId}/read`, {
     method: 'PUT',
   });
 }
+
 socket.on('new private message', (newMsg) => {
   if (newMsg.roomId === roomId) {
-    updateReadStatus(roomId);
+    // updateReadStatus(roomId);
     outputMessage(newMsg);
   }
 });

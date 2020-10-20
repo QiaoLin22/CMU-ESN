@@ -62,6 +62,7 @@ async function getHistoricalMessages(roomId) {
 }
 
 function updateAllToRead(roomId) {
+  console.log('msg -> read');
   return Message.updateMany({ roomId: roomId }, { read: true });
 }
 

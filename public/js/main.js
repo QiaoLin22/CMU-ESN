@@ -31,7 +31,7 @@ function outputUser(data, online, status) {
     icon = '<i class="far fa-question-circle ml-1" style="color: #d8d8d8"></i>';
   }
 
-  let readIcon = `<i class="fas fa-circle" style="color: red; display: none;"></i>`;
+  const readIcon = `<i class="fas fa-circle ml-4" style="color: red; display: none; position:absolute; top:10%; right: 2px;"></i>`;
 
   const otherUsername = data.username;
   const roomId =
@@ -53,10 +53,6 @@ function outputUser(data, online, status) {
     user.innerHTML = `<li class="list-group-item list-group-item-action offline-list-item" id=${roomId}>${`${`${data.username}${icon}${readIcon}`}`}</>`;
     $('#offline-list').append(user);
   }
-
-  // if (checkUnreadMessage(roomId)) {
-    
-  // }
 
   user.addEventListener('click', () => {
     // const otherUsername = event.target.innerText;
