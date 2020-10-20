@@ -93,7 +93,6 @@ function retrieveUsers() {
             return res.json();
           })
           .then((json) => {
-            console.log(`User: ${user.username}: ${json}`);
             outputUser(user, user.online, user.status);
           });
       });
