@@ -26,10 +26,11 @@ router.post(
 router.get(
   '/unread/:otherUsername',
   authenticateUser,
-  MessageController.checkMessage
+  MessageController.checkExistingUnreadMessage
 );
 
-router.put('/:roomId/read',
+router.put(
+  '/:roomId/read',
   authenticateUser,
   MessageController.updateReadStatus
 );
