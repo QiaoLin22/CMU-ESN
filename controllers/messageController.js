@@ -31,7 +31,7 @@ class messageController {
   }
 
   static getPublicMessage(req, res) {
-    getHistoricalMessages("public").then((messages) => res.send(messages));
+    getHistoricalMessages('public').then((messages) => res.send(messages));
   }
 
   static getPrivateMessage(req, res) {

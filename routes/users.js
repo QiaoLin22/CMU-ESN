@@ -12,4 +12,6 @@ router.post('/login', LoginLogoutController.login);
 
 router.put('/logout', authenticateUser, LoginLogoutController.logout);
 
+router.put('/', UserController.updateStatus);
+
 module.exports = router;
