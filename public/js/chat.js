@@ -75,7 +75,9 @@ function updateReadStatus(roomId){
 }
 socket.on('new private message', (newMsg) => {
   if (newMsg.roomId === roomId) {
-    updateReadStatus(roomId);
+    if(newMsg.username != username){
+      updateReadStatus(roomId);
+    }
     outputMessage(newMsg);
   }
 });
