@@ -71,15 +71,31 @@ function outputUser(data, online, status) {
   });
 }
 
+// function checkUnreadMessage(otherUsername) {
+//   fetch(`/api/messages/unread/${otherUsername}`, getGetOptions())
+//     .then((res) => {
+//       return res.json();
+//     })
+//     .then((json) => {
+//       return json;
+//     });
+// }
+
 function retrieveUsers() {
   fetch('/api/users', getGetOptions())
     .then((res) => {
       return res.json();
     })
     .then((data) => {
-      console.log(data);
       data.users.forEach((user) => {
-        outputUser(user, user.online, user.status);
+        fetch(`/api/messages/unread/${user.username}`, getGetOptions())
+          .then((res) => {
+            return res.json();
+          })
+          .then((json) => {
+            console.log(`User: ${user.username}: ${json}`);
+            outputUser(user, user.online, user.status);
+          });
       });
     })
     .catch((e) => {

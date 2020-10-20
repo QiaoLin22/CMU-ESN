@@ -25,7 +25,7 @@ const UserSchema = new mongoose.Schema({
   },
   status: {
     type: String,
-    default: undefined,
+    default: 'Undefined',
   },
   timestamp: {
     type: String,
@@ -41,7 +41,7 @@ function createNewUser(username, hash, salt) {
     hash,
     salt,
     online: false,
-    status: 'undefined',
+    status: 'Undefined',
     timestamp: new Date(Date.now()).toISOString(),
   });
 
