@@ -19,7 +19,7 @@ function getGetOptions() {
   };
 }
 
-function outputUser(data, online, status) {
+function outputUser(data, online, status, hasUnread) {
   let icon = '';
   if (status === 'OK') {
     icon = '<i class="far fa-check-circle ml-1" style="color: #18b87e"></i>';
@@ -31,14 +31,13 @@ function outputUser(data, online, status) {
     icon = '<i class="far fa-question-circle ml-1" style="color: #d8d8d8"></i>';
   }
 
-  const readIcon = `<i class="fas fa-circle ml-4" style="color: red; display: none; position:absolute; top:10%; right: 2px;"></i>`;
-
   const otherUsername = data.username;
   const roomId =
       username < otherUsername
         ? `${username}${otherUsername}`
         : `${otherUsername}${username}`;
   const user = document.createElement('div');
+  const readIcon = `<i class="fas fa-circle ml-4" id=${roomId} style="color: red; display: none; position:absolute; top:10%; right: 2px;"></i>`;
 
   user.classList.add('online-item');
   if (data.username === username) {
@@ -47,11 +46,21 @@ function outputUser(data, online, status) {
   }
 
   if (online) {
-    user.innerHTML = `<li class="list-group-item list-group-item-action online-list-item" id=${roomId}>${`${`${data.username}${icon}${readIcon}`}`}</li>`;
+    user.innerHTML = `<li class="list-group-item list-group-item-action online-list-item" >${`${`${data.username}${icon}${readIcon}`}`}</li>`;
+    if(hasUnread){
+      document.getElementById(roomId).style.display = "block";
+    }else {
+      document.getElementById(roomId).style.display = "none";
+    }
     $('#online-list').append(user);
   } else {
-    user.innerHTML = `<li class="list-group-item list-group-item-action offline-list-item" id=${roomId}>${`${`${data.username}${icon}${readIcon}`}`}</>`;
+    user.innerHTML = `<li class="list-group-item list-group-item-action offline-list-item">${`${`${data.username}${icon}${readIcon}`}`}</>`;
     $('#offline-list').append(user);
+    if(hasUnread){
+      document.getElementById(roomId).style.display = "block";
+    }else {
+      document.getElementById(roomId).style.display = "none";
+    }
   }
 
   user.addEventListener('click', () => {
@@ -80,9 +89,9 @@ function retrieveUsers() {
           .then((res) => {
             return res.json();
           })
-          .then((json) => {
-            console.log(`User: ${user.username}: ${json}`);
-            outputUser(user, user.online, user.status);
+          .then((hasUnread) => {
+            console.log(`User: ${user.username}: ${hasUnread}`);
+            outputUser(user, user.online, user.status,hasUnread);
           });
       });
     })
