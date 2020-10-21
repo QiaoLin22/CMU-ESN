@@ -31,6 +31,10 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: [true, 'Timestamp is required'],
   },
+  statusArray: [{
+    timestamp: {type: String}, 
+    status: {type: String}, 
+}]
 });
 
 const User = mongoose.model('User', UserSchema);
@@ -43,6 +47,10 @@ function createNewUser(username, hash, salt) {
     online: false,
     status: 'Undefined',
     timestamp: new Date(Date.now()).toISOString(),
+    statusArray:[{
+      timestamp: new Date(Date.now()).toISOString(),
+      status: 'Undefined'
+    }]
   });
 
   return newUser.save();
@@ -69,11 +77,15 @@ function updateOnlineStatus(username, online) {
 
 function updateStatusIcon(username, status) {
   const timestamp = new Date(Date.now()).toISOString();
-  return User.updateOne(
+  const objStatus = { timestamp: timestamp, status: status };
+  return User.findOneAndUpdate(
     { username: username },
     { $set: { status: status } },
     { $set: { timestamp: timestamp } }
-  );
+  ).then((user) => {
+    user.statusArray.push(objStatus);
+    user.save();
+  })
 }
 
 function getStatusByUsername(username) {
