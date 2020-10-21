@@ -3,14 +3,14 @@ require('dotenv').config();
 
 const { getStatusByUsername } = require('./user');
 
-const dbString = process.env.DB_STRING;
+/*const dbString = process.env.DB_STRING;
 
 mongoose
   .connect(dbString, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
-  .catch((e) => console.log(e));
+  .catch((e) => console.log(e));*/
 
 const MessageSchema = new mongoose.Schema({
   username: {
@@ -78,6 +78,7 @@ function checkUnreadMessage(username, otherUsername) {
 }
 
 module.exports = {
+  Message,
   createNewMessage,
   getHistoricalMessages,
   checkUnreadMessage,
