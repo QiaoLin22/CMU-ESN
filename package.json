@@ -51,7 +51,6 @@
     }
   },
   "lint-staged": {
-    "*.js": "eslint --fix",
     "!(*.ejs)": "prettier --write"
   },
   "jest": {
