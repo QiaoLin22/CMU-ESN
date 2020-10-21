@@ -1,3 +1,4 @@
+
 /* global io */
 const socket = io();
 
@@ -67,9 +68,24 @@ socket.on('new public message', (newMsg) => {
   }
 });
 
+function updateReadStatus (roomId) {
+  fetch(`/api/messages/${roomId}/read`, {
+    method: 'PUT',
+  });
+}
+
+function displayNotification(username){
+  alert(username + " just sent you a private message!");
+}
+
 socket.on('new private message', (newMsg) => {
   if (newMsg.roomId === roomId) {
+    if (newMsg.username != username) {
+      updateReadStatus(roomId);
+    }
     outputMessage(newMsg);
+  } else {
+    displayNotification(newMsg.username)
   }
 });
 

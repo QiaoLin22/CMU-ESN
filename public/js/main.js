@@ -19,7 +19,7 @@ function getGetOptions() {
   };
 }
 
-function outputUser(data, online, status) {
+function outputUser(data, online, status, hasUnread) {
   let icon = '';
   if (status === 'OK') {
     icon = '<i class="far fa-check-circle ml-1" style="color: #18b87e"></i>';
@@ -31,7 +31,14 @@ function outputUser(data, online, status) {
     icon = '<i class="far fa-question-circle ml-1" style="color: #d8d8d8"></i>';
   }
 
+  const otherUsername = data.username;
+  const roomId =
+    username < otherUsername
+      ? `${username}${otherUsername}`
+      : `${otherUsername}${username}`;
   const user = document.createElement('div');
+  const readIcon = `<i class="fas fa-circle ml-4" id=${roomId} style="color: red; display: none; position:absolute; top:10%; right: 2px;"></i>`;
+
   user.classList.add('online-item');
   if (data.username === username) {
     user.style.cursor = 'not-allowed';
@@ -39,36 +46,49 @@ function outputUser(data, online, status) {
   }
 
   if (online) {
-    user.innerHTML = `<li class="list-group-item list-group-item-action online-list-item">${`${`${data.username}${icon}`}`}</li>`;
+    user.innerHTML = `<li class="list-group-item list-group-item-action online-list-item" >${`${`${data.username}${icon}${readIcon}`}`}</li>`;
     $('#online-list').append(user);
   } else {
-    user.innerHTML = `<li class="list-group-item list-group-item-action offline-list-item">${`${`${data.username}${icon}`}`}</>`;
+    user.innerHTML = `<li class="list-group-item list-group-item-action offline-list-item">${`${`${data.username}${icon}${readIcon}`}`}</>`;
     $('#offline-list').append(user);
   }
+  if (hasUnread) {
+    document.getElementById(roomId).style.display = 'block';
+  } else {
+    document.getElementById(roomId).style.display = 'none';
+  }
 
-  user.addEventListener('click', (event) => {
-    const otherUsername = event.target.innerText;
-    console.log(username);
-    console.log(otherUsername);
-
-    const roomId =
-      username < otherUsername
-        ? `${username}${otherUsername}`
-        : `${otherUsername}${username}`;
+  user.addEventListener('click', () => {
     window.location.href = `/private-chat/${roomId}`;
   });
 }
+
+// function checkUnreadMessage(otherUsername) {
+//   fetch(`/api/messages/unread/${otherUsername}`, getGetOptions())
+//     .then((res) => {
+//       return res.json();
+//     })
+//     .then((json) => {
+//       return json;
+//     });
+// }
 
 function retrieveUsers() {
   fetch('/api/users', getGetOptions())
     .then((res) => {
       return res.json();
     })
-    .then((data) => {
-      console.log(data);
-      data.users.forEach((user) => {
-        outputUser(user, user.online, user.status);
-      });
+    .then(async (data) => {
+      /* eslint-disable no-await-in-loop */
+      for (const user of data.users) {
+        const res = await fetch(
+          `/api/messages/unread/${user.username}`,
+          getGetOptions()
+        );
+        const hasUnread = await res.json();
+        console.log(`User: ${user.username}: ${hasUnread}`);
+        outputUser(user, user.online, user.status, hasUnread);
+      }
     })
     .catch((e) => {
       console.log(e);

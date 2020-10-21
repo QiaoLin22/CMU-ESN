@@ -2,14 +2,14 @@ const mongoose = require('mongoose');
 const reservedUsernames = require('../lib/reserved_usernames.json').usernames;
 require('dotenv').config();
 
-const dbString = process.env.DB_STRING;
+// const dbString = process.env.DB_STRING;
 
-mongoose
-  .connect(dbString, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
-  .catch((e) => console.log(e));
+// mongoose
+//   .connect(dbString, {
+//     useNewUrlParser: true,
+//     useUnifiedTopology: true,
+//   })
+//   .catch((e) => console.log(e));
 
 const UserSchema = new mongoose.Schema({
   username: {
@@ -25,7 +25,7 @@ const UserSchema = new mongoose.Schema({
   },
   status: {
     type: String,
-    default: undefined,
+    default: 'Undefined',
   },
   timestamp: {
     type: String,
@@ -41,7 +41,7 @@ function createNewUser(username, hash, salt) {
     hash,
     salt,
     online: false,
-    status: 'undefined',
+    status: 'Undefined',
     timestamp: new Date(Date.now()).toISOString(),
   });
 
@@ -91,6 +91,7 @@ function validateUsernamePassword(username, password) {
 }
 
 module.exports = {
+  User,
   createNewUser,
   retrieveUsers,
   findUserByUsername,
