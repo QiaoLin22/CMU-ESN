@@ -1,27 +1,49 @@
 const mongoose = require('mongoose');
 const { MongoMemoryServer } = require('mongodb-memory-server');
-const User = require('../models/user')
+const { User, createNewUser } = require('../models/user');
 
 let mongoServer;
 
 beforeAll(async () => {
-    mongoServer = new MongoMemoryServer();
-    const mongoUri = await mongoServer.getUri();
-    await mongoose.connect(mongoUri,(err) => {
-      if (err) console.error(err);
-    });
+  mongoServer = new MongoMemoryServer();
+  const mongoUri = await mongoServer.getUri();
+  console.log(mongoUri);
+
+  const mongooseOpts = {
+    useNewUrlParser: true,
+    autoReconnect: true,
+    reconnectTries: Number.MAX_VALUE,
+    reconnectInterval: 1000,
+  };
+  await mongoose.connect(mongoUri, mongooseOpts, (err) => {
+    if (err) console.error(err);
   });
-  
-  afterAll(async () => {
-    await mongoose.disconnect();
-    await mongoServer.stop();
+});
+
+afterAll(async () => {
+  await mongoose.disconnect();
+  await mongoServer.stop();
+});
+
+describe('...', () => {
+  it('create new user successfully', async () => {
+    await createNewUser('john', '001', '1110');
+
+    const actual = await User.find(
+      { username: 'john' },
+      { _id: 0, __v: 0, timestamp: 0 }
+    );
+
+    console.log(actual);
+    const expected = [
+      {
+        username: 'john',
+        hash: '001',
+        salt: '1110',
+        online: false,
+        status: 'Undefined',
+      },
+    ];
+    expect(actual).toEqual(expected);
   });
-
-function sum(a, b) {
-    return a + b;
-}
-
-    test('adds 1 + 2 to equal 3', () => {
-        expect(sum(1, 2)).toBe(3);
-    });
-
+});
