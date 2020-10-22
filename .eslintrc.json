@@ -17,6 +17,7 @@
     "object-shorthand": "off",
     "no-else-return": "off",
     "no-underscore-dangle": "off",
-    "no-restricted-syntax": "off"
+    "no-restricted-syntax": "off",
+    "class-methods-use-this": "off"
   }
 }

@@ -1,15 +1,13 @@
-const { Model } = require('mongoose');
-
-const DAO = require('../services/dao');
+// const DAO = require('../services/dao');
 const DBInMemory = require('../services/dbInMemory');
-const userSchema = require('../models/user');
+// console.log(DBInMemory);
 
-const dao = new DAO(new DBInMemory());
+const { User, createNewUser } = require('../models/user');
 
-const User = new Model('User', userSchema);
+// const dao = new DAO(DBInMemory);
 
-beforeAll(dao.db.connect);
-afterAll(dao.db.close);
+beforeAll(DBInMemory.connect);
+afterAll(DBInMemory.close);
 
 describe('use case join community', () => {
   it('create new user successfully', async () => {

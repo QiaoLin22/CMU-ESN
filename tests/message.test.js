@@ -1,4 +1,6 @@
-const dbHandler = require('./dbHandler');
+// const DAO = require('../services/dao');
+const DBInMemory = require('../services/dbInMemory');
+
 const { User } = require('../models/user');
 const {
   Message,
@@ -8,9 +10,11 @@ const {
   checkUnreadMessage,
 } = require('../models/message');
 
-beforeAll(dbHandler.connect);
+// const dao = new DAO(DBInMemory);
 
-afterAll(dbHandler.close);
+beforeAll(DBInMemory.connect);
+
+afterAll(DBInMemory.close);
 
 describe('use case chat publicly', () => {
   it('create new message successfully', async () => {

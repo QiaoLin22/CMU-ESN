@@ -1,11 +1,15 @@
 class DAO {
-  constructor(db) {
-    this.db = db;
+  constructor(_db) {
+    this.db = _db;
   }
 
   get db() {
     return this.db;
   }
+
+  set db(_db) {
+    this.db = _db;
+  }
 }
 
-exports.DAO = DAO;
+module.exports = new DAO();

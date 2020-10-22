@@ -1,9 +1,5 @@
 const mongoose = require('mongoose');
 
-const DBProduction = require('../services/dbProduction');
-
-console.log(DBProduction.getMongoose());
-
 const { getStatusByUsername } = require('./user');
 
 // const dbString = process.env.DB_STRING;
@@ -43,7 +39,7 @@ const MessageSchema = mongoose.Schema({
   },
 });
 
-const Message = DBProduction.getMongoose().model('Message', MessageSchema);
+const Message = mongoose.model('Message', MessageSchema);
 
 async function createNewMessage(username, message, roomId) {
   const status = await getStatusByUsername(username);
