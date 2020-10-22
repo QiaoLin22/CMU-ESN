@@ -35,3 +35,21 @@ describe('use case join community', () => {
     expect(actual[0].status).toEqual(expected[0].status);
   });
 });
+
+
+    const actual = await User.find(
+      { username: 'john' },
+      { _id: 0, __v: 0, timestamp: 0 }
+    );
+
+    console.log(actual);
+    const expected = [
+      {
+        username: 'john',
+        hash: '001',
+        salt: '1110',
+        online: false,
+        status: 'Undefined',
+      },
+    ];
+    expect(actual).toEqual(expected);
