@@ -13,18 +13,20 @@ const userSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
-  status: {
-    type: String,
-    default: 'Undefined',
+  statusArray: {
+    type: [
+      {
+        timestamp: { type: String },
+        status: { type: String },
+      },
+    ],
+    default: [
+      {
+        timestamp: new Date(Date.now()).toISOString(),
+        status: 'Undefined',
+      },
+    ],
   },
-  timestamp: {
-    type: String,
-    required: [true, 'Timestamp is required'],
-  },
-  statusArray: [{
-    timestamp: {type: String}, 
-    status: {type: String}, 
-}]
 });
 
 const User = mongoose.model('User', userSchema);
@@ -35,12 +37,12 @@ function createNewUser(username, hash, salt) {
     hash,
     salt,
     online: false,
-    status: 'Undefined',
-    timestamp: new Date(Date.now()).toISOString(),
-    statusArray:[{
-      timestamp: new Date(Date.now()).toISOString(),
-      status: 'Undefined'
-    }]
+    statusArray: [
+      {
+        timestamp: new Date(Date.now()).toISOString(),
+        status: 'Undefined',
+      },
+    ],
   });
 
   return newUser.save();
@@ -49,8 +51,8 @@ function createNewUser(username, hash, salt) {
 function retrieveUsers() {
   return User.find(
     {},
-    {},
-    { sort: { online: -1, username: 1} }
+    { _id: 0, __v: 0, hash: 0, salt: 0 },
+    { sort: { online: -1, username: 1 } }
   );
 }
 
@@ -75,11 +77,11 @@ function updateStatusIcon(username, status) {
   ).then((user) => {
     user.statusArray.push(objStatus);
     user.save();
-  })
+  });
 }
 
 function getStatusByUsername(username) {
-  return User.findOne({ username: username }, { status: 1 });
+  return User.findOne({ username: username }, { statusArray: 1 });
 }
 
 function validateUsernamePassword(username, password) {
