@@ -1,8 +1,6 @@
 const mongoose = require('mongoose');
 const { MongoMemoryServer } = require('mongodb-memory-server');
-
 const mongoServer = new MongoMemoryServer();
-
 class DBInMemory {
   constructor() {
     this.connect();
@@ -12,9 +10,8 @@ class DBInMemory {
     const mongoUri = await mongoServer.getUri();
     const mongooseOpts = {
       useNewUrlParser: true,
-      autoReconnect: true,
-      reconnectTries: Number.MAX_VALUE,
-      reconnectInterval: 1000,
+      useUnifiedTopology: true,
+      useCreateIndex: true,
     };
 
     await mongoose.connect(mongoUri, mongooseOpts, (err) => {

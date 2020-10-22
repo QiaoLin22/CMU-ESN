@@ -12,6 +12,7 @@ class DBProduction {
       .connect(dbString, {
         useNewUrlParser: true,
         useUnifiedTopology: true,
+        useCreateIndex: true,
       })
       .catch((e) => console.log(e));
   }

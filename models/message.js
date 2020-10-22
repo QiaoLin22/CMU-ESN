@@ -42,14 +42,16 @@ const MessageSchema = mongoose.Schema({
 const Message = mongoose.model('Message', MessageSchema);
 
 async function createNewMessage(username, message, roomId) {
-  const status = await getStatusByUsername(username);
+  const statusObj = await getStatusByUsername(username);
+  const { statusArray } = statusObj;
+  const latestStatus = statusArray[statusArray.length - 1].status;
 
   const newMessage = new Message({
     username: username,
     timestamp: new Date(Date.now()).toISOString(),
     message: message,
     roomId: roomId,
-    status: status.status,
+    status: latestStatus,
     read: false,
   });
 

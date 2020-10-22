@@ -18,20 +18,25 @@ describe('use case join community', () => {
       { _id: 0, __v: 0, timestamp: 0 }
     );
 
-    console.log(actual);
     const expected = [
       {
         username: 'John',
         hash: '001',
         salt: '1110',
         online: false,
-        status: 'Undefined',
+        statusArray: [
+          {
+            status: 'Undefined',
+          },
+        ],
       },
     ];
     expect(actual[0].username).toEqual(expected[0].username);
     expect(actual[0].hash).toEqual(expected[0].hash);
     expect(actual[0].salt).toEqual(expected[0].salt);
     expect(actual[0].online).toEqual(expected[0].online);
-    expect(actual[0].status).toEqual(expected[0].status);
+    expect(actual[0].statusArray[0].status).toEqual(
+      expected[0].statusArray[0].status
+    );
   });
 });
