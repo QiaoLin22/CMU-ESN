@@ -13,7 +13,7 @@
   "author": "",
   "main": "app.js",
   "scripts": {
-    "devStart": "nodemon app.js -e js,ejs,css",
+    "devStart": "nodemon -r dotenv/config app.js -e js,ejs,css",
     "start": "node app.js",
     "lint": "eslint",
     "test": "jest --runInBand ./test"

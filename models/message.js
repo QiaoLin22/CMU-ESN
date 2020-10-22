@@ -1,18 +1,21 @@
 const mongoose = require('mongoose');
-require('dotenv').config();
+
+const DBProduction = require('../services/dbProduction');
+
+console.log(DBProduction.getMongoose());
 
 const { getStatusByUsername } = require('./user');
 
-/*const dbString = process.env.DB_STRING;
+// const dbString = process.env.DB_STRING;
 
-mongoose
-  .connect(dbString, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
-  .catch((e) => console.log(e));*/
+// mongoose
+//   .connect(dbString, {
+//     useNewUrlParser: true,
+//     useUnifiedTopology: true,
+//   })
+//   .catch((e) => console.log(e));
 
-const MessageSchema = new mongoose.Schema({
+const MessageSchema = mongoose.Schema({
   username: {
     type: String,
     required: [true, 'Username is required'],
@@ -40,7 +43,7 @@ const MessageSchema = new mongoose.Schema({
   },
 });
 
-const Message = mongoose.model('Message', MessageSchema);
+const Message = DBProduction.getMongoose().model('Message', MessageSchema);
 
 async function createNewMessage(username, message, roomId) {
   const status = await getStatusByUsername(username);
@@ -57,7 +60,7 @@ async function createNewMessage(username, message, roomId) {
   return newMessage.save();
 }
 
-async function getHistoricalMessages(roomId) {
+function getHistoricalMessages(roomId) {
   return Message.find({ roomId: roomId });
 }
 
