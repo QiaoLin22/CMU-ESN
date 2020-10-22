@@ -1,18 +1,17 @@
 const mongoose = require('mongoose');
-require('dotenv').config();
 
 const { getStatusByUsername } = require('./user');
 
-const dbString = process.env.DB_STRING;
+// const dbString = process.env.DB_STRING;
 
-mongoose
-  .connect(dbString, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
-  .catch((e) => console.log(e));
+// mongoose
+//   .connect(dbString, {
+//     useNewUrlParser: true,
+//     useUnifiedTopology: true,
+//   })
+//   .catch((e) => console.log(e));
 
-const MessageSchema = new mongoose.Schema({
+const MessageSchema = mongoose.Schema({
   username: {
     type: String,
     required: [true, 'Username is required'],
@@ -43,21 +42,24 @@ const MessageSchema = new mongoose.Schema({
 const Message = mongoose.model('Message', MessageSchema);
 
 async function createNewMessage(username, message, roomId) {
-  const status = await getStatusByUsername(username);
+  // TODO: make sure that getStatusByUsername() can get the latest status
+  const statusObj = await getStatusByUsername(username);
+  const { statusArray } = statusObj;
+  const latestStatus = statusArray[statusArray.length - 1].status;
 
   const newMessage = new Message({
     username: username,
     timestamp: new Date(Date.now()).toISOString(),
     message: message,
     roomId: roomId,
-    status: status.status,
+    status: latestStatus,
     read: false,
   });
 
   return newMessage.save();
 }
 
-async function getHistoricalMessages(roomId) {
+function getHistoricalMessages(roomId) {
   return Message.find({ roomId: roomId });
 }
 
@@ -78,6 +80,7 @@ function checkUnreadMessage(username, otherUsername) {
 }
 
 module.exports = {
+  Message,
   createNewMessage,
   getHistoricalMessages,
   checkUnreadMessage,
