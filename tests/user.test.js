@@ -1,49 +1,37 @@
-const mongoose = require('mongoose');
-const { MongoMemoryServer } = require('mongodb-memory-server');
+// const DAO = require('../services/dao');
+const DBInMemory = require('../services/dbInMemory');
+// console.log(DBInMemory);
+
 const { User, createNewUser } = require('../models/user');
 
-let mongoServer;
+// const dao = new DAO(DBInMemory);
 
-beforeAll(async () => {
-  mongoServer = new MongoMemoryServer();
-  const mongoUri = await mongoServer.getUri();
-  console.log(mongoUri);
+beforeAll(DBInMemory.connect);
+afterAll(DBInMemory.close);
 
-  const mongooseOpts = {
-    useNewUrlParser: true,
-    autoReconnect: true,
-    reconnectTries: Number.MAX_VALUE,
-    reconnectInterval: 1000,
-  };
-  await mongoose.connect(mongoUri, mongooseOpts, (err) => {
-    if (err) console.error(err);
-  });
-});
-
-afterAll(async () => {
-  await mongoose.disconnect();
-  await mongoServer.stop();
-});
-
-describe('...', () => {
+describe('use case join community', () => {
   it('create new user successfully', async () => {
-    await createNewUser('john', '001', '1110');
+    await createNewUser('John', '001', '1110');
 
     const actual = await User.find(
-      { username: 'john' },
+      { username: 'John' },
       { _id: 0, __v: 0, timestamp: 0 }
     );
 
     console.log(actual);
     const expected = [
       {
-        username: 'john',
+        username: 'John',
         hash: '001',
         salt: '1110',
         online: false,
         status: 'Undefined',
       },
     ];
-    expect(actual).toEqual(expected);
+    expect(actual[0].username).toEqual(expected[0].username);
+    expect(actual[0].hash).toEqual(expected[0].hash);
+    expect(actual[0].salt).toEqual(expected[0].salt);
+    expect(actual[0].online).toEqual(expected[0].online);
+    expect(actual[0].status).toEqual(expected[0].status);
   });
 });

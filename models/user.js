@@ -1,17 +1,7 @@
 const mongoose = require('mongoose');
 const reservedUsernames = require('../lib/reserved_usernames.json').usernames;
-require('dotenv').config();
 
-// const dbString = process.env.DB_STRING;
-
-// mongoose
-//   .connect(dbString, {
-//     useNewUrlParser: true,
-//     useUnifiedTopology: true,
-//   })
-//   .catch((e) => console.log(e));
-
-const UserSchema = new mongoose.Schema({
+const userSchema = new mongoose.Schema({
   username: {
     type: String,
     required: [true, 'Username is required'],
@@ -33,7 +23,7 @@ const UserSchema = new mongoose.Schema({
   },
 });
 
-const User = mongoose.model('User', UserSchema);
+const User = mongoose.model('User', userSchema);
 
 function createNewUser(username, hash, salt) {
   const newUser = new User({
@@ -96,7 +86,7 @@ module.exports = {
   retrieveUsers,
   findUserByUsername,
   updateOnlineStatus,
-  validateUsernamePassword,
   updateStatusIcon,
   getStatusByUsername,
+  validateUsernamePassword,
 };
