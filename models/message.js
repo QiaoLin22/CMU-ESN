@@ -42,10 +42,8 @@ const MessageSchema = mongoose.Schema({
 const Message = mongoose.model('Message', MessageSchema);
 
 async function createNewMessage(username, message, roomId) {
-  // TODO: make sure that getStatusByUsername() can get the latest status
-  const statusObj = await getStatusByUsername(username);
-  const { statusArray } = statusObj;
-  const latestStatus = statusArray[statusArray.length - 1].status;
+  
+  const latestStatus = await getStatusByUsername(username);
 
   const newMessage = new Message({
     username: username,
