@@ -10,7 +10,7 @@
 */
 
 body {
-  background-color: #f3fdff;
+  background-color: #e0f3f7;
   font-family: 'IBM Plex Sans', sans-serif;
   font-weight: 400;
 }
@@ -183,7 +183,26 @@ a:hover {
   font-size: 0.8rem;
 }
 
+.toast-custom {
+  font-family: 'IBM Plex Sans', sans-serif;
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  z-index: -1;
+  width: 100%;
+  color: #07869a;
+}
+
 /* bootstrap style override */
 .list-group-item {
   border-width: 0px;
+}
+
+/* toast */
+.toast-header small {
+  color: rgb(187 210 214);
+}
+
+.mr-auto {
+  color: #07869a;
 }
