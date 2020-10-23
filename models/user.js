@@ -51,13 +51,16 @@ function createNewUser(username, hash, salt) {
 function retrieveUsers() {
   return User.find(
     {},
-    { _id: 0, __v: 0, hash: 0, salt: 0 },
-    { sort: { online: -1, username: 1 } }
-  );
+    { _id: 0, __v: 0, hash: 0, salt: 0},
+    { sort: { online: -1, username: 1 } },
+  )
 }
 
 function findUserByUsername(username) {
-  return User.findOne({ username: username });
+  return User.findOne(
+    { username: username },
+    { _id: 0, __v: 0, hash: 0, salt: 0},
+    );
 }
 
 function updateOnlineStatus(username, online) {
@@ -70,18 +73,22 @@ function updateOnlineStatus(username, online) {
 function updateStatusIcon(username, status) {
   const timestamp = new Date(Date.now()).toISOString();
   const objStatus = { timestamp: timestamp, status: status };
-  return User.findOneAndUpdate(
+  return User.update(
     { username: username },
-    { $set: { status: status } },
-    { $set: { timestamp: timestamp } }
-  ).then((user) => {
-    user.statusArray.push(objStatus);
-    user.save();
-  });
+    { $push: { statusArray: objStatus } }
+  )
 }
 
 function getStatusByUsername(username) {
-  return User.findOne({ username: username }, { statusArray: 1 });
+  return User.findOne(
+    { username: username }, 
+    { statusArray: 1 }
+    ).then((arr) => {
+      return arr.statusArray[arr.statusArray.length-1].status
+    }).catch((e) => {
+      console.log(e)
+    })
+    
 }
 
 function validateUsernamePassword(username, password) {

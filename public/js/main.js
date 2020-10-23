@@ -86,6 +86,7 @@ function retrieveUsers() {
           getGetOptions()
         );
         const hasUnread = await res.json();
+        // TODO: make sure the data from the response is the latest status
         const { status } = user.statusArray[user.statusArray.length - 1];
         outputUser(user, user.online, status, hasUnread);
       }

@@ -2,11 +2,13 @@ const mongoose = require('mongoose');
 
 const dbString = process.env.DB_STRING;
 
+
 class DBProduction {
   constructor() {
+    
     this.connect();
   }
-
+  
   connect() {
     mongoose
       .connect(dbString, {
