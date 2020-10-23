@@ -2,7 +2,7 @@
 const DBInMemory = require('../services/dbInMemory');
 // console.log(DBInMemory);
 
-const { User, createNewUser, retrieveUsers, updateStatusIcon, getStatusByUsername} = require('../models/user');
+const { User, createNewUser, retrieveUsers, updateStatusIcon, getStatusByUsername,findUserByUsername} = require('../models/user');
 
 // const dao = new DAO(DBInMemory);
 
@@ -56,9 +56,9 @@ describe('use case join community', () => {
         ],
       },
     ];
-    expect(actual[0].username).toEqual(expected[0].username);
-    expect(actual[0].online).toEqual(expected[0].online);
-    expect(actual[0].statusArray[0].status).toEqual(
+    expect(actual.username).toEqual(expected[0].username);
+    expect(actual.online).toEqual(expected[0].online);
+    expect(actual.statusArray[0].status).toEqual(
       expected[0].statusArray[0].status
     );
   })
@@ -82,17 +82,17 @@ describe('use case join community', () => {
         ],
       },
     ];
-    const actual = await User.findOne(
+    const actual = await User.find(
       { username: 'John' },
       { _id: 0, __v: 0, timestamp: 0 }
     );
     
-    expect(actual.username).toEqual(expected[0].username);
-    expect(actual.hash).toEqual(expected[0].hash);
-    expect(actual.salt).toEqual(expected[0].salt);
-    expect(actual.online).toEqual(expected[0].online);
-    expect(actual.status).toEqual(expected[0].status);
-    expect(actual.statusArray[1].status).toEqual(
+    expect(actual[0].username).toEqual(expected[0].username);
+    expect(actual[0].hash).toEqual(expected[0].hash);
+    expect(actual[0].salt).toEqual(expected[0].salt);
+    expect(actual[0].online).toEqual(expected[0].online);
+    expect(actual[0].status).toEqual(expected[0].status);
+    expect(actual[0].statusArray[1].status).toEqual(
       expected[0].statusArray[1].status
     );
   })

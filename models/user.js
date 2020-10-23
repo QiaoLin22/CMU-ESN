@@ -57,7 +57,10 @@ function retrieveUsers() {
 }
 
 function findUserByUsername(username) {
-  return User.findOne({ username: username });
+  return User.findOne(
+    { username: username },
+    { _id: 0, __v: 0, hash: 0, salt: 0},
+    );
 }
 
 function updateOnlineStatus(username, online) {
