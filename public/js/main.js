@@ -37,7 +37,7 @@ function outputUser(data, online, status, hasUnread) {
       ? `${username}${otherUsername}`
       : `${otherUsername}${username}`;
   const user = document.createElement('div');
-  const readIcon = `<i class="fas fa-circle ml-4" id=${roomId} style="color: red; display: none; position:absolute; top:10%; right: 2px;"></i>`;
+  const readIcon = `<i class="fas fa-circle ml-4" id=${roomId} style="color: #44b3c5; display: none; position:absolute; top: 35%; right: 3%; height: 20%;"></i>`;
 
   user.classList.add('online-item');
   if (data.username === username) {

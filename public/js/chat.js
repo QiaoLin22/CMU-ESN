@@ -75,7 +75,10 @@ function updateReadStatus (roomId) {
 }
 
 function displayNotification(username){
-  alert(username + " just sent you a private message!");
+  $('.toast-body').replaceWith(`<div class="toast-body pl-3 pt-2 pr-2 pb-2">${username} just sent you a message</div>`);
+  $('.toast').css("zIndex", 1000);
+  $('.toast').toast('show');
+  // alert(username + " just sent you a private message!");
 }
 
 socket.on('new private message', (newMsg) => {
