@@ -1,11 +1,10 @@
 const {
   getHistoricalMessages,
   createNewMessage,
-  checkUnreadMessage,
   updateAllToRead,
 } = require('../models/message');
 
-class messageController {
+class MessageController {
   static createPublicMessage(req, res) {
     const { username, message, roomId } = req.body;
     createNewMessage(username, message, roomId)
@@ -44,22 +43,10 @@ class messageController {
     );
   }
 
-  static checkExistingUnreadMessage(req, res) {
-    const { otherUsername } = req.params;
-    const { username } = res.locals;
-    checkUnreadMessage(username, otherUsername).then((data) => {
-      if (data.length === 0) {
-        res.send(false);
-      } else {
-        res.send(true);
-      }
-    });
-  }
-
   static updateReadStatus(req, res) {
     const { roomId } = req.params;
     updateAllToRead(roomId).then(() => res.status(200).end());
   }
 }
 
-module.exports = messageController;
+module.exports = MessageController;

@@ -2,19 +2,14 @@ const mongoose = require('mongoose');
 
 const { getStatusByUsername } = require('./user');
 
-// const dbString = process.env.DB_STRING;
-
-// mongoose
-//   .connect(dbString, {
-//     useNewUrlParser: true,
-//     useUnifiedTopology: true,
-//   })
-//   .catch((e) => console.log(e));
-
 const MessageSchema = mongoose.Schema({
-  username: {
+  sender: {
     type: String,
-    required: [true, 'Username is required'],
+    required: [true, 'Sender is required'],
+  },
+  recipient: {
+    type: String,
+    required: [true, 'Recipient is required'],
   },
   timestamp: {
     type: String,
@@ -28,7 +23,7 @@ const MessageSchema = mongoose.Schema({
     type: String,
     required: [true, 'Room ID is required'],
   },
-  status: {
+  senderStatus: {
     type: String,
     enum: ['OK', 'Emergency', 'Help', 'Undefined'],
   },
@@ -41,14 +36,14 @@ const MessageSchema = mongoose.Schema({
 
 const Message = mongoose.model('Message', MessageSchema);
 
-async function createNewMessage(username, message, roomId) {
+async function createNewMessage(sender, message, roomId) {
   // TODO: make sure that getStatusByUsername() can get the latest status
-  const statusObj = await getStatusByUsername(username);
-  const { statusArray } = statusObj;
-  const latestStatus = statusArray[statusArray.length - 1].status;
+  const statusObj = await getStatusByUsername(sender);
+  const latestStatus = statusObj.status;
 
   const newMessage = new Message({
-    username: username,
+    sender: sender,
+    recipient: '',
     timestamp: new Date(Date.now()).toISOString(),
     message: message,
     roomId: roomId,
@@ -67,22 +62,23 @@ function updateAllToRead(roomId) {
   return Message.updateMany({ roomId: roomId }, { read: true });
 }
 
-function checkUnreadMessage(username, otherUsername) {
-  const roomId =
-    username < otherUsername
-      ? `${username}${otherUsername}`
-      : `${otherUsername}${username}`;
-  return Message.find({
-    roomId: roomId,
-    read: false,
-    username: { $ne: username },
-  });
+function numUnreadMessages() {
+  return Message.aggregate([
+    {
+      $match: {
+        roomId: { $regex: new RegExp(`^${username}|${username}$`) },
+        username: { $ne: username },
+        read: false,
+      },
+    },
+    { $count: 'numUnreadMessages' },
+  ]);
 }
 
 module.exports = {
   Message,
   createNewMessage,
   getHistoricalMessages,
-  checkUnreadMessage,
+  numUnreadMessages,
   updateAllToRead,
 };

@@ -24,6 +24,10 @@ class DBInMemory {
     await mongoose.connection.close();
     await mongoServer.stop();
   }
+
+  async cleanup() {
+    await mongoose.connection.dropDatabase();
+  }
 }
 
 module.exports = new DBInMemory();

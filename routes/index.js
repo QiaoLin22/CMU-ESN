@@ -1,8 +1,5 @@
 const router = require('express').Router();
-const {
-  authenticateUser,
-  verifyRoomId,
-} = require('../middleware/authMiddleware');
+const { authenticateUser, verifyRoomId } = require('../middleware/auth');
 
 router.get('/', (req, res) => {
   res.render('index');

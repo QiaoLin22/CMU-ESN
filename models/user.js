@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const reservedUsernames = require('../lib/reserved_usernames.json').usernames;
+const { numUnreadMessages } = require('./message');
 
 const userSchema = new mongoose.Schema({
   username: {
@@ -80,8 +81,13 @@ function updateStatusIcon(username, status) {
   });
 }
 
-function getStatusByUsername(username) {
-  return User.findOne({ username: username }, { statusArray: 1 });
+async function getStatusByUsername(username) {
+  const result = await User.aggregate([
+    { $match: { username: username } },
+    { $project: { status: { $arrayElemAt: ['$statusArray', -1] } } },
+  ]);
+
+  return result[0].status;
 }
 
 function validateUsernamePassword(username, password) {

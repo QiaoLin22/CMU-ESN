@@ -11,7 +11,7 @@ const usersRouter = require('./routes/users');
 const messagesRouter = require('./routes/messages');
 
 const PORT = process.env.PORT || 3000;
-const DBProduction = require('./services/dbProduction');
+require('./services/db-production');
 
 // pass io to following middleware/router
 app.use((req, res, next) => {

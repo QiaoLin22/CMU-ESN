@@ -1,8 +1,5 @@
 const router = require('express').Router();
-const {
-  authenticateUser,
-  verifyRoomId,
-} = require('../middleware/authMiddleware');
+const { authenticateUser, verifyRoomId } = require('../middleware/auth');
 
 const MessageController = require('../controllers/messageController');
 
@@ -21,12 +18,6 @@ router.post(
   '/private',
   authenticateUser,
   MessageController.createPrivateMessage
-);
-
-router.get(
-  '/unread/:otherUsername',
-  authenticateUser,
-  MessageController.checkExistingUnreadMessage
 );
 
 router.put(

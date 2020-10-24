@@ -1,5 +1,5 @@
 // const DAO = require('../services/dao');
-const DBInMemory = require('../services/dbInMemory');
+const DBInMemory = require('../services/db-in-memory');
 
 const { User } = require('../models/user');
 const {
@@ -7,7 +7,7 @@ const {
   createNewMessage,
   getHistoricalMessages,
   updateAllToRead,
-  checkUnreadMessage,
+  numUnreadMessages,
 } = require('../models/message');
 
 // const dao = new DAO(DBInMemory)
@@ -15,17 +15,36 @@ const {
 beforeAll(DBInMemory.connect);
 afterAll(DBInMemory.close);
 
-describe('use case chat publicly', () => {
-  it('create new message successfully', async () => {
-    // create a new user
-    await new User({
+beforeEach(async () => {
+  // create new users
+  await User.insertMany([
+    {
       username: 'John',
       hash: '001',
       salt: '110',
-    }).save();
+      statusArray: [
+        {
+          timestamp: '1',
+          status: 'Undefined',
+        },
+        {
+          timestamp: '2',
+          status: 'OK',
+        },
+      ],
+    },
+    {
+      username: 'Mike',
+      hash: '00001',
+      salt: '0101001',
+    },
+  ]);
+});
 
-    // console.log(newUser);
+afterEach(DBInMemory.cleanup);
 
+describe('use case chat publicly', () => {
+  it('create new message successfully', async () => {
     await createNewMessage('John', 'test', 'public');
 
     const actual = await Message.find({ username: 'John' });
@@ -47,6 +66,8 @@ describe('use case chat publicly', () => {
   });
 
   it('get historical message successfully', async () => {
+    await createNewMessage('John', 'test', 'public');
+
     const actual = await getHistoricalMessages('public');
 
     const expected = [
@@ -67,6 +88,10 @@ describe('use case chat publicly', () => {
 });
 
 describe('use case chat privately', () => {
+  beforeEach(async () => {
+    await createNewMessage('John', 'test', 'public');
+  });
+
   it('update message to read successfully', async () => {
     await updateAllToRead('public');
     const actual = await Message.find({ read: 0, roomId: 'public' });
@@ -75,14 +100,6 @@ describe('use case chat privately', () => {
   });
 
   it('get unread message successfully', async () => {
-    const otherUser = new User({
-      username: 'Mike',
-      hash: '00001',
-      salt: '0101001',
-      timestamp: '2020-10-21T05:08:23.867Z',
-    });
-    await otherUser.save();
-
     const messageSentByMike = new Message({
       username: 'Mike',
       message: 'Unread',
@@ -91,8 +108,9 @@ describe('use case chat privately', () => {
     });
     await messageSentByMike.save();
 
-    const actual = await checkUnreadMessage('John', 'Mike');
+    const actual = await numUnreadMessages('John');
+    console.log(actual);
 
-    expect(actual.length).toEqual(1);
+    expect(actual[0].numUnreadMessages).toEqual(1);
   });
 });
