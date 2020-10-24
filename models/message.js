@@ -36,10 +36,8 @@ const MessageSchema = mongoose.Schema({
 
 const Message = mongoose.model('Message', MessageSchema);
 
-async function createNewMessage(sender, message, roomId) {
-  // TODO: make sure that getStatusByUsername() can get the latest status
-  const statusObj = await getStatusByUsername(sender);
-  const latestStatus = statusObj.status;
+async function createNewMessage(username, message, roomId) {
+  const latestStatus = await getStatusByUsername(username);
 
   const newMessage = new Message({
     sender: sender,
@@ -62,7 +60,7 @@ function updateAllToRead(roomId) {
   return Message.updateMany({ roomId: roomId }, { read: true });
 }
 
-function numUnreadMessages() {
+function numUnreadMessages(username) {
   return Message.aggregate([
     {
       $match: {

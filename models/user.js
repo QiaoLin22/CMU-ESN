@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const reservedUsernames = require('../lib/reserved_usernames.json').usernames;
+const reservedUsernames = require('../lib/reserved-usernames.json').usernames;
 const { numUnreadMessages } = require('./message');
 
 const userSchema = new mongoose.Schema({
@@ -58,7 +58,7 @@ function retrieveUsers() {
 }
 
 function findUserByUsername(username) {
-  return User.findOne({ username: username });
+  return User.findOne({ username: username }, { _id: 0, __v: 0 });
 }
 
 function updateOnlineStatus(username, online) {
@@ -71,14 +71,10 @@ function updateOnlineStatus(username, online) {
 function updateStatusIcon(username, status) {
   const timestamp = new Date(Date.now()).toISOString();
   const objStatus = { timestamp: timestamp, status: status };
-  return User.findOneAndUpdate(
+  return User.update(
     { username: username },
-    { $set: { status: status } },
-    { $set: { timestamp: timestamp } }
-  ).then((user) => {
-    user.statusArray.push(objStatus);
-    user.save();
-  });
+    { $push: { statusArray: objStatus } }
+  );
 }
 
 async function getStatusByUsername(username) {

@@ -1,4 +1,3 @@
-
 /* global io */
 const socket = io();
 
@@ -68,14 +67,19 @@ socket.on('new public message', (newMsg) => {
   }
 });
 
-function updateReadStatus (roomId) {
+function updateReadStatus(roomId) {
   fetch(`/api/messages/${roomId}/read`, {
     method: 'PUT',
   });
 }
 
-function displayNotification(username){
-  alert(username + " just sent you a private message!");
+function displayNotification(username) {
+  $('.toast-body').replaceWith(
+    `<div class="toast-body pl-3 pt-2 pr-2 pb-2">${username} just sent you a message</div>`
+  );
+  $('.toast').css('zIndex', 1000);
+  $('.toast').toast('show');
+  // alert(username + " just sent you a private message!");
 }
 
 socket.on('new private message', (newMsg) => {
@@ -85,7 +89,7 @@ socket.on('new private message', (newMsg) => {
     }
     outputMessage(newMsg);
   } else {
-    displayNotification(newMsg.username)
+    displayNotification(newMsg.username);
   }
 });
 
