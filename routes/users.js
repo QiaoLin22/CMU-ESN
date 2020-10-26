@@ -1,8 +1,8 @@
 const router = require('express').Router();
 const { authenticateUser } = require('../middleware/auth');
 
-const LoginLogoutController = require('../controllers/loginLogoutController');
-const UserController = require('../controllers/userController');
+const LoginLogoutController = require('../controllers/login-logout-controller');
+const UserController = require('../controllers/user-controller');
 
 router.get('/', authenticateUser, UserController.retrieveUsers);
 

@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const { authenticateUser, verifyRoomId } = require('../middleware/auth');
 
-const MessageController = require('../controllers/messageController');
+const MessageController = require('../controllers/message-controller');
 
 router.post('/public', authenticateUser, MessageController.createPublicMessage);
 

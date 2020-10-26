@@ -1,5 +1,5 @@
 // const DAO = require('../services/dao');
-const DBInMemory = require('../services/dbInMemory');
+const DBInMemory = require('../services/db-in-memory');
 // console.log(DBInMemory);
 
 const {
