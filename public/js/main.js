@@ -19,6 +19,7 @@ function getGetOptions() {
   };
 }
 
+/* output each user with online/offline, status icon, and unread message icon */
 function outputUser(data, online, status, hasUnread) {
   let icon = '';
   if (status === 'OK') {
@@ -31,15 +32,17 @@ function outputUser(data, online, status, hasUnread) {
     icon = '<i class="far fa-question-circle ml-1" style="color: #d8d8d8"></i>';
   }
 
+  // get roomId 
   const otherUsername = data.username;
   const roomId =
     username < otherUsername
       ? `${username}${otherUsername}`
       : `${otherUsername}${username}`;
   const user = document.createElement('div');
-  const readIcon = `<i class="fas fa-circle ml-4" id=${roomId} style="color: red; display: none; position:absolute; top:10%; right: 2px;"></i>`;
+  const readIcon = `<i class="fas fa-circle ml-4" id=${roomId} style="color: #44b3c5; display: none; position:absolute; top: 35%; right: 3%; height: 20%;"></i>`;
 
   user.classList.add('online-item');
+  //self-chat prevention
   if (data.username === username) {
     user.style.cursor = 'not-allowed';
     user.style.pointerEvents = 'none';
@@ -63,17 +66,9 @@ function outputUser(data, online, status, hasUnread) {
   });
 }
 
-// function checkUnreadMessage(otherUsername) {
-//   fetch(`/api/messages/unread/${otherUsername}`, getGetOptions())
-//     .then((res) => {
-//       return res.json();
-//     })
-//     .then((json) => {
-//       return json;
-//     });
-// }
-
+/* retrieve userlist */
 function retrieveUsers() {
+  // fetch "/api/users" request to retrieve userlist
   fetch('/api/users', getGetOptions())
     .then((res) => {
       return res.json();
@@ -81,11 +76,13 @@ function retrieveUsers() {
     .then(async (data) => {
       /* eslint-disable no-await-in-loop */
       for (const user of data.users) {
+        //check if there is an unread message from username
         const res = await fetch(
           `/api/messages/unread/${user.username}`,
           getGetOptions()
         );
         const hasUnread = await res.json();
+        //get the latest status
         // TODO: make sure the data from the response is the latest status
         const { status } = user.statusArray[user.statusArray.length - 1];
         outputUser(user, user.online, status, hasUnread);
@@ -96,6 +93,7 @@ function retrieveUsers() {
     });
 }
 
+/* updateDirectory request handler */
 socket.on('updateDirectory', () => {
   console.log('updateDirectory');
   $('#offline-list').empty();
@@ -105,7 +103,9 @@ socket.on('updateDirectory', () => {
 
 jQuery(retrieveUsers);
 
+/* logout handler */
 logoutBtn.on('click', () => {
+  // fetch "/api/users/logout" request to handle user logout
   fetch('/api/users/logout', {
     method: 'PUT',
     headers: {
@@ -120,6 +120,7 @@ logoutBtn.on('click', () => {
   });
 });
 
+/* update status */
 function updateStatus(status) {
   status.on('click', () => {
     const newStatus = {
@@ -127,6 +128,7 @@ function updateStatus(status) {
       status: status.text(),
     };
     console.log(newStatus);
+    // fetch "/api/users" request to update status
     fetch('/api/users', {
       method: 'PUT',
       headers: {

@@ -2,7 +2,14 @@
 const DBInMemory = require('../services/dbInMemory');
 // console.log(DBInMemory);
 
-const { User, createNewUser, retrieveUsers, updateStatusIcon, getStatusByUsername,findUserByUsername} = require('../models/user');
+const {
+  User,
+  createNewUser,
+  retrieveUsers,
+  updateStatusIcon,
+  getStatusByUsername,
+  findUserByUsername,
+} = require('../models/user');
 
 // const dao = new DAO(DBInMemory);
 
@@ -17,7 +24,7 @@ describe('use case join community', () => {
       { username: 'John' },
       { _id: 0, __v: 0, timestamp: 0 }
     );
-    
+
     const expected = [
       {
         username: 'John',
@@ -42,7 +49,7 @@ describe('use case join community', () => {
 
   it('Find user by username successfully', async () => {
     const actual = await findUserByUsername('John');
-    console.log(actual)
+    console.log(actual);
     const expected = [
       {
         username: 'John',
@@ -61,10 +68,10 @@ describe('use case join community', () => {
     expect(actual.statusArray[0].status).toEqual(
       expected[0].statusArray[0].status
     );
-  })
+  });
 
-  it('Update status successfully', async() => {
-    await updateStatusIcon('John','OK');
+  it('Update status successfully', async () => {
+    await updateStatusIcon('John', 'OK');
 
     const expected = [
       {
@@ -78,30 +85,30 @@ describe('use case join community', () => {
           },
           {
             status: 'OK',
-          }
+          },
         ],
       },
     ];
-    const actual = await User.find(
+    const actual = await User.findOne(
       { username: 'John' },
       { _id: 0, __v: 0, timestamp: 0 }
     );
-    
-    expect(actual[0].username).toEqual(expected[0].username);
-    expect(actual[0].hash).toEqual(expected[0].hash);
-    expect(actual[0].salt).toEqual(expected[0].salt);
-    expect(actual[0].online).toEqual(expected[0].online);
-    expect(actual[0].status).toEqual(expected[0].status);
-    expect(actual[0].statusArray[1].status).toEqual(
+
+    expect(actual.username).toEqual(expected[0].username);
+    expect(actual.hash).toEqual(expected[0].hash);
+    expect(actual.salt).toEqual(expected[0].salt);
+    expect(actual.online).toEqual(expected[0].online);
+    expect(actual.status).toEqual(expected[0].status);
+    expect(actual.statusArray[1].status).toEqual(
       expected[0].statusArray[1].status
     );
-  })
+  });
 
-  it('get status by username successfully', async() => {
+  it('get status by username successfully', async () => {
     const actual = await getStatusByUsername('John');
     const expected = 'OK';
     expect(actual).toEqual(expected);
-  })
+  });
 
   it('retrieve users successfully', async () => {
     const actual = await retrieveUsers();
@@ -124,5 +131,5 @@ describe('use case join community', () => {
     expect(actual[0].statusArray[0].status).toEqual(
       expected[0].statusArray[0].status
     );
-  })
+  });
 });
