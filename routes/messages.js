@@ -17,6 +17,7 @@ router.get(
 router.post(
   '/private',
   authenticateUser,
+  verifyRoomId,
   MessageController.createPrivateMessage
 );
 
@@ -24,6 +25,12 @@ router.put(
   '/:roomId/read',
   authenticateUser,
   MessageController.updateReadStatus
+);
+
+router.get(
+  '/unread/:otherUsername',
+  authenticateUser,
+  MessageController.checkExistingUnreadMessage
 );
 
 module.exports = router;

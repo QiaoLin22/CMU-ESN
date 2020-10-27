@@ -12,7 +12,13 @@ const roomId = (() => {
   return lastStr === 'public-wall' ? 'public' : lastStr;
 })();
 
-$('#roomId-data').text(roomId);
+const otherUsername = (() => {
+  const usernames = roomId.split('-');
+  if (roomId === 'public') return undefined;
+  return usernames[0] === username ? usernames[1] : usernames[0];
+})();
+
+$('#roomId-data').text(otherUsername);
 const chatContainer = $('.chat-container');
 const chatMessages = $('.chat-messages');
 const msgEle = $('#msg');
@@ -98,7 +104,8 @@ $('#submitBtn').on('click', (element) => {
   element.preventDefault();
 
   const newMsg = {
-    username: username,
+    sender: username,
+    recipient: otherUsername,
     message: msgEle.val(),
     roomId: roomId,
   };

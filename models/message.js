@@ -36,12 +36,12 @@ const MessageSchema = mongoose.Schema({
 
 const Message = mongoose.model('Message', MessageSchema);
 
-async function createNewMessage(username, message, roomId) {
+async function createNewMessage(sender, recipient, message, roomId) {
   const latestStatus = await getStatusByUsername(username);
 
   const newMessage = new Message({
     sender: sender,
-    recipient: '',
+    recipient: recipient,
     timestamp: new Date(Date.now()).toISOString(),
     message: message,
     roomId: roomId,
@@ -62,15 +62,31 @@ function updateAllToRead(roomId) {
 
 function numUnreadMessages(username) {
   return Message.aggregate([
+    // {
+    //   $match: {
+    //     username: username,
+    //     read: false,
+    //   },
+    // },
     {
-      $match: {
-        roomId: { $regex: new RegExp(`^${username}|${username}$`) },
-        username: { $ne: username },
-        read: false,
+      $group: {
+        _id: '$roomId',
       },
     },
     { $count: 'numUnreadMessages' },
   ]);
+}
+
+function checkUnreadMessage(username, otherUsername) {
+  const roomId =
+    username < otherUsername
+      ? `${username}${otherUsername}`
+      : `${otherUsername}${username}`;
+  return Message.find({
+    roomId: roomId,
+    read: false,
+    username: { $ne: username },
+  });
 }
 
 module.exports = {
@@ -79,4 +95,5 @@ module.exports = {
   getHistoricalMessages,
   numUnreadMessages,
   updateAllToRead,
+  checkUnreadMessage,
 };

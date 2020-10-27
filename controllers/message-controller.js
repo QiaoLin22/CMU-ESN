@@ -2,12 +2,13 @@ const {
   getHistoricalMessages,
   createNewMessage,
   updateAllToRead,
+  checkUnreadMessage,
 } = require('../models/message');
 
 class MessageController {
   static createPublicMessage(req, res) {
-    const { username, message, roomId } = req.body;
-    createNewMessage(username, message, roomId)
+    const { sender, recipient, message, roomId } = req.body;
+    createNewMessage(sender, recipient, message, roomId)
       .then((newMessage) => {
         req.io.emit('new public message', newMessage);
         res.status(201).send({ message: 'successfully create a message' });
@@ -19,8 +20,8 @@ class MessageController {
   }
 
   static createPrivateMessage(req, res) {
-    const { username, message, roomId } = req.body;
-    createNewMessage(username, message, roomId)
+    const { sender, recipient, message, roomId } = req.body;
+    createNewMessage(sender, recipient, message, roomId)
       .then((newMessage) => {
         req.io.in(roomId).emit('new private message', newMessage);
         req.io.emit('updateDirectory');
@@ -41,6 +42,18 @@ class MessageController {
     updateAllToRead(roomId).then(() =>
       getHistoricalMessages(roomId).then((messages) => res.send(messages))
     );
+  }
+
+  static checkExistingUnreadMessage(req, res) {
+    const { otherUsername } = req.params;
+    const { username } = res.locals;
+    checkUnreadMessage(username, otherUsername).then((data) => {
+      if (data.length === 0) {
+        res.send(false);
+      } else {
+        res.send(true);
+      }
+    });
   }
 
   static updateReadStatus(req, res) {

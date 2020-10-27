@@ -34,8 +34,8 @@ function outputUser(data, online, status, hasUnread) {
   const otherUsername = data.username;
   const roomId =
     username < otherUsername
-      ? `${username}${otherUsername}`
-      : `${otherUsername}${username}`;
+      ? `${username}-${otherUsername}`
+      : `${otherUsername}-${username}`;
   const user = document.createElement('div');
   const readIcon = `<i class="fas fa-circle ml-4" id=${roomId} style="color: #44b3c5; display: none; position:absolute; top: 35%; right: 3%; height: 20%;"></i>`;
 
@@ -88,6 +88,7 @@ function retrieveUsers() {
         const hasUnread = await res.json();
         // TODO: make sure the data from the response is the latest status
         const { status } = user.statusArray[user.statusArray.length - 1];
+        console.log(user);
         outputUser(user, user.online, status, hasUnread);
       }
     })

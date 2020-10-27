@@ -49,7 +49,9 @@ function createNewUser(username, hash, salt) {
   return newUser.save();
 }
 
-function retrieveUsers() {
+async function retrieveUsers() {
+  const countUnreadMessages = await numUnreadMessages();
+  console.log(countUnreadMessages);
   return User.find(
     {},
     { _id: 0, __v: 0, hash: 0, salt: 0 },
