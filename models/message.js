@@ -1,18 +1,17 @@
 const mongoose = require('mongoose');
-require('dotenv').config();
 
 const { getStatusByUsername } = require('./user');
 
-const dbString = process.env.DB_STRING;
+// const dbString = process.env.DB_STRING;
 
-mongoose
-  .connect(dbString, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
-  .catch((e) => console.log(e));
+// mongoose
+//   .connect(dbString, {
+//     useNewUrlParser: true,
+//     useUnifiedTopology: true,
+//   })
+//   .catch((e) => console.log(e));
 
-const MessageSchema = new mongoose.Schema({
+const MessageSchema = mongoose.Schema({
   username: {
     type: String,
     required: [true, 'Username is required'],
@@ -33,23 +32,27 @@ const MessageSchema = new mongoose.Schema({
     type: String,
     enum: ['OK', 'Emergency', 'Help', 'Undefined'],
   },
+  read: {
+    type: Boolean,
+    required: [true, 'Read status is required'],
+    default: false,
+  },
 });
 
 const Message = mongoose.model('Message', MessageSchema);
 
 async function createNewMessage(username, message, roomId) {
-  const status = await getStatusByUsername(username);
+  
+  const latestStatus = await getStatusByUsername(username);
 
-  console.log(status);
   const newMessage = new Message({
     username: username,
     timestamp: new Date(Date.now()).toISOString(),
     message: message,
     roomId: roomId,
-    status: status.status,
+    status: latestStatus,
+    read: false,
   });
-
-  console.log(newMessage);
 
   return newMessage.save();
 }
@@ -58,4 +61,26 @@ function getHistoricalMessages(roomId) {
   return Message.find({ roomId: roomId });
 }
 
-module.exports = { createNewMessage, getHistoricalMessages };
+function updateAllToRead(roomId) {
+  return Message.updateMany({ roomId: roomId }, { read: true });
+}
+
+function checkUnreadMessage(username, otherUsername) {
+  const roomId =
+    username < otherUsername
+      ? `${username}${otherUsername}`
+      : `${otherUsername}${username}`;
+  return Message.find({
+    roomId: roomId,
+    read: false,
+    username: { $ne: username },
+  });
+}
+
+module.exports = {
+  Message,
+  createNewMessage,
+  getHistoricalMessages,
+  checkUnreadMessage,
+  updateAllToRead,
+};

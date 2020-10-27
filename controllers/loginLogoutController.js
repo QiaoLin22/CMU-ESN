@@ -16,7 +16,7 @@ class LoginLogoutController {
       if (!user) {
         validateUsernamePassword(username, password);
         // ask the user to confirm the creation of a new user
-        res.status(200).send({ message: 'create new user?' });
+        return res.status(200).send({ message: 'create new user?' });
       }
 
       // user exists, check if password is correct
