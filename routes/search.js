@@ -15,4 +15,10 @@ router.get(
   SearchInfoController.searchMessage
 );
 
+router.get(
+  '/messages/:roomId',
+  authenticateUser,
+  verifyRoomId,
+  SearchInfoController.searchStatus
+);
 module.exports = router;

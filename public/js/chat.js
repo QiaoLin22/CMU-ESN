@@ -101,13 +101,9 @@ socket.on('new private message', (newMsg) => {
     }
     outputMessage(newMsg);
   } else {
-<<<<<<< HEAD
      //if user is not in the same room with the sender of the new message
     //send notification
     displayNotification(newMsg.username)
-=======
-    displayNotification(newMsg.username);
->>>>>>> 7849d515f12301231000d3d2bd16f274a694c978
   }
 });
 

@@ -28,4 +28,8 @@ router.get(
 router.get('/private/:roomId/search', authenticateUser, (req, res) => {
   res.render('search', { username: res.locals.username });
 });
+
+router.get('/public/search', authenticateUser, (req, res) => {
+  res.render('search', { username: res.locals.username });
+});
 module.exports = router;

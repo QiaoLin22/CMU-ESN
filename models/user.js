@@ -80,6 +80,7 @@ function updateStatusIcon(username, status) {
 }
 
 function getStatusByUsername(username) {
+  //TODO
   return User.findOne(
     { username: username }, 
     { statusArray: 1 }
@@ -101,6 +102,13 @@ function validateUsernamePassword(username, password) {
     throw Error('Passwords should be at least 4 characters long');
 }
 
+function findUserStatus(username){
+  return User.find(
+    {username: username},
+    {statusArray:{$slice:-10}}
+    );
+}
+
 module.exports = {
   User,
   createNewUser,
@@ -110,4 +118,5 @@ module.exports = {
   updateStatusIcon,
   getStatusByUsername,
   validateUsernamePassword,
+  findUserStatus,
 };

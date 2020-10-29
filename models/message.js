@@ -77,10 +77,18 @@ function checkUnreadMessage(username, otherUsername) {
   });
 }
 
+function searchMessage(roomId, filteredKeywords){
+  return Message.find({ 
+    roomId: roomId ,
+    message : { $regex : filteredKeywords}, 
+  }).limit(10);
+}
+
 module.exports = {
   Message,
   createNewMessage,
   getHistoricalMessages,
   checkUnreadMessage,
   updateAllToRead,
+  searchMessage,
 };

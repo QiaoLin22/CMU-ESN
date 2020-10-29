@@ -3,6 +3,7 @@ const path = require('path');
 const jwt = require('jsonwebtoken');
 
 const { findUserByUsername } = require('../models/user');
+const e = require('express');
 
 const pathToKey = path.join(__dirname, '..', 'id_rsa_pub.pem');
 
@@ -33,7 +34,9 @@ const authenticateUser = (req, res, next) => {
 const verifyRoomId = (req, res, next) => {
   const { roomId } = req.params;
   const { username } = res.locals;
-
+  if(roomId === 'public') 
+    next();
+  else{
   const usernameIndex = roomId.indexOf(username);
   let otherUsername;
 
@@ -58,6 +61,7 @@ const verifyRoomId = (req, res, next) => {
   } else {
     res.status(400).send('room id is not valid');
   }
+}
 };
 
 module.exports = { authenticateUser, verifyRoomId };
