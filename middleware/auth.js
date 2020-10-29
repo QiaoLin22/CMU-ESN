@@ -49,6 +49,7 @@ const verifyRoomId = async (req, res, next) => {
 
     next();
   } catch (e) {
+    console.log(e);
     res.status(400).send('room id is not valid');
   }
 };

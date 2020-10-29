@@ -15,7 +15,7 @@ router.get(
 );
 
 router.post(
-  '/private',
+  '/private/:roomId',
   authenticateUser,
   verifyRoomId,
   MessageController.createPrivateMessage

@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const { getStatusByUsername } = require('./user');
+const { getStatusByUsername, validateUsernamePassword } = require('./user');
 
 const MessageSchema = mongoose.Schema({
   sender: {
@@ -37,7 +37,7 @@ const MessageSchema = mongoose.Schema({
 const Message = mongoose.model('Message', MessageSchema);
 
 async function createNewMessage(sender, recipient, message, roomId) {
-  const latestStatus = await getStatusByUsername(username);
+  const latestStatus = await getStatusByUsername(sender);
 
   const newMessage = new Message({
     sender: sender,
@@ -60,40 +60,21 @@ function updateAllToRead(roomId) {
   return Message.updateMany({ roomId: roomId }, { read: true });
 }
 
-function numUnreadMessages(username) {
-  return Message.aggregate([
-    // {
-    //   $match: {
-    //     username: username,
-    //     read: false,
-    //   },
-    // },
-    {
-      $group: {
-        _id: '$roomId',
-      },
-    },
-    { $count: 'numUnreadMessages' },
-  ]);
-}
-
-function checkUnreadMessage(username, otherUsername) {
-  const roomId =
-    username < otherUsername
-      ? `${username}${otherUsername}`
-      : `${otherUsername}${username}`;
-  return Message.find({
-    roomId: roomId,
-    read: false,
-    username: { $ne: username },
-  });
-}
+// function checkUnreadMessage(username, otherUsername) {
+//   const roomId =
+//     username < otherUsername
+//       ? `${username}${otherUsername}`
+//       : `${otherUsername}${username}`;
+//   return Message.find({
+//     roomId: roomId,
+//     read: false,
+//     username: { $ne: username },
+//   });
+// }
 
 module.exports = {
   Message,
   createNewMessage,
   getHistoricalMessages,
-  numUnreadMessages,
   updateAllToRead,
-  checkUnreadMessage,
 };

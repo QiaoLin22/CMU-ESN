@@ -29,7 +29,7 @@ class UserController {
   }
 
   static retrieveUsers(req, res, next) {
-    retrieveUsers()
+    retrieveUsers(res.locals.username)
       .then((users) => res.status(200).json({ users }))
       .catch((err) => next(err));
   }

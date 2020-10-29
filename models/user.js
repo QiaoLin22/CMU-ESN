@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 const reservedUsernames = require('../lib/reserved-usernames.json').usernames;
-const { numUnreadMessages } = require('./message');
 
 const userSchema = new mongoose.Schema({
   username: {
@@ -49,8 +48,8 @@ function createNewUser(username, hash, salt) {
   return newUser.save();
 }
 
-async function retrieveUsers() {
-  const countUnreadMessages = await numUnreadMessages();
+async function retrieveUsers(username) {
+  const countUnreadMessages = await numUnreadMessages(username);
   console.log(countUnreadMessages);
   return User.find(
     {},
@@ -96,6 +95,25 @@ function validateUsernamePassword(username, password) {
 
   if (!password.length >= 4)
     throw Error('Passwords should be at least 4 characters long');
+}
+
+function numUnreadMessages(recipient) {
+  console.log(recipient);
+  return Message.aggregate([
+    {
+      $match: {
+        recipient: recipient,
+        read: false,
+      },
+    },
+    {
+      $group: {
+        _id: '$roomId',
+        count: { $sum: 1 },
+      },
+    },
+    // { $count: 'numUnreadMessages' },
+  ]);
 }
 
 module.exports = {

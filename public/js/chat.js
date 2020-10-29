@@ -111,7 +111,8 @@ $('#submitBtn').on('click', (element) => {
   };
 
   const publicOrPrivate = roomId === 'public' ? 'public' : 'private';
-  fetch(`/api/messages/${publicOrPrivate}`, {
+  console.log(newMsg);
+  fetch(`/api/messages/${publicOrPrivate}/${roomId}`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
