@@ -1,4 +1,3 @@
-
 /* global io */
 const socket = io();
 
@@ -75,15 +74,17 @@ socket.on('new public message', (newMsg) => {
   }
 });
 
-function updateReadStatus (roomId) {
+function updateReadStatus(roomId) {
   fetch(`/api/messages/${roomId}/read`, {
     method: 'PUT',
   });
 }
 
-function displayNotification(username){
-  $('.toast-body').replaceWith(`<div class="toast-body pl-3 pt-2 pr-2 pb-2">${username} just sent you a message</div>`);
-  $('.toast').css("zIndex", 1000);
+function displayNotification(username) {
+  $('.toast-body').replaceWith(
+    `<div class="toast-body pl-3 pt-2 pr-2 pb-2">${username} just sent you a message</div>`
+  );
+  $('.toast').css('zIndex', 1000);
   $('.toast').toast('show');
   // alert(username + " just sent you a private message!");
 }
@@ -100,9 +101,13 @@ socket.on('new private message', (newMsg) => {
     }
     outputMessage(newMsg);
   } else {
+<<<<<<< HEAD
      //if user is not in the same room with the sender of the new message
     //send notification
     displayNotification(newMsg.username)
+=======
+    displayNotification(newMsg.username);
+>>>>>>> 7849d515f12301231000d3d2bd16f274a694c978
   }
 });
 
@@ -132,4 +137,9 @@ $('#submitBtn').on('click', (element) => {
     .catch((e) => {
       console.log(e);
     });
+});
+$('#searchBtn').on('click', (element) => {
+  const fetchURL =
+    roomId === 'public' ? '/public/search' : `/private/${roomId}/search`;
+  window.location.href = fetchURL;
 });
