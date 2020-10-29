@@ -30,7 +30,6 @@ class searchInfoController {
   static searchMessage(req, res) {
     const { roomId } = req.params;
     const { keywords } = req.params;
-    console.log(roomId);
     const keywordsArray = keywords.split(/[^A-Za-z0-9]/);
     const filteredKeywords = filterStopwords(keywordsArray);
     Messages.searchMessage(roomId, filteredKeywords).then((data)=>res.send(data));
