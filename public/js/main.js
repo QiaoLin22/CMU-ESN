@@ -144,3 +144,8 @@ updateStatus(ok);
 updateStatus(help);
 updateStatus(emergency);
 updateStatus(na);
+
+$('#searchBtn').on('click', (element) => {
+  const fetchURL = '/search?context=directory';
+  window.location.href = fetchURL;
+});

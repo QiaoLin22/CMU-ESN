@@ -109,6 +109,18 @@ function findUserStatus(username){
     );
 }
 
+function findUserByKeyword(keyword) {
+  return User.find(
+    { username:{ $regex : keyword}}, 
+    { _id: 0, __v: 0},
+    { sort: { online: -1, username: 1 } },
+    );
+}
+
+function findUserByStatus(keyword) {
+  return User.find({$expr: {$eq: [{"$arrayElemAt": ["$statusArray.status", -1]}, keyword]}});
+}
+
 module.exports = {
   User,
   createNewUser,
@@ -119,4 +131,6 @@ module.exports = {
   getStatusByUsername,
   validateUsernamePassword,
   findUserStatus,
+  findUserByKeyword,
+  findUserByStatus,
 };

@@ -44,6 +44,14 @@ class searchInfoController {
    
   }
   
+  static searchUser(req, res){
+    const { keywords } = req.params;
+    if(keywords === 'OK' || keywords === 'Help' || keywords === 'Emergency'){
+      Users.findUserByStatus(keywords).then((data)=>res.send(data));
+    }else{
+      Users.findUserByKeyword(keywords).then((data)=>res.send(data));
+    }
+  }
 }
 
 module.exports = searchInfoController;

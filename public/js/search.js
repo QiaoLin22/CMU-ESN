@@ -1,16 +1,10 @@
-const roomId = (() => {
-  // check if this is private chat
-  const urlList = window.location.href.split('/');
-  const lastStr = urlList[urlList.length - 2];
-
-  return lastStr === 'public-wall' ? 'public' : lastStr;
-})();
-
 const chatContainer = $('.chat-container');
 const chatMessages = $('.chat-messages');
 const msgEle = $('#msg');
+const urlParams = new URLSearchParams(window.location.search);
+const searchContext = urlParams.get('context');
 
-/* display chat message */
+/* display searched message */
 function outputMessage(message) {
   let icon = '';
   const { status } = message;
@@ -64,8 +58,51 @@ function outputStatus(anotherUsername, statusArray) {
   );
 }
 
+function outputUser(result) {
+  let icon = '';
+  console.log(result);
+  const { status } = result.statusArray[result.statusArray.length - 1];
+  if (status === 'OK') {
+    icon = '<i class="far fa-check-circle ml-1" style="color: #18b87e"></i>';
+  } else if (status === 'Help') {
+    icon = '<i class="fas fa-info-circle ml-1" style="color: #ffd500"></i>';
+  } else if (status === 'Emergency') {
+    icon = '<i class="fas fa-first-aid ml-1" style="color: #fb5252"></i>';
+  } else if (status === undefined || status === 'Undefined') {
+    icon = '<i class="far fa-question-circle ml-1" style="color: #d8d8d8"></i>';
+  }
 
-function searchMessage(keywords){
+  const user = document.createElement('div');
+  user.classList.add('online-item');
+  if (result.online) {
+    user.innerHTML = `<li class="list-group-item list-group-item-action online-list-item" >${`${`${result.username}${icon}`}`}</li>`;
+    chatMessages.append(user);
+  } else {
+    user.innerHTML = `<li class="list-group-item list-group-item-action offline-list-item">${`${`${result.username}${icon}`}`}</>`;
+    chatMessages.append(user);
+  }
+}
+
+function searchUser(keywords){
+  console.log(keywords);
+  fetch(`/api/search/users/${keywords}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
+  .then((res) => res.json())
+  .then((json) => {
+    json.forEach((result) => {
+      outputUser(result);
+    });
+  })
+    .catch((e) => {
+      console.log(e);
+    });
+}
+
+function searchMessage(keywords, roomId){
   fetch(`/api/search/messages/${roomId}/${keywords}`, {
     method: 'GET',
     headers: {
@@ -83,7 +120,7 @@ function searchMessage(keywords){
     });
 }
 
-function searchStatus(){
+function searchStatus(roomId){
   fetch(`/api/search/messages/${roomId}`, {
     method: 'GET',
     headers: {
@@ -105,9 +142,29 @@ function searchStatus(){
 $('#submitBtn').on('click', (element) => {
   element.preventDefault();
   const keywords = msgEle.val();
-  if(keywords === 'status'){
-    searchStatus();
+  if(searchContext === 'directory'){
+    searchUser(keywords);
+  }else if(searchContext === 'message'){
+    const roomId = urlParams.get('roomid');
+    if(keywords === 'status'){
+      searchStatus(roomId);
+    }else{
+      searchMessage(keywords, roomId);
+    }
   }else{
-    searchMessage(keywords);
+
+  }
+});
+
+$('#backBtn').on('click', (element) => {
+  element.preventDefault();
+  const keywords = msgEle.val();
+  if(searchContext === 'directory'){
+    window.location.href = '/main';
+  }else if(searchContext === 'message'){
+    const roomId = urlParams.get('roomid');
+    (roomId === 'public')? window.location.href = '/public-wall': window.location.href = `/private-chat/${roomId}`;
+  }else{
+
   }
 });

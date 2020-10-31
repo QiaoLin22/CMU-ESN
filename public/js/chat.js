@@ -86,7 +86,6 @@ function displayNotification(username) {
   );
   $('.toast').css('zIndex', 1000);
   $('.toast').toast('show');
-  // alert(username + " just sent you a private message!");
 }
 
 /*  new private message request handler */
@@ -134,8 +133,8 @@ $('#submitBtn').on('click', (element) => {
       console.log(e);
     });
 });
+
 $('#searchBtn').on('click', (element) => {
-  const fetchURL =
-    roomId === 'public' ? '/public/search' : `/private/${roomId}/search`;
+  const fetchURL = `/search?context=message&roomid=${roomId}`;
   window.location.href = fetchURL;
 });

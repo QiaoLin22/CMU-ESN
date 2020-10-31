@@ -21,4 +21,11 @@ router.get(
   verifyRoomId,
   SearchInfoController.searchStatus
 );
+
+router.get(
+  `/users/:keywords`,
+  authenticateUser,
+  SearchInfoController.searchUser
+);
+
 module.exports = router;

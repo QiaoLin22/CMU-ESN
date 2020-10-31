@@ -12,7 +12,7 @@
       integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z"
       crossorigin="anonymous"
     />
-    <link rel="stylesheet" href="../css/style.css" />
+    <link rel="stylesheet" href="/css/style.css" />
     <script
       src="https://use.fontawesome.com/releases/v5.15.1/js/all.js"
       data-auto-a11y="true"
@@ -39,7 +39,7 @@
 
           <div class="row chat-header">
             <h6 class="mt-1">
-              <a href="/chat" class="mr-3 ml-3" ><</a>
+              <a id="backBtn" class="mr-3 ml-3" ><</a>
               <span id = "roomId-data"></span>
             </h6>
           </div>
@@ -55,7 +55,7 @@
                   class="mx-2 pl-2"
                   id="msg"
                   type="text"
-                  placeholder="Enter message"
+                  placeholder="Enter search keyword"
                   required
                   autocomplete="off"
                 />
