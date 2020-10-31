@@ -29,8 +29,7 @@ function outputMessage(message) {
   chatContainer.scrollTop(chatContainer[0].scrollHeight);
 }
 
-
-/* display chat message */
+/* display searched status list */
 function outputStatus(anotherUsername, statusArray) {
   statusArray.reverse().forEach((statusObj)=>{
     let icon = '';
@@ -58,9 +57,9 @@ function outputStatus(anotherUsername, statusArray) {
   );
 }
 
+/* display searched user list */
 function outputUser(result) {
   let icon = '';
-  console.log(result);
   const { status } = result.statusArray[result.statusArray.length - 1];
   if (status === 'OK') {
     icon = '<i class="far fa-check-circle ml-1" style="color: #18b87e"></i>';
@@ -84,7 +83,6 @@ function outputUser(result) {
 }
 
 function searchUser(keywords){
-  console.log(keywords);
   fetch(`/api/search/users/${keywords}`, {
     method: 'GET',
     headers: {
@@ -93,9 +91,14 @@ function searchUser(keywords){
   })
   .then((res) => res.json())
   .then((json) => {
-    json.forEach((result) => {
-      outputUser(result);
-    });
+    msgEle.val('');
+    if(json.length === 0)
+      alert("no result found");
+    else{
+      json.forEach((result) => {
+        outputUser(result);
+      });
+    }
   })
     .catch((e) => {
       console.log(e);
@@ -111,9 +114,14 @@ function searchMessage(keywords, roomId){
   })
   .then((res) => res.json())
   .then((json) => {
-    json.forEach((result) => {
-      outputMessage(result);
-    });
+    msgEle.val('');
+    if(json.length === 0)
+      alert("no result found");
+    else{
+      json.forEach((result) => {
+        outputMessage(result);
+      });
+    }
   })
     .catch((e) => {
       console.log(e);
@@ -129,10 +137,14 @@ function searchStatus(roomId){
   })
   .then((res) => res.json())
   .then((json) => {
-    //console.log(json);
-    json.forEach((result) => {
-      outputStatus(result.username, result.statusArray);
-    });
+    msgEle.val('');
+    if(json.length === 0)
+      alert("no result found");
+    else{
+      json.forEach((result) => {
+        outputStatus(result.username, result.statusArray);
+      });
+    }
   })
     .catch((e) => {
       console.log(e);

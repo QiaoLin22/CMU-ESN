@@ -38,9 +38,8 @@ class searchInfoController {
   static searchStatus(req, res) {
     const { roomId } = req.params;
     const { username } = res.locals;
-    console.log(username);
     const anotherUsername = getAnotherUsername(roomId, username);
-    Users.findUserStatus(anotherUsername).then((data)=>res.send(data));
+    Users.retrieveUserStatus(anotherUsername).then((data)=>res.send(data));
    
   }
   

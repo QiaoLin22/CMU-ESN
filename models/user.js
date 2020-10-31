@@ -102,7 +102,7 @@ function validateUsernamePassword(username, password) {
     throw Error('Passwords should be at least 4 characters long');
 }
 
-function findUserStatus(username){
+function retrieveUserStatus(username){
   return User.find(
     {username: username},
     {statusArray:{$slice:-10}}
@@ -130,7 +130,7 @@ module.exports = {
   updateStatusIcon,
   getStatusByUsername,
   validateUsernamePassword,
-  findUserStatus,
+  retrieveUserStatus,
   findUserByKeyword,
   findUserByStatus,
 };
