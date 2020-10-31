@@ -24,45 +24,24 @@
     <div class="container">
       <div class="row">
         <div class="col-lg col-md-3 col-sm-2"></div>
-
         <div class="col-lg col-md-6 col-sm-8">
-          <div class="row chat-container p-4">
-            <div class="chat-messages"></div>
+          <div class="row chat-header">
+            <h6 class="mt-1">
+              <a href="/main" class="mr-3 ml-3" ><</a>
+              <span id = "roomId-data"></span>
+            </h6>
           </div>
 
-          <div class="row chat-footer py-3 px-1">
-            <form id="chatForm">
-              <div class="input-group input-area">
-                <input
-                  class="mx-2 pl-2"
-                  id="msg"
-                  type="text"
-                  placeholder="Enter message"
-                  required
-                  autocomplete="off"
-                />
-                <div class="input-group-append">
-                  <button
-                    type="submit"
-                    class="btn btn-info"
-                    id="submitBtn"
-                  >
-                    >
-                  </button>
-                </div>
+          <div class="row announcement-container">
+            <div class="announcements">
+              <div class="announcement p-3">
+                <p class="meta mb-1"> Username <span class="ml-3">2020 Nov 1, 10:30am </span></p> 
+                <p class="collapse text" id="collapseExample" aria-expanded="false"> This is a new Announcement This is a new Announcement This is a new Announcement This is a new Announcement This is a new Announcement This is a new Announcement This is a new Announcement This is a new Announcement This is a new Announcement</p>
+                <a role="button" class="collapsed" data-toggle="collapse" aria-expanded="false" aria-controls="collapseExample"></a>
               </div>
-            </form>
+            </div>
           </div>
-
-          <!-- use only for passing the username -->
-          <input
-            id="username-data"
-            value="<%= username %>"
-            style="display: none"
-          />
-
         </div>
-
         <div class="col-lg col-md-3 col-sm-2"></div>
       </div>
     </div>
