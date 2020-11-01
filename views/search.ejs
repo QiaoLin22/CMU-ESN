@@ -25,51 +25,31 @@
       <div class="row">
         <div class="col-lg col-md-3 col-sm-2"></div>
 
-        <div class="col-lg col-md-6 col-sm-8">
-          <div class="toast toast-custom mt-2" role="alert" aria-live="polite" aria-atomic="true" data-animation = "true" data-autohide = "true" data-delay = "4000">
-            <div role="alert" aria-live="assertive" aria-atomic="true">
-              <div class="toast-header p-2">
-                <i class="fas fa-bell mr-2" style="color: #07869a;"></i>
-                <strong class="mr-auto">New Message</strong>
-                <small>a second ago</small>
-              </div>
-              <div class="toast-body"></div>
-            </div>
-          </div>
-
-          <div class="row chat-header">
+        <div class="row chat-header">
             <h6 class="mt-1">
               <a id="backBtn" class="mr-3 ml-3" ><</a>
-              <span id = "roomId-data"></span>
+              <span>Search</span>
             </h6>
           </div>
-
+          <div class="row searchbar p-3">
+            <form class = "search-form">
+              <input 
+              id="msg" 
+              type="text" 
+              placeholder="Enter search keyword"
+              required
+              autocomplete="off"
+              />
+              <button                    
+                type="submit"                    
+                class="btn btn-info ml-2"                    
+                id="submitBtn"                  
+              >
+              >
+            </form>
+          </div>
           <div class="row chat-container p-4">
             <div class="chat-messages"></div>
-          </div>
-
-          <div class="row chat-footer py-3 px-1"></div>
-            <form id="chatForm">
-              <div class="input-group input-area">
-                <input
-                  class="mx-2 pl-2"
-                  id="msg"
-                  type="text"
-                  placeholder="Enter search keyword"
-                  required
-                  autocomplete="off"
-                />
-                <div class="input-group-append">
-                  <button
-                    type="submit"
-                    class="btn btn-info"
-                    id="submitBtn"
-                  >
-                  >
-                  </button>
-                </div>
-              </div>
-            </form>
           </div>
 
           <!-- use only for passing the username -->

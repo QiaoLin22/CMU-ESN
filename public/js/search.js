@@ -139,6 +139,7 @@ function searchStatus(roomId){
   .then((json) => {
     msgEle.val('');
     if(json.length === 0)
+    //console.log(json)
       alert("no result found");
     else{
       json.forEach((result) => {
@@ -177,6 +178,6 @@ $('#backBtn').on('click', (element) => {
     const roomId = urlParams.get('roomid');
     (roomId === 'public')? window.location.href = '/public-wall': window.location.href = `/private-chat/${roomId}`;
   }else{
-
+    window.location.href = '/announcement';
   }
 });
