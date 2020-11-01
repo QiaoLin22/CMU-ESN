@@ -9,6 +9,14 @@ router.get('/main', authenticateUser, (req, res) => {
   res.render('main', { username: res.locals.username });
 });
 
+router.get('/announcement', authenticateUser, (req, res) => {
+  res.render('announcements');
+});
+
+router.get('/profile', authenticateUser, (req, res) => {
+  res.render('profile', { username: res.locals.username });
+});
+
 router.get('/public-wall', authenticateUser, (req, res) => {
   res.render('chat', { username: res.locals.username });
 });
