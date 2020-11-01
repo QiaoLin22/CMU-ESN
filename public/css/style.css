@@ -180,12 +180,9 @@ a:hover {
 
 /* chat page */
 .chat-header {
-  height: 10vh;
+  height: 8vh;
   position: sticky;
-  background-color: #9edee8;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #71bcc7;
+  background-color: #d2edf1;
   box-shadow: 0px 8px 20px 0px #6ea4ad21;
   align-items: center;
 }
@@ -214,7 +211,7 @@ a:hover {
 }
 
 .chat-footer {
-  height: 10vh;
+  height: 12vh;
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #71bcc7;
@@ -270,17 +267,7 @@ a:hover {
 }
 
 .announcement-header a {
-  top: 40%;
   color: #d2edf1;
-}
-
-.announcement-header a:hover {
-  color: #a9e2eb;
-  text-decoration: none;
-}
-
-.announcement-header a:active {
-  color: #a9e2eb;
 }
 
 .announcements {
