@@ -109,14 +109,14 @@ socket.on('new private message', (newMsg) => {
   if (newMsg.roomId === roomId) {
     //if the message is not send by current user
     //mark the message as read
-    if (newMsg.username != username) {
+    if (newMsg.sender !== username) {
       updateReadStatus(roomId);
     }
     outputMessage(newMsg);
   } else {
     //if user is not in the same room with the sender of the new message
     //send notification
-    displayNotification(newMsg.username);
+    displayNotification(newMsg.sender);
   }
 });
 
