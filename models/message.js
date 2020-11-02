@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const { getStatusByUsername } = require('./user');
 
 const MessageSchema = mongoose.Schema({
   sender: {

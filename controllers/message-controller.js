@@ -22,7 +22,6 @@ class MessageController {
     const { sender, recipient, message, roomId } = req.body;
     createNewMessage(sender, recipient, message, roomId)
       .then((newMessage) => {
-        console.log(newMessage);
         req.io.in(roomId).emit('new private message', newMessage);
         req.io.emit('updateDirectory');
         res.status(201).send({ message: 'successfully create a message' });
