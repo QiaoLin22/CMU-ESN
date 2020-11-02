@@ -30,4 +30,8 @@ router.get(
   }
 );
 
+router.get('/search', authenticateUser, (req, res) => {
+  res.render('search', { username: res.locals.username });
+});
+
 module.exports = router;

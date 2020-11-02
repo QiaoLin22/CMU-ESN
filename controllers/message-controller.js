@@ -1,3 +1,4 @@
+const message = require('../models/message');
 const {
   getHistoricalMessages,
   createNewMessage,

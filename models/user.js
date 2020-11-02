@@ -121,6 +121,24 @@ function validateUsernamePassword(username, password) {
     throw Error('Passwords should be at least 4 characters long');
 }
 
+function retrieveUserStatus(username) {
+  return User.find({ username: username }, { statusArray: { $slice: -10 } });
+}
+
+function findUserByKeyword(keyword) {
+  return User.find(
+    { username: { $regex: keyword } },
+    { _id: 0, __v: 0 },
+    { sort: { online: -1, username: 1 } }
+  );
+}
+
+function findUserByStatus(keyword) {
+  return User.find({
+    $expr: { $eq: [{ $arrayElemAt: ['$statusArray.status', -1] }, keyword] },
+  });
+}
+
 module.exports = {
   User,
   createNewUser,
@@ -130,4 +148,7 @@ module.exports = {
   updateStatusIcon,
   getStatusByUsername,
   validateUsernamePassword,
+  retrieveUserStatus,
+  findUserByKeyword,
+  findUserByStatus,
 };

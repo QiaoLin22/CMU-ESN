@@ -67,7 +67,9 @@ function outputUser(user) {
   });
 }
 
+/* retrieve userlist */
 function retrieveUsers() {
+  // fetch "/api/users" request to retrieve userlist
   fetch('/api/users', getGetOptions())
     .then((res) => {
       return res.json();
@@ -80,6 +82,7 @@ function retrieveUsers() {
     });
 }
 
+/* updateDirectory request handler */
 socket.on('updateDirectory', () => {
   console.log('updateDirectory');
   $('#offline-list').empty();
@@ -89,25 +92,19 @@ socket.on('updateDirectory', () => {
 
 jQuery(retrieveUsers);
 
-// function updateStatus(status) {
-//   status.on('click', () => {
-//     const newStatus = {
-//       username: username,
-//       status: status.text(),
-//     };
-//     console.log(newStatus);
-//     fetch('/api/users', {
-//       method: 'PUT',
-//       headers: {
-//         'Content-Type': 'application/json',
-//       },
-//       body: JSON.stringify(newStatus),
-//     }).catch((e) => {
-//       console.log(e);
-//     });
-//   });
-// }
-// updateStatus(ok);
-// updateStatus(help);
-// updateStatus(emergency);
-// updateStatus(na);
+/* logout handler */
+logoutBtn.on('click', () => {
+  // fetch "/api/users/logout" request to handle user logout
+  fetch('/api/users/logout', {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  }).then((res) => {
+    if (res.ok) {
+      // delete jwt
+      document.cookie = 'jwt=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+      window.location.href = '/';
+    }
+  });
+});

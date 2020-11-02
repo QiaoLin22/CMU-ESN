@@ -12,7 +12,7 @@
 /* global style */
 
 body {
-  background-color: #eaf7fa;
+  background-color: #e9f3f5;
   font-family: 'IBM Plex Sans', sans-serif;
   font-weight: 400;
 }
@@ -33,6 +33,10 @@ a:active {
 a:hover {
   color: #07869a;
   cursor: pointer;
+}
+
+.searchbar {
+  display: block;
 }
 
 .searchbar input {
@@ -182,12 +186,13 @@ a:hover {
 .chat-header {
   height: 8vh;
   position: sticky;
-  background-color: #d2edf1;
-  box-shadow: 0px 8px 20px 0px #6ea4ad21;
+  background-color: #b4e3ea;
+  box-shadow: 0px 7px 20px 0px #73aab33d;
   align-items: center;
 }
 
-.chat-header h6 {
+.chat-header h5 {
+  margin-top: 8px;
   color: #07869a;
 }
 
@@ -198,6 +203,11 @@ a:hover {
 .chat-header a:hover {
   color: #07869a;
   text-decoration: none;
+}
+
+.chat-header-content {
+  display: flex;
+  justify-content: space-between;
 }
 
 .chat-container {
@@ -212,17 +222,10 @@ a:hover {
 
 .chat-footer {
   height: 12vh;
+  background-color: #deeef1;
+  border-top-color: #2aa9bd;
   border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #71bcc7;
-  background-color: #d2edf1;
-}
-
-.chat-footer input {
-  border-color: #17a2b8;
-  border-radius: 5%;
-  border-style: solid;
-  border-width: 1px;
+  border-top-width: 1px;
 }
 
 .message p {
@@ -327,6 +330,7 @@ a:hover {
   border-radius: 50%;
   z-index: 1031;
   box-shadow: 2px 2px 5px 1px #05525f40;
+  cursor: pointer;
 }
 
 .create-announcement-button h6 {
@@ -345,6 +349,31 @@ a:hover {
   border-color: #17a2b8;
   padding: 1rem;
   background-color: #f5fafb;
+}
+
+/*search page*/
+.search-form {
+  width: 100%;
+  display: flex;
+}
+
+.search-header h5 {
+  background-color: #07869a;
+  height: 8vh;
+  width: 100%;
+  align-items: center;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 8px;
+}
+
+.more-btn {
+  height: 2rem;
+  border: none;
+  background: none;
+  margin-left: auto;
+  margin-right: auto;
+  color: #1ea2b8;
 }
 
 /* bootstrap style override */

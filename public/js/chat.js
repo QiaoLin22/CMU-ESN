@@ -4,11 +4,11 @@ const socket = io();
 const username = $('#username-data').val();
 socket.emit('join room', username);
 
+/* get roomId */
 const roomId = (() => {
   // check if this is private chat
   const urlList = window.location.href.split('/');
   const lastStr = urlList[urlList.length - 1];
-
   return lastStr === 'public-wall' ? 'public' : lastStr;
 })();
 
@@ -31,9 +31,11 @@ const chatContainer = $('.chat-container');
 const chatMessages = $('.chat-messages');
 const msgEle = $('#msg');
 
+/* display chat message */
 function outputMessage(message) {
   let icon = '';
   const { status } = message;
+  //get status icon
   if (status === 'OK') {
     icon = '<i class="far fa-check-circle ml-1" style="color: #18b87e"></i>';
   } else if (status === 'Help') {
@@ -54,7 +56,10 @@ function outputMessage(message) {
   chatContainer.scrollTop(chatContainer[0].scrollHeight);
 }
 
+/* retrieve historical messages with specific roomId */
 function loadMessages() {
+  // fetch "/api/messages/public"
+  //or "/api/messages/private/{roomId}" request to retrieve historical messages
   const fetchURL =
     roomId === 'public'
       ? '/api/messages/public'
@@ -75,7 +80,9 @@ function loadMessages() {
 
 jQuery(loadMessages);
 
+/* new public message request handler */
 socket.on('new public message', (newMsg) => {
+  //if user is in  public room, display message
   if (roomId === 'public') {
     outputMessage(newMsg);
   }
@@ -93,21 +100,27 @@ function displayNotification(username) {
   );
   $('.toast').css('zIndex', 1000);
   $('.toast').toast('show');
-  // alert(username + " just sent you a private message!");
 }
 
+/*  new private message request handler */
 socket.on('new private message', (newMsg) => {
+  //if user is in the same room with the sender of the new message
+  //display the new message
   if (newMsg.roomId === roomId) {
+    //if the message is not send by current user
+    //mark the message as read
     if (newMsg.username != username) {
       updateReadStatus(roomId);
     }
     outputMessage(newMsg);
   } else {
+    //if user is not in the same room with the sender of the new message
+    //send notification
     displayNotification(newMsg.username);
   }
 });
 
-// input new Message
+/* input new Message */
 $('#submitBtn').on('click', (element) => {
   element.preventDefault();
 
@@ -133,4 +146,9 @@ $('#submitBtn').on('click', (element) => {
     .catch((e) => {
       console.log(e);
     });
+});
+
+$('#searchBtn').on('click', (element) => {
+  const fetchURL = `/search?context=message&roomid=${roomId}`;
+  window.location.href = fetchURL;
 });

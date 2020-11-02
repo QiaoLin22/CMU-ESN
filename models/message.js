@@ -59,9 +59,17 @@ function updateAllToRead(roomId) {
   return Message.updateMany({ roomId: roomId }, { read: true });
 }
 
+function searchMessage(roomId, filteredKeywords) {
+  return Message.find({
+    roomId: roomId,
+    message: { $regex: filteredKeywords },
+  }).limit(10);
+}
+
 module.exports = {
   Message,
   createNewMessage,
   getHistoricalMessages,
   updateAllToRead,
+  searchMessage,
 };
