@@ -131,9 +131,9 @@ $('#submitBtn').on('click', (element) => {
     roomId: roomId,
   };
 
-  const publicOrPrivate = roomId === 'public' ? 'public' : 'private';
+  const partialUrl = roomId === 'public' ? 'public' : `private/${roomId}`;
 
-  fetch(`/api/messages/${publicOrPrivate}/${roomId}`, {
+  fetch(`/api/messages/${partialUrl}`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
