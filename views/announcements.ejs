@@ -26,40 +26,61 @@
         <div class="col-lg col-md-3 col-sm-2"></div>
 
         <div class="col-lg col-md-6 col-sm-8">
-          <div class="row chat-container p-4">
-            <div class="chat-messages"></div>
+          <div class="row announcement-header">
+              <h5>Announcement</h5>
+              <a><i class="fas fa-search mr-3"></i></a>
           </div>
 
-          <div class="row chat-footer py-3 px-1">
-            <form id="chatForm">
-              <div class="input-group input-area">
-                <input
-                  class="mx-2 pl-2"
-                  id="msg"
-                  type="text"
-                  placeholder="Enter message"
-                  required
-                  autocomplete="off"
-                />
-                <div class="input-group-append">
-                  <button
-                    type="submit"
-                    class="btn btn-info"
-                    id="submitBtn"
-                  >
-                    >
+          <div class="row announcement-container">
+            <div class="announcements">
+              <div class="announcement p-3">
+                <p class="meta mb-1"> Username <span class="ml-3">2020 Nov 1, 10:30am </span></p> 
+                <p class="collapse" id="collapseExample" aria-expanded="false"> This is a new Announcement This is a new Announcement This is a new Announcement This is a new Announcement This is a new Announcement This is a new Announcement This is a new Announcement This is a new Announcement This is a new Announcement</p>
+                <a role="button" class="collapsed" data-toggle="collapse" href="#collapseExample" aria-expanded="false" aria-controls="collapseExample"></a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Create new Announcement modal -->
+          <div class="modal fade border-info" id="announceModal" tabindex="-1" aria-labelledby="announceModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content modal-lg">
+                <div class="modal-header">
+                  <div class="container-fluid">
+                    <div class="row text-left text-info">
+                      <h6 class="mb-2">New Announcement</h6>
+                    </div>
+                  </div>
+                </div>
+                <div class="modal-body">
+                  <div class="alert" id="announceAlert" role="alert" hidden></div>
+                  <div class="container-fluid">
+                    <div class="row text-left text-info">
+                      <textarea class="create-announcement-text" placeholder="New Announcement"></textarea>
+                    </div>
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                    Cancel
+                  </button>
+                  <button type="button" class="btn btn-info" id="confirmBtn">
+                    Post
                   </button>
                 </div>
               </div>
-            </form>
+            </div>
           </div>
 
-          <!-- use only for passing the username -->
-          <input
-            id="username-data"
-            value="<%= username %>"
-            style="display: none"
-          />
+          <!-- add new announcement -->
+          <div id="create-announcement" class="create-announcement-button"><h6>+</h6></div>
+
+          <!-- navigation bar -->
+          <nav class="navbar fixed-bottom custom-nav px-5">
+            <a class="navbar-brand" href="/main"><i class="fas fa-home"></i></a>
+            <a class="navbar-brand" href="/announcement" style="color: #17a2b8;"><i class="far fa-bell"></i></a>
+            <a class="navbar-brand" href="/profile"><i class="far fa-user"></i></a>
+          </nav>
 
         </div>
 
@@ -83,5 +104,5 @@
     crossorigin="anonymous"
   ></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.3/socket.io.js"></script>
-  <script type="module" src="/js/announcements.js"></script>
+  <script type="module" src="/js/announcement.js"></script>
 </html>

@@ -21,10 +21,16 @@
   </head>
   <body>
     <div class="container directory-container">
-      <div class="row mt-5">
-        <div class="col-lg col-md-3 col-1"></div>
-        <div class="col-lg col-md-6 col-10">
-          <h4 class="login-header text-left">ESN Chatroom</h4>
+      <div class="row">
+        <div class="col-lg col-md-3 "></div>
+        <div class="col-lg col-md-6 col">
+          <div class="row directory-header">
+            <h5>ESN Chatroom</h5>
+          </div>
+
+          <div class="row searchbar p-3">
+            <input type="text" placeholder="Search..">
+          </div>
 
           <ul class="list-group list-group-flush directory-category">
             <ui><h6>Channels</h6></ui>
@@ -32,12 +38,12 @@
               <a href="/public-wall"># Public</a>
             </li>
           </ul>
-
+  
           <ul class="list-group list-group-flush directory-category">
             <ui>
               <div class="direct-msg mb-3">
                 <span><h6>Directory</h6></span>
-                <span class="dropdown">
+                <!-- <span class="dropdown">
                   <a class="btn btn-info dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Status
                   </a>
@@ -47,19 +53,27 @@
                     <a class="dropdown-item status-btn" href="#">Emergency<i class="fas fa-first-aid ml-2" style="color: #fb5252"></i></a>
                     <a class="dropdown-item status-btn" href="#">Undefined<i class="far fa-question-circle ml-2" style="color: white"></i></a>
                   </div>
-                </span>
+                </span> -->
               </div>
             </ui>
             <div class="online-offline-list">
               <div id="online-list"></div>
-
               <div id="offline-list"></div>
             </div>
             <br>
-            <button id="logoutBtn" class="btn btn-info btn-block">Log out</a>
+            
           </ul>
+
+          <!-- navigation bar -->
+          <nav class="navbar fixed-bottom custom-nav px-5">
+              <a class="navbar-brand" href="/main" style="color: #17a2b8;"><i class="fas fa-home"></i></a>
+              <a class="navbar-brand" href="/announcement"><i class="far fa-bell"></i></a>
+              <a class="navbar-brand" href="/profile"><i class="far fa-user"></i></a>
+          </nav>
+
         </div>
-        <div class="col-lg col-md-3 col-1"></div>
+
+        <div class="col-lg col-md-3 "></div>
       </div>
     </div>
     <!-- use only for passing the username -->

@@ -9,9 +9,16 @@
     line-break -> #71bcc7
 */
 
+/* global style */
+
 body {
-  background-color: #e0f3f7;
+  background-color: #eaf7fa;
   font-family: 'IBM Plex Sans', sans-serif;
+  font-weight: 400;
+}
+
+h5 {
+  /* use for page header */
   font-weight: 400;
 }
 
@@ -25,6 +32,45 @@ a:active {
 
 a:hover {
   color: #07869a;
+  cursor: pointer;
+}
+
+.searchbar input {
+  width: 100%;
+  border-radius: 5px;
+  padding: 0.5rem;
+  background-color: #ebf7fa;
+  border-style: solid;
+  border-width: 1px;
+  border-color: #17a2b8;
+  box-shadow: 3px 3px 5px 0px #06869a4d;
+  color: #17a2b8;
+}
+
+.searchbar input:hover {
+  cursor: pointer;
+  background-color: #d0e6e9;
+}
+
+.searchbar :-ms-input-placeholder {
+  color: #1b5058;
+}
+
+.empty-block {
+  height: 30vh;
+}
+
+/* nav bar */
+.custom-nav {
+  background-color: #deeef1;
+  border-top-color: #2aa9bd;
+  border-top-style: solid;
+  border-top-width: 1px;
+  height: 8vh;
+}
+
+.custom-nav a {
+  color: #a7d8e0;
 }
 
 /* login page */
@@ -60,12 +106,26 @@ a:hover {
 }
 
 /* ESN Directory page */
+
 .directory-container h4 {
-  color: #17a2b8;
+  color: White;
+}
+
+.directory-container h5 {
+  color: white;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 8px;
 }
 
 .directory-container h6 {
   color: #17a2b8;
+}
+
+.directory-header {
+  background-color: #07869a;
+  height: 8vh;
+  align-items: center;
 }
 
 .directory-category {
@@ -120,12 +180,9 @@ a:hover {
 
 /* chat page */
 .chat-header {
-  height: 10vh;
+  height: 8vh;
   position: sticky;
-  background-color: #9edee8;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #71bcc7;
+  background-color: #d2edf1;
   box-shadow: 0px 8px 20px 0px #6ea4ad21;
   align-items: center;
 }
@@ -154,7 +211,7 @@ a:hover {
 }
 
 .chat-footer {
-  height: 10vh;
+  height: 12vh;
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #71bcc7;
@@ -191,6 +248,103 @@ a:hover {
   z-index: -1;
   width: 100%;
   color: #07869a;
+}
+
+/* Announcement */
+.announcement-header {
+  height: 8vh;
+  position: sticky;
+  background-color: #07869a;
+  color: #ffffff;
+  box-shadow: 0px 8px 20px 0px #6ea4ad21;
+  align-items: center;
+}
+
+.announcement-header h5 {
+  margin-top: 8px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.announcement-header a {
+  color: #d2edf1;
+}
+
+.announcements {
+  width: 100%;
+  height: 84vh;
+  overflow-y: scroll;
+  background-color: #ecf5f7;
+}
+
+.announcement {
+  background-color: #ffffff;
+  border-bottom: #d7d7d7;
+  border-bottom-width: 1px;
+  border-bottom-style: solid;
+}
+
+.announcement .meta {
+  margin-bottom: 0.8rem;
+  font-weight: bold;
+  color: #07869a;
+}
+
+.announcement p span {
+  font-weight: 400;
+  color: rgb(187 210 214);
+  font-size: 0.8rem;
+  float: right;
+}
+
+.announcement #collapseExample.collapse:not(.show)[aria-expanded='false'] {
+  color: #343434;
+  display: block;
+  height: 10vh;
+  overflow: hidden;
+}
+
+.announcement #collapseExample.collapsing[aria-expanded='false'] {
+  height: 10vh;
+}
+
+.announcement a.collapsed:after {
+  content: '+ Show More';
+}
+
+.announcement a:not(.collapsed):after {
+  content: '- Show Less';
+}
+
+.create-announcement-button {
+  position: fixed;
+  bottom: 10vh;
+  right: 5vw;
+  background-color: #07869a;
+  color: white;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  z-index: 1031;
+  box-shadow: 2px 2px 5px 1px #05525f40;
+}
+
+.create-announcement-button h6 {
+  font-size: 2rem;
+  font-weight: 400;
+  text-align: center;
+  margin-bottom: 0px;
+  margin-top: 0.25rem;
+}
+
+.create-announcement-text {
+  height: 50vh;
+  width: 100%;
+  border-radius: 5px;
+  border-width: 1px;
+  border-color: #17a2b8;
+  padding: 1rem;
+  background-color: #f5fafb;
 }
 
 /* bootstrap style override */
