@@ -330,6 +330,7 @@ a:hover {
   border-radius: 50%;
   z-index: 1031;
   box-shadow: 2px 2px 5px 1px #05525f40;
+  cursor: pointer;
 }
 
 .create-announcement-button h6 {
