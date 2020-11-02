@@ -9,6 +9,7 @@ const io = require('socket.io').listen(server);
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 const messagesRouter = require('./routes/messages');
+const announcementsRouter = require('./routes/announcements');
 
 const PORT = process.env.PORT || 3000;
 require('./services/db-production');
@@ -30,6 +31,7 @@ app.use(cookieParser());
 app.use('/', indexRouter);
 app.use('/api/users', usersRouter);
 app.use('/api/messages', messagesRouter);
+app.use('/api/announcements', announcementsRouter);
 
 server.listen(PORT);
 
