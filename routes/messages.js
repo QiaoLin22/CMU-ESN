@@ -14,23 +14,11 @@ router.get(
   MessageController.getPrivateMessage
 );
 
-router.get(
-  '/announcements',
-  authenticateUser,
-  MessageController.getAnnouncement
-);
-
 router.post(
   '/private/:roomId',
   authenticateUser,
   verifyRoomId,
   MessageController.createPrivateMessage
-);
-
-router.post(
-  '/announcements',
-  authenticateUser,
-  MessageController.createNewAnnouncement
 );
 
 router.put(

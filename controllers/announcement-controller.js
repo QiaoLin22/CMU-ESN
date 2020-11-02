@@ -22,4 +22,4 @@ class AnnouncementController {
   }
 }
 
-modules.export = AnnouncementController;
+module.exports = AnnouncementController;

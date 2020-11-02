@@ -10,3 +10,5 @@ router.get(
   authenticateUser,
   AnnouncementController.getHistoricalAnnouncements
 );
+
+module.exports = router;

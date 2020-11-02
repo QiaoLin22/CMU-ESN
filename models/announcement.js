@@ -24,11 +24,11 @@ function createNewAnnouncement(sender, message) {
     message: message,
   });
 
-  return Announcement.save();
+  return newAnnouncement.save();
 }
 
 function getAllAnnouncements() {
-  return Message.find({});
+  return Announcement.find({});
 }
 
 module.exports = {

@@ -1,8 +1,5 @@
 const router = require('express').Router();
-const {
-  authenticateUser,
-  verifyRoomId,
-} = require('../middleware/authMiddleware');
+const { authenticateUser, verifyRoomId } = require('../middleware/auth');
 
 const SearchInfoController = require('../controllers/searchInfoController');
 
