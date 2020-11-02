@@ -77,11 +77,15 @@ function checkUnreadMessage(username, otherUsername) {
   });
 }
 
-function searchMessage(roomId, filteredKeywords){
-  return Message.find({ 
-    roomId: roomId ,
-    message : { $regex : filteredKeywords}, 
-  }).limit(10);
+function searchMessage(roomId, filteredKeywords, pagination){
+  const query = [];
+  filteredKeywords.forEach(keyword => {
+    query.push({ roomId: roomId, message: { $regex: keyword}});
+  });
+  return Message.find( {$and: query})
+  .sort({timestamp:-1})
+  .skip(pagination*10)
+  .limit(10);
 }
 
 module.exports = {

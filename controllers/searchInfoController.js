@@ -8,7 +8,7 @@ function filterStopwords(keywords) {
   let filteredKeywords = keywords.filter(
     keyword => !stopwords.includes(keyword) &&  keyword !== ''
   );
-  return filteredKeywords.join(' ');
+  return filteredKeywords;
 }
 
 function getAnotherUsername(roomId, username){
@@ -30,9 +30,10 @@ class searchInfoController {
   static searchMessage(req, res) {
     const { roomId } = req.params;
     const { keywords } = req.params;
+    const { pagination } = req.params;
     const keywordsArray = keywords.split(/[^A-Za-z0-9]/);
     const filteredKeywords = filterStopwords(keywordsArray);
-    Messages.searchMessage(roomId, filteredKeywords).then((data)=>res.send(data));
+    Messages.searchMessage(roomId, filteredKeywords, pagination).then((data)=>res.send(data));
   }
 
   static searchStatus(req, res) {

@@ -3,6 +3,17 @@ const chatMessages = $('.chat-messages');
 const msgEle = $('#msg');
 const urlParams = new URLSearchParams(window.location.search);
 const searchContext = urlParams.get('context');
+document.getElementById("loadBtn").style.visibility = "hidden";
+let pagination = 0;
+
+/*display no result alert*/
+function displayNotification() {
+  $('.toast-body').replaceWith(
+    `<div class="toast-body pl-3 pt-2 pr-2 pb-2">no result found</div>`
+  );
+  $('.toast').css('zIndex', 1000);
+  $('.toast').toast('show');
+}
 
 /* display searched message */
 function outputMessage(message) {
@@ -93,7 +104,8 @@ function searchUser(keywords){
   .then((json) => {
     msgEle.val('');
     if(json.length === 0)
-      alert("no result found");
+      //alert("no result found");
+      displayNotification();
     else{
       json.forEach((result) => {
         outputUser(result);
@@ -106,7 +118,7 @@ function searchUser(keywords){
 }
 
 function searchMessage(keywords, roomId){
-  fetch(`/api/search/messages/${roomId}/${keywords}`, {
+  fetch(`/api/search/messages/${roomId}/${keywords}/${pagination}`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -114,9 +126,9 @@ function searchMessage(keywords, roomId){
   })
   .then((res) => res.json())
   .then((json) => {
-    msgEle.val('');
     if(json.length === 0)
-      alert("no result found");
+      //alert("no result found");
+      displayNotification();
     else{
       json.forEach((result) => {
         outputMessage(result);
@@ -137,10 +149,9 @@ function searchStatus(roomId){
   })
   .then((res) => res.json())
   .then((json) => {
-    msgEle.val('');
     if(json.length === 0)
     //console.log(json)
-      alert("no result found");
+    displayNotification
     else{
       json.forEach((result) => {
         outputStatus(result.username, result.statusArray);
@@ -154,6 +165,7 @@ function searchStatus(roomId){
 
 $('#submitBtn').on('click', (element) => {
   element.preventDefault();
+  pagination = 0;
   const keywords = msgEle.val();
   if(searchContext === 'directory'){
     searchUser(keywords);
@@ -162,6 +174,7 @@ $('#submitBtn').on('click', (element) => {
     if(keywords === 'status'){
       searchStatus(roomId);
     }else{
+      document.getElementById("loadBtn").style.visibility = "visible";
       searchMessage(keywords, roomId);
     }
   }else{
@@ -179,5 +192,18 @@ $('#backBtn').on('click', (element) => {
     (roomId === 'public')? window.location.href = '/public-wall': window.location.href = `/private-chat/${roomId}`;
   }else{
     window.location.href = '/announcement';
+  }
+});
+
+$('#loadBtn').on('click', (element) => {
+ if(searchContext === 'message'){
+    pagination++;
+    const keywords = msgEle.val();
+    const roomId = urlParams.get('roomid');
+    if(keywords === 'status'){
+      searchStatus(roomId);
+    }else{
+      searchMessage(keywords, roomId);
+    }
   }
 });
