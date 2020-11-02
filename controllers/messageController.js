@@ -1,3 +1,4 @@
+const message = require('../models/message');
 const {
   getHistoricalMessages,
   createNewMessage,
@@ -26,6 +27,21 @@ class messageController {
         req.io.in(roomId).emit('new private message', newMessage);
         req.io.emit('updateDirectory');
         res.status(201).send({ message: 'successfully create a message' });
+      })
+      .catch((e) => {
+        console.log(e);
+        res.status(400).send(e);
+      });
+  }
+
+  static createNewAnnouncement(req, res) {
+    const { username, announcement, roomId } = req.body;
+    createNewMessage(username, announcement, roomId)
+      .then((newAnnouncement) => {
+        req.io.in(roomId).emit('new announcement', newAnnouncement);
+        res
+          .status(201)
+          .send({ message: 'successfully create an announcement' });
       })
       .catch((e) => {
         console.log(e);
