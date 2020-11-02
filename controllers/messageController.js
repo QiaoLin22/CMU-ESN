@@ -60,6 +60,12 @@ class messageController {
     );
   }
 
+  static getAnnouncement(req, res) {
+    getHistoricalMessages('announcement').then((messages) =>
+      res.send(messages)
+    );
+  }
+
   static checkExistingUnreadMessage(req, res) {
     const { otherUsername } = req.params;
     const { username } = res.locals;

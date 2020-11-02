@@ -17,10 +17,22 @@ router.get(
   MessageController.getPrivateMessage
 );
 
+router.get(
+  '/announcement',
+  authenticateUser,
+  MessageController.getAnnouncement
+);
+
 router.post(
   '/private',
   authenticateUser,
   MessageController.createPrivateMessage
+);
+
+router.post(
+  '/announcement',
+  authenticateUser,
+  MessageController.createNewAnnouncement
 );
 
 router.get(

@@ -34,7 +34,7 @@ function loadAnnouncement() {
     });
 }
 
-// jQuery(loadAnnouncement);
+jQuery(loadAnnouncement);
 
 createAnnounce.on('click', () => {
   announceModal.modal('show');
@@ -52,7 +52,14 @@ post.on('click', (event) => {
     message: text.val(),
     roomId: roomId,
   };
-  //TODO: post to database
-  outputAnnouncement(newAnnouncement);
-  console.log(newAnnouncement);
+
+  fetch(`/api/messages/announcement`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(newAnnouncement),
+  }).catch((e) => {
+    console.log(e);
+  });
 });
