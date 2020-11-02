@@ -27,10 +27,4 @@ router.put(
   MessageController.updateReadStatus
 );
 
-router.get(
-  '/unread/:otherUsername',
-  authenticateUser,
-  MessageController.checkExistingUnreadMessage
-);
-
 module.exports = router;

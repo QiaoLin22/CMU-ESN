@@ -1,5 +1,6 @@
 const { findUserByUsername } = require('../models/user');
 const { verifyToken } = require('../lib/jwt');
+const { extractUsernames } = require('../lib/room-id');
 
 const authenticateUser = (req, res, next) => {
   const token = req.cookies.jwt;
@@ -8,14 +9,16 @@ const authenticateUser = (req, res, next) => {
     verifyToken(token, (err, decodedToken) => {
       if (err) {
         console.log(err);
-        res.redirect('/');
+        // res.redirect('/');
+        res.status(401).end();
       } else {
         res.locals.username = decodedToken.username;
         next();
       }
     });
   } else {
-    res.redirect('/');
+    // res.redirect('/');
+    res.status(401).end();
   }
 };
 
@@ -24,15 +27,7 @@ const verifyRoomId = async (req, res, next) => {
   const currUsername = res.locals.username;
 
   try {
-    const usernames = roomId.split('-');
-    const username1 = usernames[0];
-    const username2 = usernames[1];
-
-    // check if there is delimiter
-    if (!username2) throw Error();
-
-    // check if currUsername in usernames
-    if (!usernames.includes(currUsername)) throw Error();
+    const { username1, username2 } = extractUsernames(roomId, currUsername);
 
     // check two usernames are not the same
     if (username1 === username2) throw Error();
@@ -49,7 +44,6 @@ const verifyRoomId = async (req, res, next) => {
 
     next();
   } catch (e) {
-    console.log(e);
     res.status(400).send('room id is not valid');
   }
 };

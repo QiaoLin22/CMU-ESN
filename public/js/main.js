@@ -19,7 +19,11 @@ function getGetOptions() {
   };
 }
 
-function outputUser(data, online, status, hasUnread) {
+function outputUser(user) {
+  const { online, numUnreadMessages } = user;
+  const otherUsername = user.username;
+  const status = user.latestStatus.status;
+
   let icon = '';
   if (status === 'OK') {
     icon = '<i class="far fa-check-circle ml-1" style="color: #18b87e"></i>';
@@ -31,66 +35,46 @@ function outputUser(data, online, status, hasUnread) {
     icon = '<i class="far fa-question-circle ml-1" style="color: #d8d8d8"></i>';
   }
 
-  const otherUsername = data.username;
   const roomId =
     username < otherUsername
-      ? `${username}-${otherUsername}`
-      : `${otherUsername}-${username}`;
-  const user = document.createElement('div');
+      ? `${username}${otherUsername}`
+      : `${otherUsername}${username}`;
+
+  const userDiv = document.createElement('div');
   const readIcon = `<i class="fas fa-circle ml-4" id=${roomId} style="color: #44b3c5; display: none; position:absolute; top: 35%; right: 3%; height: 20%;"></i>`;
 
-  user.classList.add('online-item');
-  if (data.username === username) {
-    user.style.cursor = 'not-allowed';
-    user.style.pointerEvents = 'none';
+  userDiv.classList.add('online-item');
+  if (user.username === username) {
+    userDiv.style.cursor = 'not-allowed';
+    userDiv.style.pointerEvents = 'none';
   }
 
   if (online) {
-    user.innerHTML = `<li class="list-group-item list-group-item-action online-list-item" >${`${`${data.username}${icon}${readIcon}`}`}</li>`;
-    $('#online-list').append(user);
+    userDiv.innerHTML = `<li class="list-group-item list-group-item-action online-list-item" >${`${`${user.username}${icon}${readIcon}`}`}</li>`;
+    $('#online-list').append(userDiv);
   } else {
-    user.innerHTML = `<li class="list-group-item list-group-item-action offline-list-item">${`${`${data.username}${icon}${readIcon}`}`}</>`;
-    $('#offline-list').append(user);
+    userDiv.innerHTML = `<li class="list-group-item list-group-item-action offline-list-item">${`${`${user.username}${icon}${readIcon}`}`}</>`;
+    $('#offline-list').append(userDiv);
   }
-  if (hasUnread) {
+
+  if (numUnreadMessages > 0) {
     document.getElementById(roomId).style.display = 'block';
   } else {
     document.getElementById(roomId).style.display = 'none';
   }
 
-  user.addEventListener('click', () => {
+  userDiv.addEventListener('click', () => {
     window.location.href = `/private-chat/${roomId}`;
   });
 }
-
-// function checkUnreadMessage(otherUsername) {
-//   fetch(`/api/messages/unread/${otherUsername}`, getGetOptions())
-//     .then((res) => {
-//       return res.json();
-//     })
-//     .then((json) => {
-//       return json;
-//     });
-// }
 
 function retrieveUsers() {
   fetch('/api/users', getGetOptions())
     .then((res) => {
       return res.json();
     })
-    .then(async (data) => {
-      /* eslint-disable no-await-in-loop */
-      for (const user of data.users) {
-        const res = await fetch(
-          `/api/messages/unread/${user.username}`,
-          getGetOptions()
-        );
-        const hasUnread = await res.json();
-        // TODO: make sure the data from the response is the latest status
-        const { status } = user.statusArray[user.statusArray.length - 1];
-        console.log(user);
-        outputUser(user, user.online, status, hasUnread);
-      }
+    .then((data) => {
+      data.forEach((user) => outputUser(user));
     })
     .catch((e) => {
       console.log(e);

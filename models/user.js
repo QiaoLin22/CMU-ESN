@@ -49,13 +49,37 @@ function createNewUser(username, hash, salt) {
 }
 
 async function retrieveUsers(username) {
-  const countUnreadMessages = await numUnreadMessages(username);
-  console.log(countUnreadMessages);
-  return User.find(
-    {},
-    { _id: 0, __v: 0, hash: 0, salt: 0 },
-    { sort: { online: -1, username: 1 } }
-  );
+  return User.aggregate([
+    {
+      $lookup: {
+        from: 'messages',
+        let: { curr_username: '$username' },
+        pipeline: [
+          {
+            $match: {
+              $expr: {
+                $and: [
+                  { $eq: ['$recipient', username] },
+                  { $eq: ['$sender', '$$curr_username'] },
+                  { $eq: ['$read', false] },
+                ],
+              },
+            },
+          },
+        ],
+        as: 'unreadMessages',
+      },
+    },
+    {
+      $project: {
+        username: 1,
+        online: 1,
+        latestStatus: { $arrayElemAt: ['$statusArray', -1] },
+        numUnreadMessages: { $size: '$unreadMessages' },
+      },
+    },
+    { $sort: { online: -1, username: 1 } },
+  ]);
 }
 
 function findUserByUsername(username) {
@@ -95,25 +119,6 @@ function validateUsernamePassword(username, password) {
 
   if (!password.length >= 4)
     throw Error('Passwords should be at least 4 characters long');
-}
-
-function numUnreadMessages(recipient) {
-  console.log(recipient);
-  return Message.aggregate([
-    {
-      $match: {
-        recipient: recipient,
-        read: false,
-      },
-    },
-    {
-      $group: {
-        _id: '$roomId',
-        count: { $sum: 1 },
-      },
-    },
-    // { $count: 'numUnreadMessages' },
-  ]);
 }
 
 module.exports = {

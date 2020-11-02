@@ -13,12 +13,20 @@ const roomId = (() => {
 })();
 
 const otherUsername = (() => {
-  const usernames = roomId.split('-');
-  if (roomId === 'public') return undefined;
-  return usernames[0] === username ? usernames[1] : usernames[0];
+  if (roomId === 'public') return 'public';
+
+  const startRegex = new RegExp(`^${username}`);
+  const endRegex = new RegExp(`${username}$`);
+
+  if (roomId.match(startRegex)) {
+    return roomId.replace(startRegex, '');
+  } else if (roomId.match(endRegex)) {
+    return roomId.replace(endRegex, '');
+  }
 })();
 
 $('#roomId-data').text(otherUsername);
+
 const chatContainer = $('.chat-container');
 const chatMessages = $('.chat-messages');
 const msgEle = $('#msg');
@@ -111,7 +119,7 @@ $('#submitBtn').on('click', (element) => {
   };
 
   const publicOrPrivate = roomId === 'public' ? 'public' : 'private';
-  console.log(newMsg);
+
   fetch(`/api/messages/${publicOrPrivate}/${roomId}`, {
     method: 'POST',
     headers: {

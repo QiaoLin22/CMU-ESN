@@ -1,7 +1,5 @@
 const mongoose = require('mongoose');
 
-const { getStatusByUsername, validateUsernamePassword } = require('./user');
-
 const MessageSchema = mongoose.Schema({
   sender: {
     type: String,
@@ -59,18 +57,6 @@ function getHistoricalMessages(roomId) {
 function updateAllToRead(roomId) {
   return Message.updateMany({ roomId: roomId }, { read: true });
 }
-
-// function checkUnreadMessage(username, otherUsername) {
-//   const roomId =
-//     username < otherUsername
-//       ? `${username}${otherUsername}`
-//       : `${otherUsername}${username}`;
-//   return Message.find({
-//     roomId: roomId,
-//     read: false,
-//     username: { $ne: username },
-//   });
-// }
 
 module.exports = {
   Message,
