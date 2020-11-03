@@ -42,7 +42,6 @@ const MessageSchema = mongoose.Schema({
 const Message = mongoose.model('Message', MessageSchema);
 
 async function createNewMessage(username, message, roomId) {
-  
   const latestStatus = await getStatusByUsername(username);
 
   const newMessage = new Message({
@@ -77,10 +76,11 @@ function checkUnreadMessage(username, otherUsername) {
   });
 }
 
-function searchMessage(roomId, filteredKeywords){
-  return Message.find({ 
-    roomId: roomId ,
-    message : { $regex : filteredKeywords}, 
+function searchMessage(roomId, filteredKeywords) {
+  console.log(filteredKeywords);
+  return Message.find({
+    roomId: roomId,
+    message: { $regex: filteredKeywords, $options: 'm', $options: 'si' },
   }).limit(10);
 }
 
