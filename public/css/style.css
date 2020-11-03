@@ -132,6 +132,10 @@ a:hover {
   align-items: center;
 }
 
+.directory-main {
+  height: 84vh;
+}
+
 .directory-category {
   margin-top: 1.5rem;
 }

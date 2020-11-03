@@ -15,8 +15,8 @@ function outputAnnouncement(newAnnouncement) {
   //TODO: need unique id to replace collapseExample -> each announcement matches with one show button
   //TODO: show button won't show unless the announcement is long
   const announcementId = `ann-${newAnnouncement._id}`;
-  announce.innerHTML = `<p class="meta mb-1"> ${username} <span class="ml-3"> ${timestamp} </span></p><p class="collapse" id=${announcementId} aria-expanded="false"> ${newAnnouncement.message} </p><a role="button" class="collapsed" data-toggle="collapse" href="#${announcementId}"aria-expanded="false" aria-controls=${announcementId}></a>`;
-  announcements.append(announce);
+  announce.innerHTML = `<p class="meta mb-1"> ${newAnnouncement.sender} <span class="ml-3"> ${timestamp} </span></p><p class="collapse" id=${announcementId} aria-expanded="false"> ${newAnnouncement.message} </p><a role="button" class="collapsed" data-toggle="collapse" href="#${announcementId}"aria-expanded="false" aria-controls=${announcementId}></a>`;
+  announcements.prepend(announce);
 }
 
 function loadAnnouncement() {
