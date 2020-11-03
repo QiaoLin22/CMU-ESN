@@ -40,7 +40,7 @@ class UserController {
       .then(() => {
         req.io.emit('updateDirectory');
         req.io.emit('updateMsgStatus', username);
-        res.status(201).send({ message: 'success' });
+        res.status(200).send({ message: 'success' });
       })
       .catch((err) => {
         console.log(err);

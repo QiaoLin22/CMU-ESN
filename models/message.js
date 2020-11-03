@@ -13,6 +13,7 @@ const MessageSchema = mongoose.Schema({
   timestamp: {
     type: String,
     required: [true, 'Timestamp is required'],
+    default: new Date(Date.now()).toISOString(),
   },
   message: {
     type: String,
@@ -41,7 +42,6 @@ async function createNewMessage(sender, recipient, message, roomId) {
   const newMessage = new Message({
     sender: sender,
     recipient: recipient,
-    timestamp: new Date(Date.now()).toISOString(),
     message: message,
     roomId: roomId,
     status: latestStatus.status,

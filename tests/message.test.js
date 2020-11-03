@@ -35,8 +35,8 @@ beforeEach(async () => {
     },
     {
       username: 'Mike',
-      hash: '00001',
-      salt: '0101001',
+      hash: '002',
+      salt: '111',
     },
   ]);
 });
@@ -45,28 +45,27 @@ afterEach(DBInMemory.cleanup);
 
 describe('use case chat publicly', () => {
   it('create new message successfully', async () => {
-    await createNewMessage('John', undefined, 'test', 'public');
+    await createNewMessage('John', 'public', 'test', 'public');
 
-    const actual = await Message.find({ username: 'John' });
+    const result = await Message.findOne(
+      { sender: 'John' },
+      { _id: 0, __v: 0, timestamp: 0 }
+    );
+    const actual = result.toJSON();
 
-    const expected = [
-      {
-        read: false,
-        sender: 'John',
-        message: 'test',
-        roomId: 'public',
-        status: 'Undefined',
-      },
-    ];
-    expect(actual[0].sender).toEqual(expected[0].sender);
-    expect(actual[0].read).toEqual(expected[0].read);
-    expect(actual[0].message).toEqual(expected[0].message);
-    expect(actual[0].roomId).toEqual(expected[0].roomId);
-    expect(actual[0].status).toEqual(expected[0].status);
+    const expected = {
+      read: false,
+      sender: 'John',
+      recipient: 'public',
+      message: 'test',
+      roomId: 'public',
+      status: 'OK',
+    };
+    expect(actual).toEqual(expected);
   });
 
   it('get historical message successfully', async () => {
-    await createNewMessage('John', 'test', 'public');
+    await createNewMessage('John', 'public', 'test', 'public');
 
     const actual = await getHistoricalMessages('public');
 
@@ -74,12 +73,14 @@ describe('use case chat publicly', () => {
       {
         read: false,
         sender: 'John',
+        recipient: 'public',
         message: 'test',
         roomId: 'public',
-        status: 'Undefined',
+        status: 'OK',
       },
     ];
     expect(actual[0].sender).toEqual(expected[0].sender);
+    expect(actual[0].recipient).toEqual(expected[0].recipient);
     expect(actual[0].read).toEqual(expected[0].read);
     expect(actual[0].message).toEqual(expected[0].message);
     expect(actual[0].roomId).toEqual(expected[0].roomId);
@@ -89,28 +90,28 @@ describe('use case chat publicly', () => {
 
 describe('use case chat privately', () => {
   beforeEach(async () => {
-    await createNewMessage('John', 'test', 'public');
+    await Message.insertMany(
+      {
+        sender: 'John',
+        recipient: 'Mike',
+        message: 'hello',
+        roomId: 'JohnMike',
+        status: 'OK',
+      },
+      {
+        sender: 'Mike',
+        recipient: 'John',
+        message: 'hi',
+        roomId: 'JohnMike',
+        status: 'Undefined',
+      }
+    );
   });
 
   it('update message to read successfully', async () => {
-    await updateAllToRead('public');
-    const actual = await Message.find({ read: 0, roomId: 'public' });
+    await updateAllToRead('JohnMike');
+    const actual = await Message.find({ read: false, roomId: 'JohnMike' });
 
     expect(actual.length).toEqual(0);
-  });
-
-  it('get unread message successfully', async () => {
-    const messageSentByMike = new Message({
-      username: 'Mike',
-      message: 'Unread',
-      roomId: 'JohnMike',
-      timestamp: '2020-10-21T05:08:23.867Z',
-    });
-    await messageSentByMike.save();
-
-    const actual = await numUnreadMessages('John');
-    console.log(actual);
-
-    expect(actual[0].numUnreadMessages).toEqual(1);
   });
 });
