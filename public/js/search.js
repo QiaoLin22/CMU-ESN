@@ -117,7 +117,6 @@ function searchUser(keywords) {
   })
   .then((res) => res.json())
   .then((json) => {
-    msgEle.val('');
     if(json.length === 0)
       displayNotification("no result found");
     else{
@@ -140,7 +139,9 @@ function searchMessage(keywords, roomId, pagination){
   })
   .then((res) => res.json())
   .then((json) => {
-    if(json.length === 0)
+    if(json.error === "no valid keyword"){
+      displayNotification("Please enter a valid keyword");
+    }else if(json.length === 0)
       displayNotification("no result found");
     else{
       json.forEach((result) => {
@@ -162,7 +163,9 @@ function searchAnnouncement(keywords, pagination){
   })
   .then((res) => res.json())
   .then((json) => {
-    if(json.length === 0)
+    if(json.error === "no valid keyword"){
+      displayNotification("Please enter a valid keyword");
+    }else if(json.length === 0)
       displayNotification("no result found");
     else{
       json.forEach((result) => {
@@ -185,7 +188,7 @@ function searchStatus(roomId) {
   .then((res) => res.json())
   .then((json) => {
     if(json.length === 0)
-    displayNotification("no result found");
+      displayNotification("no result found");
     else{
       json.forEach((result) => {
         outputStatus(result.username, result.statusArray);
