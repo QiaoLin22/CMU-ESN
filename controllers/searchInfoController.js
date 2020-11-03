@@ -1,6 +1,7 @@
 const stopwords = require('../lib/stopwords.json').stopwords;
 const Messages = require('../models/message');
 const Users = require('../models/user');
+const { extractUsernames } = require('../lib/room-id');
 const Annoucement = require('../models/announcement');
 
 function filterStopwords(keywords) {
@@ -8,20 +9,6 @@ function filterStopwords(keywords) {
     (keyword) => !stopwords.includes(keyword) && keyword !== ''
   );
   return filteredKeywords;
-}
-
-function getAnotherUsername(roomId, username) {
-  const usernameIndex = roomId.indexOf(username);
-  let otherUsername;
-
-  if (usernameIndex > -1) {
-    if (usernameIndex === 0) {
-      otherUsername = roomId.substring(username.length);
-    } else {
-      otherUsername = roomId.substring(0, usernameIndex);
-    }
-  }
-  return otherUsername;
 }
 
 class searchInfoController {
@@ -40,7 +27,8 @@ class searchInfoController {
   static searchStatus(req, res) {
     const { roomId } = req.params;
     const { username } = res.locals;
-    const anotherUsername = getAnotherUsername(roomId, username);
+    const { username1, username2 } = extractUsernames(roomId, username);
+    const anotherUsername = (username1 === username)? username2: username1;
     Users.retrieveUserStatus(anotherUsername).then((data) => res.send(data));
   }
 
