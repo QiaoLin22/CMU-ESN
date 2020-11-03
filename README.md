@@ -1,4 +1,5 @@
-# F20-ESN-SA3 
+# F20-ESN-SA3
+
 [![cmusv-fse](https://circleci.com/gh/cmusv-fse/f20-ESN-SA3.svg?style=shield&circle-token=ca7fe5747851d001be5b7183c9fbfbcfd413c3e8)](https://circleci.com/gh/cmusv-fse/f20-ESN-SA3)
 [![BCH compliance](https://bettercodehub.com/edge/badge/cmusv-fse/f20-ESN-SA3?branch=master&token=1efc4e02ba3a3bb40eb61657ea91f4b72c12fe2b)](https://bettercodehub.com/)
 

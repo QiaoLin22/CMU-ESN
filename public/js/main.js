@@ -4,11 +4,10 @@ const socket = io();
 const username = $('#username-data').val();
 socket.emit('join room', username);
 
-const logoutBtn = $('#logoutBtn');
-const ok = $('.status-btn:nth-child(1)');
-const help = $('.status-btn:nth-child(2)');
-const emergency = $('.status-btn:nth-child(3)');
-const na = $('.status-btn:nth-child(4)');
+// const ok = $('.status-btn:nth-child(1)');
+// const help = $('.status-btn:nth-child(2)');
+// const emergency = $('.status-btn:nth-child(3)');
+// const na = $('.status-btn:nth-child(4)');
 
 function getGetOptions() {
   return {
@@ -19,8 +18,11 @@ function getGetOptions() {
   };
 }
 
-/* output each user with online/offline, status icon, and unread message icon */
-function outputUser(data, online, status, hasUnread) {
+function outputUser(user) {
+  const { online, numUnreadMessages } = user;
+  const otherUsername = user.username;
+  const status = user.latestStatus.status;
+
   let icon = '';
   if (status === 'OK') {
     icon = '<i class="far fa-check-circle ml-1" style="color: #18b87e"></i>';
@@ -32,36 +34,35 @@ function outputUser(data, online, status, hasUnread) {
     icon = '<i class="far fa-question-circle ml-1" style="color: #d8d8d8"></i>';
   }
 
-  // get roomId 
-  const otherUsername = data.username;
   const roomId =
     username < otherUsername
       ? `${username}${otherUsername}`
       : `${otherUsername}${username}`;
-  const user = document.createElement('div');
+
+  const userDiv = document.createElement('div');
   const readIcon = `<i class="fas fa-circle ml-4" id=${roomId} style="color: #44b3c5; display: none; position:absolute; top: 35%; right: 3%; height: 20%;"></i>`;
 
-  user.classList.add('online-item');
-  //self-chat prevention
-  if (data.username === username) {
-    user.style.cursor = 'not-allowed';
-    user.style.pointerEvents = 'none';
+  userDiv.classList.add('online-item');
+  if (user.username === username) {
+    userDiv.style.cursor = 'not-allowed';
+    userDiv.style.pointerEvents = 'none';
   }
 
   if (online) {
-    user.innerHTML = `<li class="list-group-item list-group-item-action online-list-item" >${`${`${data.username}${icon}${readIcon}`}`}</li>`;
-    $('#online-list').append(user);
+    userDiv.innerHTML = `<li class="list-group-item list-group-item-action online-list-item" >${`${`${user.username}${icon}${readIcon}`}`}</li>`;
+    $('#online-list').append(userDiv);
   } else {
-    user.innerHTML = `<li class="list-group-item list-group-item-action offline-list-item">${`${`${data.username}${icon}${readIcon}`}`}</>`;
-    $('#offline-list').append(user);
+    userDiv.innerHTML = `<li class="list-group-item list-group-item-action offline-list-item">${`${`${user.username}${icon}${readIcon}`}`}</>`;
+    $('#offline-list').append(userDiv);
   }
-  if (hasUnread) {
+
+  if (numUnreadMessages > 0) {
     document.getElementById(roomId).style.display = 'block';
   } else {
     document.getElementById(roomId).style.display = 'none';
   }
 
-  user.addEventListener('click', () => {
+  userDiv.addEventListener('click', () => {
     window.location.href = `/private-chat/${roomId}`;
   });
 }
@@ -73,19 +74,8 @@ function retrieveUsers() {
     .then((res) => {
       return res.json();
     })
-    .then(async (data) => {
-      /* eslint-disable no-await-in-loop */
-      for (const user of data.users) {
-        //check if there is an unread message from username
-        const res = await fetch(
-          `/api/messages/unread/${user.username}`,
-          getGetOptions()
-        );
-        const hasUnread = await res.json();
-        //get the latest status
-        const { status } = user.statusArray[0];
-        outputUser(user, user.online, status, hasUnread);
-      }
+    .then((data) => {
+      data.forEach((user) => outputUser(user));
     })
     .catch((e) => {
       console.log(e);
@@ -101,20 +91,3 @@ socket.on('updateDirectory', () => {
 });
 
 jQuery(retrieveUsers);
-
-/* logout handler */
-logoutBtn.on('click', () => {
-  // fetch "/api/users/logout" request to handle user logout
-  fetch('/api/users/logout', {
-    method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  }).then((res) => {
-    if (res.ok) {
-      // delete jwt
-      document.cookie = 'jwt=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
-      window.location.href = '/';
-    }
-  });
-});

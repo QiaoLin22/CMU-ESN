@@ -12,7 +12,21 @@ const roomId = (() => {
   return lastStr === 'public-wall' ? 'public' : lastStr;
 })();
 
-$('#roomId-data').text(roomId);
+const otherUsername = (() => {
+  if (roomId === 'public') return 'public';
+
+  const startRegex = new RegExp(`^${username}`);
+  const endRegex = new RegExp(`${username}$`);
+
+  if (roomId.match(startRegex)) {
+    return roomId.replace(startRegex, '');
+  } else if (roomId.match(endRegex)) {
+    return roomId.replace(endRegex, '');
+  }
+})();
+
+$('#roomId-data').text(otherUsername);
+
 const chatContainer = $('.chat-container');
 const chatMessages = $('.chat-messages');
 const msgEle = $('#msg');
@@ -35,7 +49,7 @@ function outputMessage(message) {
   const timestamp = new Date(message.timestamp).toLocaleString();
   const msg = document.createElement('div');
   msg.classList.add('message');
-  msg.innerHTML = `<p class="meta mb-1"> ${message.username} <span>${icon}</span> <span class="ml-3"> ${timestamp} </span></p> <p class="text"> ${message.message} </p>`;
+  msg.innerHTML = `<p class="meta mb-1"> ${message.sender} <span>${icon}</span> <span class="ml-3"> ${timestamp} </span></p> <p class="text"> ${message.message} </p>`;
   chatMessages.append(msg);
 
   // scroll to the bottom
@@ -44,7 +58,7 @@ function outputMessage(message) {
 
 /* retrieve historical messages with specific roomId */
 function loadMessages() {
-  // fetch "/api/messages/public" 
+  // fetch "/api/messages/public"
   //or "/api/messages/private/{roomId}" request to retrieve historical messages
   const fetchURL =
     roomId === 'public'
@@ -95,14 +109,14 @@ socket.on('new private message', (newMsg) => {
   if (newMsg.roomId === roomId) {
     //if the message is not send by current user
     //mark the message as read
-    if (newMsg.username != username) {
+    if (newMsg.sender !== username) {
       updateReadStatus(roomId);
     }
     outputMessage(newMsg);
   } else {
-     //if user is not in the same room with the sender of the new message
+    //if user is not in the same room with the sender of the new message
     //send notification
-    displayNotification(newMsg.username)
+    displayNotification(newMsg.sender);
   }
 });
 
@@ -111,15 +125,15 @@ $('#submitBtn').on('click', (element) => {
   element.preventDefault();
 
   const newMsg = {
-    username: username,
+    sender: username,
+    recipient: otherUsername,
     message: msgEle.val(),
     roomId: roomId,
   };
 
-  const publicOrPrivate = roomId === 'public' ? 'public' : 'private';
-  // fetch "/api/messages/public" 
-  //or "/api/messages/private/" request to create a new message
-  fetch(`/api/messages/${publicOrPrivate}`, {
+  const partialUrl = roomId === 'public' ? 'public' : `private/${roomId}`;
+
+  fetch(`/api/messages/${partialUrl}`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

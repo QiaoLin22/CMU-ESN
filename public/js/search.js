@@ -33,7 +33,7 @@ function outputMessage(message) {
   const timestamp = new Date(message.timestamp).toLocaleString();
   const msg = document.createElement('div');
   msg.classList.add('message');
-  msg.innerHTML = `<p class="meta mb-1"> ${message.username} <span>${icon}</span> <span class="ml-3"> ${timestamp} </span></p> <p class="text"> ${message.message} </p>`;
+  msg.innerHTML = `<p class="meta mb-1"> ${message.sender} <span>${icon}</span> <span class="ml-3"> ${timestamp} </span></p> <p class="text"> ${message.message} </p>`;
   chatMessages.append(msg);
 
   // scroll to the bottom
@@ -42,7 +42,7 @@ function outputMessage(message) {
 
 /* display searched status list */
 function outputStatus(anotherUsername, statusArray) {
-  statusArray.reverse().forEach((statusObj)=>{
+  statusArray.reverse().forEach((statusObj) => {
     let icon = '';
     //get status icon
     if (statusObj.status === 'OK') {
@@ -51,21 +51,23 @@ function outputStatus(anotherUsername, statusArray) {
       icon = '<i class="fas fa-info-circle ml-1" style="color: #ffd500"></i>';
     } else if (statusObj.status === 'Emergency') {
       icon = '<i class="fas fa-first-aid ml-1" style="color: #fb5252"></i>';
-    } else if (statusObj.status === undefined || statusObj.status === 'Undefined') {
-      icon = '<i class="far fa-question-circle ml-1" style="color: #d8d8d8"></i>';
+    } else if (
+      statusObj.status === undefined ||
+      statusObj.status === 'Undefined'
+    ) {
+      icon =
+        '<i class="far fa-question-circle ml-1" style="color: #d8d8d8"></i>';
     }
-  
+
     const timestamp = new Date(statusObj.timestamp).toLocaleString();
     const msg = document.createElement('div');
     msg.classList.add('message');
     msg.innerHTML = `<p class="meta mb-1"> ${anotherUsername} <span>${icon}</span> <span class="ml-3"> ${timestamp} </span> </p>`;
     chatMessages.append(msg);
-  
+
     // scroll to the bottom
     chatContainer.scrollTop(chatContainer[0].scrollHeight);
-  }
-
-  );
+  });
 }
 
 /* display searched user list */
@@ -93,7 +95,7 @@ function outputUser(result) {
   }
 }
 
-function searchUser(keywords){
+function searchUser(keywords) {
   fetch(`/api/search/users/${keywords}`, {
     method: 'GET',
     headers: {
@@ -117,7 +119,7 @@ function searchUser(keywords){
     });
 }
 
-function searchMessage(keywords, roomId){
+function searchMessage(keywords, roomId, pagination){
   fetch(`/api/search/messages/${roomId}/${keywords}/${pagination}`, {
     method: 'GET',
     headers: {
@@ -140,7 +142,7 @@ function searchMessage(keywords, roomId){
     });
 }
 
-function searchStatus(roomId){
+function searchStatus(roomId) {
   fetch(`/api/search/messages/${roomId}`, {
     method: 'GET',
     headers: {
@@ -167,30 +169,35 @@ $('#submitBtn').on('click', (element) => {
   element.preventDefault();
   pagination = 0;
   const keywords = msgEle.val();
-  if(searchContext === 'directory'){
-    searchUser(keywords);
-  }else if(searchContext === 'message'){
-    const roomId = urlParams.get('roomid');
-    if(keywords === 'status'){
-      searchStatus(roomId);
-    }else{
-      document.getElementById("loadBtn").style.visibility = "visible";
-      searchMessage(keywords, roomId);
-    }
+  if(!keywords){
+    //TODO add alert
   }else{
-
+    if (searchContext === 'directory') {
+      searchUser(keywords);
+    } else if (searchContext === 'message') {
+      const roomId = urlParams.get('roomid');
+      if (keywords === 'status') {
+        searchStatus(roomId);
+      }else{
+        document.getElementById("loadBtn").style.visibility = "visible";
+        searchMessage(keywords, roomId, pagination);
+      }
+    } else {
+    }
   }
 });
 
 $('#backBtn').on('click', (element) => {
   element.preventDefault();
   const keywords = msgEle.val();
-  if(searchContext === 'directory'){
+  if (searchContext === 'directory') {
     window.location.href = '/main';
-  }else if(searchContext === 'message'){
+  } else if (searchContext === 'message') {
     const roomId = urlParams.get('roomid');
-    (roomId === 'public')? window.location.href = '/public-wall': window.location.href = `/private-chat/${roomId}`;
-  }else{
+    roomId === 'public'
+      ? (window.location.href = '/public-wall')
+      : (window.location.href = `/private-chat/${roomId}`);
+  } else {
     window.location.href = '/announcement';
   }
 });
@@ -203,7 +210,7 @@ $('#loadBtn').on('click', (element) => {
     if(keywords === 'status'){
       searchStatus(roomId);
     }else{
-      searchMessage(keywords, roomId);
+      searchMessage(keywords, roomId, pagination);
     }
   }
 });
