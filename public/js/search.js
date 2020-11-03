@@ -7,9 +7,9 @@ document.getElementById("loadBtn").style.visibility = "hidden";
 let pagination = 0;
 
 /*display no result alert*/
-function displayNotification() {
+function displayNotification(notificationMessage) {
   $('.toast-body').replaceWith(
-    `<div class="toast-body pl-3 pt-2 pr-2 pb-2">no result found</div>`
+    `<div class="toast-body pl-3 pt-2 pr-2 pb-2">${notificationMessage}</div>`
   );
   $('.toast').css('zIndex', 1000);
   $('.toast').toast('show');
@@ -95,6 +95,19 @@ function outputUser(result) {
   }
 }
 
+/* display searched announcement */
+function outputAnnouncement(newAnnouncement) {
+  const timestamp = new Date(newAnnouncement.timestamp).toLocaleString();
+  const announce = document.createElement('div');
+  announce.classList.add('announcement');
+  announce.classList.add('p-3');
+  //TODO: need unique id to replace collapseExample -> each announcement matches with one show button
+  //TODO: show button won't show unless the announcement is long
+  const announcementId = `ann-${newAnnouncement._id}`;
+  announce.innerHTML = `<p class="meta mb-1"> ${newAnnouncement.sender} <span class="ml-3"> ${timestamp} </span></p><p class="collapse" id=${announcementId} aria-expanded="false"> ${newAnnouncement.message} </p><a role="button" class="collapsed" data-toggle="collapse" href="#${announcementId}"aria-expanded="false" aria-controls=${announcementId}></a>`;
+  chatMessages.prepend(announce);
+}
+
 function searchUser(keywords) {
   fetch(`/api/search/users/${keywords}`, {
     method: 'GET',
@@ -106,8 +119,7 @@ function searchUser(keywords) {
   .then((json) => {
     msgEle.val('');
     if(json.length === 0)
-      //alert("no result found");
-      displayNotification();
+      displayNotification("no result found");
     else{
       json.forEach((result) => {
         outputUser(result);
@@ -129,11 +141,32 @@ function searchMessage(keywords, roomId, pagination){
   .then((res) => res.json())
   .then((json) => {
     if(json.length === 0)
-      //alert("no result found");
-      displayNotification();
+      displayNotification("no result found");
     else{
       json.forEach((result) => {
         outputMessage(result);
+      });
+    }
+  })
+    .catch((e) => {
+      console.log(e);
+    });
+}
+
+function searchAnnouncement(keywords, pagination){
+  fetch(`/api/search/announcement/${keywords}/${pagination}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
+  .then((res) => res.json())
+  .then((json) => {
+    if(json.length === 0)
+      displayNotification("no result found");
+    else{
+      json.forEach((result) => {
+        outputAnnouncement(result);
       });
     }
   })
@@ -152,8 +185,7 @@ function searchStatus(roomId) {
   .then((res) => res.json())
   .then((json) => {
     if(json.length === 0)
-    //console.log(json)
-    displayNotification
+    displayNotification("no result found");
     else{
       json.forEach((result) => {
         outputStatus(result.username, result.statusArray);
@@ -169,8 +201,9 @@ $('#submitBtn').on('click', (element) => {
   element.preventDefault();
   pagination = 0;
   const keywords = msgEle.val();
+  //TODO clear chat container
   if(!keywords){
-    //TODO add alert
+    displayNotification("please enter a keyword");
   }else{
     if (searchContext === 'directory') {
       searchUser(keywords);
@@ -183,6 +216,7 @@ $('#submitBtn').on('click', (element) => {
         searchMessage(keywords, roomId, pagination);
       }
     } else {
+      searchAnnouncement(keywords, pagination);
     }
   }
 });
@@ -212,5 +246,7 @@ $('#loadBtn').on('click', (element) => {
     }else{
       searchMessage(keywords, roomId, pagination);
     }
+  }else if(searchContext === 'announcement'){
+    searchAnnouncement(keywords, pagination);
   }
 });
