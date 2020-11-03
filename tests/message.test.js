@@ -45,20 +45,20 @@ afterEach(DBInMemory.cleanup);
 
 describe('use case chat publicly', () => {
   it('create new message successfully', async () => {
-    await createNewMessage('John', 'test', 'public');
+    await createNewMessage('John', undefined, 'test', 'public');
 
     const actual = await Message.find({ username: 'John' });
 
     const expected = [
       {
         read: false,
-        username: 'John',
+        sender: 'John',
         message: 'test',
         roomId: 'public',
         status: 'Undefined',
       },
     ];
-    expect(actual[0].username).toEqual(expected[0].username);
+    expect(actual[0].sender).toEqual(expected[0].sender);
     expect(actual[0].read).toEqual(expected[0].read);
     expect(actual[0].message).toEqual(expected[0].message);
     expect(actual[0].roomId).toEqual(expected[0].roomId);
@@ -73,13 +73,13 @@ describe('use case chat publicly', () => {
     const expected = [
       {
         read: false,
-        username: 'John',
+        sender: 'John',
         message: 'test',
         roomId: 'public',
         status: 'Undefined',
       },
     ];
-    expect(actual[0].username).toEqual(expected[0].username);
+    expect(actual[0].sender).toEqual(expected[0].sender);
     expect(actual[0].read).toEqual(expected[0].read);
     expect(actual[0].message).toEqual(expected[0].message);
     expect(actual[0].roomId).toEqual(expected[0].roomId);
