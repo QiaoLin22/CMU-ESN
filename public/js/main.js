@@ -21,7 +21,7 @@ function getGetOptions() {
 function outputUser(user) {
   const { online, numUnreadMessages } = user;
   const otherUsername = user.username;
-  const status = user.latestStatus.status;
+  const { status } = user.latestStatus;
 
   let icon = '';
   if (status === 'OK') {

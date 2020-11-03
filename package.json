@@ -49,7 +49,7 @@
   },
   "lint-staged": {
     "*.js": "eslint --fix",
-    "!(*.ejs)": "prettier --write"
+    "*.{js,json,css,yml,md}": "prettier --write"
   },
   "jest": {
     "testEnvironment": "node"
