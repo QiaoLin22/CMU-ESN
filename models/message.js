@@ -22,7 +22,7 @@ const MessageSchema = mongoose.Schema({
     type: String,
     required: [true, 'Room ID is required'],
   },
-  senderStatus: {
+  status: {
     type: String,
     enum: ['OK', 'Emergency', 'Help', 'Undefined'],
   },
@@ -44,7 +44,7 @@ async function createNewMessage(sender, recipient, message, roomId) {
     timestamp: new Date(Date.now()).toISOString(),
     message: message,
     roomId: roomId,
-    status: latestStatus,
+    status: latestStatus.status,
     read: false,
   });
 
