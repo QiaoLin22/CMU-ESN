@@ -51,7 +51,7 @@ function createNewUser(username, hash, salt) {
 function retrieveUsers() {
   return User.find(
     {},
-    { _id: 0, __v: 0, hash: 0, salt: 0},
+    { _id: 0, __v: 0, hash: 0, salt: 0, statusArray:{$slice:-1}},
     { sort: { online: -1, username: 1 } },
   )
 }
@@ -113,7 +113,7 @@ function findUserByKeyword(keyword) {
   return User.find(
     { username:{ $regex : keyword}}, 
     { _id: 0, __v: 0},
-    { sort: { online: -1, username: 1 } },
+    { sort: { online: -1, username: 1 } }
     );
 }
 

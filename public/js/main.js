@@ -83,8 +83,7 @@ function retrieveUsers() {
         );
         const hasUnread = await res.json();
         //get the latest status
-        // TODO: make sure the data from the response is the latest status
-        const { status } = user.statusArray[user.statusArray.length - 1];
+        const { status } = user.statusArray[0];
         outputUser(user, user.online, status, hasUnread);
       }
     })
@@ -119,36 +118,3 @@ logoutBtn.on('click', () => {
     }
   });
 });
-
-
-/* update status */
-/*
-function updateStatus(status) {
-  status.on('click', () => {
-    const newStatus = {
-      username: username,
-      status: status.text(),
-    };
-    console.log(newStatus);
-    // fetch "/api/users" request to update status
-    fetch('/api/users', {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(newStatus),
-    }).catch((e) => {
-      console.log(e);
-    });
-  });
-}
-updateStatus(ok);
-updateStatus(help);
-updateStatus(emergency);
-updateStatus(na);
-*/
-/*
-$('#searchBtn').on('click', (element) => {
-  const fetchURL = '/search?context=directory';
-  window.location.href = fetchURL;
-});*/
