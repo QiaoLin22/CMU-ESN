@@ -1,7 +1,7 @@
 const stopwords = require('../lib/stopwords.json').stopwords;
 const Messages = require('../models/message');
-
 const Users = require('../models/user');
+const Annoucement = require('../models/announcement');
 
 function filterStopwords(keywords) {
   let filteredKeywords = keywords.filter(
@@ -48,6 +48,14 @@ class searchInfoController {
     } else {
       Users.findUserByKeyword(keywords).then((data) => res.send(data));
     }
+  }
+
+  static searchAnnouncement(req, res){
+    const { keywords } = req.params;
+    const { pagination } = req.params;
+    const keywordsArray = keywords.split(/[^A-Za-z0-9]/);
+    const filteredKeywords = filterStopwords(keywordsArray);
+    Annoucement.searchAnnoucement(filteredKeywords, pagination).then((data)=>res.send(data));
   }
 }
 
