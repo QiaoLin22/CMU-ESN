@@ -9,7 +9,7 @@ const SearchInfoController = require('../controllers/searchInfoController');
 // router.post('/public', authenticateUser, MessageController.createPublicMessage);
 
 router.get(
-  '/messages/:roomId/:keywords',
+  '/messages/:roomId/:keywords/:pagination',
   authenticateUser,
   verifyRoomId,
   SearchInfoController.searchMessage
