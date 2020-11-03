@@ -1,24 +1,19 @@
 const mongoose = require('mongoose');
-
 const { getStatusByUsername } = require('./user');
 
-// const dbString = process.env.DB_STRING;
-
-// mongoose
-//   .connect(dbString, {
-//     useNewUrlParser: true,
-//     useUnifiedTopology: true,
-//   })
-//   .catch((e) => console.log(e));
-
 const MessageSchema = mongoose.Schema({
-  username: {
+  sender: {
     type: String,
-    required: [true, 'Username is required'],
+    required: [true, 'Sender is required'],
+  },
+  recipient: {
+    type: String,
+    required: [true, 'Recipient is required'],
   },
   timestamp: {
     type: String,
     required: [true, 'Timestamp is required'],
+    default: new Date(Date.now()).toISOString(),
   },
   message: {
     type: String,
@@ -41,16 +36,15 @@ const MessageSchema = mongoose.Schema({
 
 const Message = mongoose.model('Message', MessageSchema);
 
-async function createNewMessage(username, message, roomId) {
-  
-  const latestStatus = await getStatusByUsername(username);
+async function createNewMessage(sender, recipient, message, roomId) {
+  const latestStatus = await getStatusByUsername(sender);
 
   const newMessage = new Message({
-    username: username,
-    timestamp: new Date(Date.now()).toISOString(),
+    sender: sender,
+    recipient: recipient,
     message: message,
     roomId: roomId,
-    status: latestStatus,
+    status: latestStatus.status,
     read: false,
   });
 
@@ -65,22 +59,21 @@ function updateAllToRead(roomId) {
   return Message.updateMany({ roomId: roomId }, { read: true });
 }
 
-function checkUnreadMessage(username, otherUsername) {
-  const roomId =
-    username < otherUsername
-      ? `${username}${otherUsername}`
-      : `${otherUsername}${username}`;
-  return Message.find({
-    roomId: roomId,
-    read: false,
-    username: { $ne: username },
+function searchMessage(roomId, filteredKeywords, pagination){
+  const query = [];
+  filteredKeywords.forEach(keyword => {
+    query.push({ roomId: roomId, message: { $regex: keyword, $options:'i'}});
   });
+  return Message.find( {$and: query})
+  .sort({timestamp:-1})
+  .skip(pagination*10)
+  .limit(10);
 }
 
 module.exports = {
   Message,
   createNewMessage,
   getHistoricalMessages,
-  checkUnreadMessage,
   updateAllToRead,
+  searchMessage,
 };

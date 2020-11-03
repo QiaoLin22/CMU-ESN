@@ -1,4 +1,3 @@
-require('dotenv').config();
 const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
@@ -10,9 +9,11 @@ const io = require('socket.io').listen(server);
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 const messagesRouter = require('./routes/messages');
+const announcementsRouter = require('./routes/announcements');
+const searchRouter = require('./routes/search');
 
 const PORT = process.env.PORT || 3000;
-const DBProduction = require('./services/dbProduction');
+require('./services/db-production');
 
 // pass io to following middleware/router
 app.use((req, res, next) => {
@@ -31,6 +32,8 @@ app.use(cookieParser());
 app.use('/', indexRouter);
 app.use('/api/users', usersRouter);
 app.use('/api/messages', messagesRouter);
+app.use('/api/announcements', announcementsRouter);
+app.use('/api/search', searchRouter);
 
 server.listen(PORT);
 

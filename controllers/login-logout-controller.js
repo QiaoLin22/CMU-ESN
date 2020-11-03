@@ -3,7 +3,8 @@ const {
   findUserByUsername,
   validateUsernamePassword,
 } = require('../models/user');
-const { validPassword, createToken } = require('../lib/utils');
+const { validatePassword } = require('../lib/password');
+const { createToken } = require('../lib/jwt');
 
 class LoginLogoutController {
   static async login(req, res) {
@@ -20,7 +21,7 @@ class LoginLogoutController {
       }
 
       // user exists, check if password is correct
-      if (validPassword(password, user.hash, user.salt)) {
+      if (validatePassword(password, user.hash, user.salt)) {
         // generate jwt and return it in response
         const token = createToken(user);
         const cookieMaxAge = 3 * 24 * 60 * 60;

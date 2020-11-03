@@ -1,8 +1,5 @@
 const router = require('express').Router();
-const {
-  authenticateUser,
-  verifyRoomId,
-} = require('../middleware/authMiddleware');
+const { authenticateUser, verifyRoomId } = require('../middleware/auth');
 
 router.get('/', (req, res) => {
   res.render('index');
@@ -10,6 +7,14 @@ router.get('/', (req, res) => {
 
 router.get('/main', authenticateUser, (req, res) => {
   res.render('main', { username: res.locals.username });
+});
+
+router.get('/announcement', authenticateUser, (req, res) => {
+  res.render('announcements');
+});
+
+router.get('/profile', authenticateUser, (req, res) => {
+  res.render('profile', { username: res.locals.username });
 });
 
 router.get('/public-wall', authenticateUser, (req, res) => {
@@ -24,5 +29,9 @@ router.get(
     res.render('chat', { username: res.locals.username });
   }
 );
+
+router.get('/search', authenticateUser, (req, res) => {
+  res.render('search', { username: res.locals.username });
+});
 
 module.exports = router;

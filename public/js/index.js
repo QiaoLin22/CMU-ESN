@@ -26,6 +26,7 @@ function checkStatus(res) {
   return res.json();
 }
 
+//Error handler
 function catchError(err, alertElement) {
   if (err instanceof Error) {
     if (alertElement) {
@@ -53,6 +54,9 @@ function getPostOptions() {
   };
 }
 
+/* check username and password
+username should be at least 3 characters long
+passwords should be at least 4 characters long */
 function checkUsernamePassword(username, password) {
   if (username.length < 3) {
     showAlert(
@@ -107,6 +111,7 @@ $('#submitBtn').on('click', (event) => {
   loginRequest();
 });
 
+/* welcome message checkbox handler */
 $('#welcomeNextBtn').on('click', (event) => {
   if ($('#acknowledgementForm')[0].checkValidity()) {
     event.preventDefault();

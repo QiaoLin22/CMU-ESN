@@ -1,26 +1,41 @@
-
 /* global io */
 const socket = io();
 
 const username = $('#username-data').val();
 socket.emit('join room', username);
 
+/* get roomId */
 const roomId = (() => {
   // check if this is private chat
   const urlList = window.location.href.split('/');
   const lastStr = urlList[urlList.length - 1];
-
   return lastStr === 'public-wall' ? 'public' : lastStr;
 })();
 
-$('#roomId-data').text(roomId);
+const otherUsername = (() => {
+  if (roomId === 'public') return 'public';
+
+  const startRegex = new RegExp(`^${username}`);
+  const endRegex = new RegExp(`${username}$`);
+
+  if (roomId.match(startRegex)) {
+    return roomId.replace(startRegex, '');
+  } else if (roomId.match(endRegex)) {
+    return roomId.replace(endRegex, '');
+  }
+})();
+
+$('#roomId-data').text(otherUsername);
+
 const chatContainer = $('.chat-container');
 const chatMessages = $('.chat-messages');
 const msgEle = $('#msg');
 
+/* display chat message */
 function outputMessage(message) {
   let icon = '';
   const { status } = message;
+  //get status icon
   if (status === 'OK') {
     icon = '<i class="far fa-check-circle ml-1" style="color: #18b87e"></i>';
   } else if (status === 'Help') {
@@ -34,14 +49,17 @@ function outputMessage(message) {
   const timestamp = new Date(message.timestamp).toLocaleString();
   const msg = document.createElement('div');
   msg.classList.add('message');
-  msg.innerHTML = `<p class="meta mb-1"> ${message.username} <span>${icon}</span> <span class="ml-3"> ${timestamp} </span></p> <p class="text"> ${message.message} </p>`;
+  msg.innerHTML = `<p class="meta mb-1"> ${message.sender} <span>${icon}</span> <span class="ml-3"> ${timestamp} </span></p> <p class="text"> ${message.message} </p>`;
   chatMessages.append(msg);
 
   // scroll to the bottom
   chatContainer.scrollTop(chatContainer[0].scrollHeight);
 }
 
+/* retrieve historical messages with specific roomId */
 function loadMessages() {
+  // fetch "/api/messages/public"
+  //or "/api/messages/private/{roomId}" request to retrieve historical messages
   const fetchURL =
     roomId === 'public'
       ? '/api/messages/public'
@@ -62,48 +80,60 @@ function loadMessages() {
 
 jQuery(loadMessages);
 
+/* new public message request handler */
 socket.on('new public message', (newMsg) => {
+  //if user is in  public room, display message
   if (roomId === 'public') {
     outputMessage(newMsg);
   }
 });
 
-function updateReadStatus (roomId) {
+function updateReadStatus(roomId) {
   fetch(`/api/messages/${roomId}/read`, {
     method: 'PUT',
   });
 }
 
-function displayNotification(username){
-  $('.toast-body').replaceWith(`<div class="toast-body pl-3 pt-2 pr-2 pb-2">${username} just sent you a message</div>`);
-  $('.toast').css("zIndex", 1000);
+function displayNotification(username) {
+  $('.toast-body').replaceWith(
+    `<div class="toast-body pl-3 pt-2 pr-2 pb-2">${username} just sent you a message</div>`
+  );
+  $('.toast').css('zIndex', 1000);
   $('.toast').toast('show');
-  // alert(username + " just sent you a private message!");
 }
 
+/*  new private message request handler */
 socket.on('new private message', (newMsg) => {
+  //if user is in the same room with the sender of the new message
+  //display the new message
   if (newMsg.roomId === roomId) {
-    if (newMsg.username != username) {
+    //if the message is not send by current user
+    //mark the message as read
+    if (newMsg.sender !== username) {
       updateReadStatus(roomId);
     }
     outputMessage(newMsg);
   } else {
-    displayNotification(newMsg.username)
+    //if user is not in the same room with the sender of the new message
+    //send notification
+    displayNotification(newMsg.sender);
   }
 });
 
-// input new Message
+/* input new Message */
 $('#submitBtn').on('click', (element) => {
   element.preventDefault();
 
   const newMsg = {
-    username: username,
+    sender: username,
+    recipient: otherUsername,
     message: msgEle.val(),
     roomId: roomId,
   };
 
-  const publicOrPrivate = roomId === 'public' ? 'public' : 'private';
-  fetch(`/api/messages/${publicOrPrivate}`, {
+  const partialUrl = roomId === 'public' ? 'public' : `private/${roomId}`;
+
+  fetch(`/api/messages/${partialUrl}`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -116,4 +146,9 @@ $('#submitBtn').on('click', (element) => {
     .catch((e) => {
       console.log(e);
     });
+});
+
+$('#searchBtn').on('click', (element) => {
+  const fetchURL = `/search?context=message&roomid=${roomId}`;
+  window.location.href = fetchURL;
 });
