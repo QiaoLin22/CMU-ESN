@@ -7,9 +7,9 @@ document.getElementById('loadBtn').style.visibility = 'hidden';
 let pagination = 0;
 
 /*display no result alert*/
-function displayNotification() {
+function displayNotification(alterMessage) {
   $('.toast-body').replaceWith(
-    `<div class="toast-body pl-3 pt-2 pr-2 pb-2">no result found</div>`
+    `<div class="toast-body pl-3 pt-2 pr-2 pb-2">${alterMessage}</div>`
   );
   $('.toast').css('zIndex', 1000);
   $('.toast').toast('show');
@@ -117,9 +117,9 @@ function searchUser(keywords) {
     .then((res) => res.json())
     .then((json) => {
       msgEle.val('');
-      if (json.length === 0)
-        //alert("no result found");
-        displayNotification();
+      if (json.error === 'no valid keyword') {
+        displayNotification('Please enter a valid keyword');
+      } else if (json.length === 0) displayNotification('no result found');
       else {
         json.forEach((result) => {
           outputUser(result);
@@ -140,10 +140,11 @@ function searchMessage(keywords, roomId, pagination){
   })
     .then((res) => res.json())
     .then((json) => {
-      if (json.length === 0)
-        //alert("no result found");
-        displayNotification();
+      if (json.error === 'no valid keyword') {
+        displayNotification('Please enter a valid keyword');
+      } else if (json.length === 0) displayNotification('no result found');
       else {
+        document.getElementById('loadBtn').style.visibility = 'visible';
         json.forEach((result) => {
           outputMessage(result);
         });
@@ -187,9 +188,9 @@ function searchStatus(roomId) {
   })
     .then((res) => res.json())
     .then((json) => {
-      if (json.length === 0)
-        //console.log(json)
-        displayNotification;
+      if (json.error === 'no valid keyword') {
+        displayNotification('Please enter a valid keyword');
+      } else if (json.length === 0) displayNotification('no result found');
       else {
         json.forEach((result) => {
           outputStatus(result.username, result.statusArray);
@@ -203,10 +204,11 @@ function searchStatus(roomId) {
 
 $('#submitBtn').on('click', (element) => {
   element.preventDefault();
+  $('#search-results').empty();
   pagination = 0;
   const keywords = msgEle.val();
   if(!keywords){
-    //TODO add alert
+    displayNotification('Please enter a valid keyword');
   }else{
     if (searchContext === 'directory') {
       searchUser(keywords);
@@ -215,10 +217,10 @@ $('#submitBtn').on('click', (element) => {
       if (keywords === 'status') {
         searchStatus(roomId);
       }else{
-        document.getElementById("loadBtn").style.visibility = "visible";
         searchMessage(keywords, roomId, pagination);
       }
     } else {
+      searchAnnouncement(keywords, pagination)
     }
   }
 });
@@ -243,10 +245,12 @@ $('#loadBtn').on('click', (element) => {
     pagination++;
     const keywords = msgEle.val();
     const roomId = urlParams.get('roomid');
-    if (keywords === 'status') {
-      searchStatus(roomId);
-    }else{
+    if (keywords !== 'status') {
       searchMessage(keywords, roomId, pagination);
     }
+  }else if(searchContext === 'announcement'){
+    pagination++;
+    const keywords = msgEle.val();
+    searchAnnouncement(keywords, pagination);
   }
 });
