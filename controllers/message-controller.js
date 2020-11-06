@@ -28,7 +28,6 @@ class MessageController {
         .then((newMessage) => {
           req.app.get('io').in(roomId).emit('new private message', newMessage);
           req.app.get('io').emit('updateDirectory');
-          console.log('201');
           res.status(201).send({ message: 'success' });
         })
         .catch((e) => {
