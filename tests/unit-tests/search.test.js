@@ -1,5 +1,5 @@
 // const DAO = require('../services/dao');
-const DBInMemory = require('../services/db-in-memory');
+const DBInMemory = require('../../services/db-in-memory');
 // const express = require("express");
 // const app = express();
 
@@ -8,10 +8,10 @@ const {
   findUserByKeyword,
   findUserByStatus,
   retrieveUserStatus,
-} = require('../models/user');
-const { searchAnnouncement, Announcement } = require('../models/announcement');
+} = require('../../models/user');
+const { searchAnnouncement, Announcement } = require('../../models/announcement');
 
-const { searchMessage, Message } = require('../models/message');
+const { searchMessage, Message } = require('../../models/message');
 // const {
 //     router
 // } = require('../routes/search');

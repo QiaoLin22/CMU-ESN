@@ -2,10 +2,10 @@ const request = require('supertest');
 const http = require('http');
 const socketIO = require('socket.io');
 
-const app = require('../app');
-const DBInMemory = require('../services/db-in-memory');
-const { createToken } = require('../lib/jwt');
-const { Announcement } = require('../models/announcement');
+const app = require('../../app');
+const DBInMemory = require('../../services/db-in-memory');
+const { createToken } = require('../../lib/jwt');
+const { Announcement } = require('../../models/announcement');
 
 const server = http.createServer(app);
 const io = socketIO.listen(server);

@@ -1,5 +1,5 @@
 // const DAO = require('../services/dao');
-const DBInMemory = require('../services/db-in-memory');
+const DBInMemory = require('../../services/db-in-memory');
 // console.log(DBInMemory);
 
 const {
@@ -9,7 +9,7 @@ const {
   updateStatusIcon,
   getStatusByUsername,
   findUserByUsername,
-} = require('../models/user');
+} = require('../../models/user');
 
 // const dao = new DAO(DBInMemory);
 

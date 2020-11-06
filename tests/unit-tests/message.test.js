@@ -1,13 +1,13 @@
 // const DAO = require('../services/dao');
-const DBInMemory = require('../services/db-in-memory');
+const DBInMemory = require('../../services/db-in-memory');
 
-const { User } = require('../models/user');
+const { User } = require('../../models/user');
 const {
   Message,
   createNewMessage,
   getHistoricalMessages,
   updateAllToRead,
-} = require('../models/message');
+} = require('../../models/message');
 
 // const dao = new DAO(DBInMemory)
 

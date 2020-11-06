@@ -1,10 +1,10 @@
 const request = require('supertest');
-const app = require('../app');
-const { createToken } = require('../lib/jwt');
-const DBInMemory = require('../services/db-in-memory');
-const { User } = require('../models/user');
-const { Message } = require('../models/message');
-const { Announcement } = require('../models/announcement');
+const app = require('../../app');
+const { createToken } = require('../../lib/jwt');
+const DBInMemory = require('../../services/db-in-memory');
+const { User } = require('../../models/user');
+const { Message } = require('../../models/message');
+const { Announcement } = require('../../models/announcement');
 
 beforeAll(DBInMemory.connect);
 afterAll(DBInMemory.close);
@@ -92,7 +92,6 @@ describe("GET '/messages/:roomId/:keywords/:pagination'", () => {
         status: 'OK',
       },
     ];
-    console.log(response.statusCode);
     expect(response.body.length).toEqual(expected.length);
     expect(response.body[0].message).toEqual(expected[0].message);
     expect(response.body[0].roomId).toEqual(expected[0].roomId);
@@ -203,8 +202,7 @@ describe("GET '/announcements/:keywords/:pagination'", () => {
     const response = await request(app)
       .get('/api/search/announcements/hello/0')
       .set('Cookie', `jwt=${token}`);
-    console.log(response.body);
-    console.log(response.statusCode);
+
     const expected = [
       {
         sender: 'John',
