@@ -154,7 +154,7 @@ function searchMessage(keywords, roomId, pagination) {
 }
 
 function searchAnnouncement(keywords, pagination) {
-  fetch(`/api/search/announcement/${keywords}/${pagination}`, {
+  fetch(`/api/search/announcements/${keywords}/${pagination}`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',

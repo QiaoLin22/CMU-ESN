@@ -21,7 +21,10 @@ const { searchMessage, Message } = require('../models/message');
 // const dao = new DAO(DBInMemory);
 
 beforeAll(DBInMemory.connect);
-afterAll(DBInMemory.close);
+afterAll(done => {
+  DBInMemory.close();
+  done();
+});
 beforeEach(async () => {
   // create new users
   await User.insertMany([

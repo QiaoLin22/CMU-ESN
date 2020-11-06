@@ -20,13 +20,13 @@ router.get(
 );
 
 router.get(
-  `/users/:keywords`,
+  '/users/:keywords',
   authenticateUser,
   SearchInfoController.searchUser
 );
 
 router.get(
-  `/announcement/:keywords/:pagination`,
+  '/announcements/:keywords/:pagination',
   authenticateUser,
   SearchInfoController.searchAnnouncement
 )

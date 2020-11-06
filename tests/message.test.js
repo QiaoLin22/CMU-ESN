@@ -12,7 +12,10 @@ const {
 // const dao = new DAO(DBInMemory)
 
 beforeAll(DBInMemory.connect);
-afterAll(DBInMemory.close);
+afterAll(done => {
+  DBInMemory.close();
+  done();
+});
 
 beforeEach(async () => {
   // create new users
