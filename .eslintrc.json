@@ -18,6 +18,7 @@
     "no-else-return": "off",
     "no-underscore-dangle": "off",
     "no-restricted-syntax": "off",
-    "class-methods-use-this": "off"
+    "class-methods-use-this": "off",
+    "prefer-destructuring": "warn"
   }
 }
