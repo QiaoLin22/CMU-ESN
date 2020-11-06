@@ -52,10 +52,6 @@ describe('POST /announcements', () => {
 
     console.log(newAnnouncement);
     // make sure we add it correctly
-    expect(newAnnouncement.body).toHaveProperty('sender');
-    expect(newAnnouncement.body).toHaveProperty('message');
-    expect(newAnnouncement.body.sender).toBe('John');
-    expect(newAnnouncement.body.message).toBe('Hi');
     expect(newAnnouncement.statusCode).toBe(201);
 
     // make sure we have 3 announcements now
