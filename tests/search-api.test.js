@@ -59,7 +59,7 @@ beforeEach(async () => {
     }
   );
 });
-
+afterEach(DBInMemory.cleanup);
 describe("GET '/messages/:roomId/:keywords/:pagination'", () => {
   test('It should respond with an array of messages with keyword', async () => {
     const token = createToken({ _id: '000', username: 'John' });
