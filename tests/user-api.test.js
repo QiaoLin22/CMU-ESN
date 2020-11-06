@@ -2,7 +2,7 @@ const request = require('supertest');
 const app = require('../app');
 const { createToken } = require('../lib/jwt');
 const DBInMemory = require('../services/db-in-memory');
-const { User } = require('../models/user');
+const { User, updateOnlineStatus } = require('../models/user');
 
 beforeAll(DBInMemory.connect);
 afterAll(DBInMemory.close);
@@ -71,6 +71,7 @@ describe('GET /', () => {
     expect(response.statusCode).toBe(200);
   });
 });
+
 describe('POST /', () => {
   test('It should responds with the newly created user', async () => {
     const newUser = await request(app).post('/api/users/').send({
@@ -98,6 +99,31 @@ describe('POST /login', () => {
     });
 
     // make sure we can login successfully
+    expect(response.statusCode).toBe(200);
+  });
+});
+
+describe('PUT /logout', () => {
+  test('It should respond with a user logout successfully', async () => {
+    const token = createToken({ _id: '111', username: 'John' });
+    updateOnlineStatus('John', true);
+    const response = await request(app)
+      .put('/api/users/logout')
+      .set('Cookie', `jwt=${token}`);
+
+    // Make sure we can logout successfully
+    expect(response.statusCode).toBe(200);
+  });
+});
+
+describe('PUT /', () => {
+  test('It should responds with a successfully update online status', async () => {
+    const response = await request(app).put('/api/users/').send({
+      username: 'John',
+      status: 'offline',
+    });
+
+    // make sure we can change status successfully
     expect(response.statusCode).toBe(200);
   });
 });
