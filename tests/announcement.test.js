@@ -6,7 +6,6 @@ const {
     Announcement,
     createNewAnnouncement,
     getAllAnnouncements,
-    searchAnnoucement,
 } = require('../models/announcement');
 const dbInMemory = require('../services/db-in-memory');
 
@@ -38,5 +37,15 @@ describe('use case post announcement', () => {
     expect(actual).toEqual(expected);
   });
 
-  
+  it('retrieve all announcements successfully', async () => {
+    const actual = await getAllAnnouncements();
+    console.log(actual)
+    const expected = ([
+      {
+      sender: 'John',
+      message: 'Hi',
+    }
+  ]);
+    expect(actual.length).toEqual(expected.length);
+  });
 });

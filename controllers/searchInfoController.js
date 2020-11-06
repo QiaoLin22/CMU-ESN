@@ -1,6 +1,7 @@
 const stopwords = require('../lib/stopwords.json').stopwords;
 const Messages = require('../models/message');
 const Users = require('../models/user');
+const { extractUsernames } = require('../lib/room-id');
 const Annoucement = require('../models/announcement');
 
 function filterStopwords(keywords) {
@@ -10,20 +11,6 @@ function filterStopwords(keywords) {
   return filteredKeywords;
 }
 
-function getAnotherUsername(roomId, username) {
-  const usernameIndex = roomId.indexOf(username);
-  let otherUsername;
-
-  if (usernameIndex > -1) {
-    if (usernameIndex === 0) {
-      otherUsername = roomId.substring(username.length);
-    } else {
-      otherUsername = roomId.substring(0, usernameIndex);
-    }
-  }
-  return otherUsername;
-}
-
 class searchInfoController {
   static searchMessage(req, res) {
     const { roomId } = req.params;
@@ -31,13 +18,21 @@ class searchInfoController {
     const { pagination } = req.params;
     const keywordsArray = keywords.split(/[^A-Za-z0-9]/);
     const filteredKeywords = filterStopwords(keywordsArray);
-    Messages.searchMessage(roomId, filteredKeywords, pagination).then((data)=>res.send(data));
+    if (filteredKeywords.length === 0)
+      res.status(400).json({ error: 'no valid keyword' });
+    else
+      Messages.searchMessage(
+        roomId,
+        filteredKeywords,
+        pagination
+      ).then((data) => res.send(data));
   }
 
   static searchStatus(req, res) {
     const { roomId } = req.params;
     const { username } = res.locals;
-    const anotherUsername = getAnotherUsername(roomId, username);
+    const { username1, username2 } = extractUsernames(roomId, username);
+    const anotherUsername = username1 === username ? username2 : username1;
     Users.retrieveUserStatus(anotherUsername).then((data) => res.send(data));
   }
 
@@ -50,12 +45,17 @@ class searchInfoController {
     }
   }
 
-  static searchAnnouncement(req, res){
+  static searchAnnouncement(req, res) {
     const { keywords } = req.params;
     const { pagination } = req.params;
     const keywordsArray = keywords.split(/[^A-Za-z0-9]/);
     const filteredKeywords = filterStopwords(keywordsArray);
-    Annoucement.searchAnnoucement(filteredKeywords, pagination).then((data)=>res.send(data));
+    if (filteredKeywords.length === 0)
+      res.status(400).json({ error: 'no valid keyword' });
+    else
+      Annoucement.searchAnnouncement(filteredKeywords, pagination).then((data) =>
+        res.send(data)
+      );
   }
 }
 
