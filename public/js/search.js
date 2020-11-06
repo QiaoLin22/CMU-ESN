@@ -104,7 +104,7 @@ function outputAnnouncement(newAnnouncement) {
 
   const announcementId = `ann-${newAnnouncement._id}`;
   announce.innerHTML = `<p class="meta mb-1"> ${newAnnouncement.sender} <span class="ml-3"> ${timestamp} </span></p><p class="collapse" id=${announcementId} aria-expanded="false"> ${newAnnouncement.message} </p><a role="button" class="collapsed" data-toggle="collapse" href="#${announcementId}"aria-expanded="false" aria-controls=${announcementId}></a>`;
-  chatMessages.prepend(announce);
+  chatMessages.append(announce);
 }
 
 function searchUser(keywords) {
