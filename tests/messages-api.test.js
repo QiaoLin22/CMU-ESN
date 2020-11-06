@@ -1,9 +1,16 @@
 const request = require('supertest');
+const http = require('http');
+const socketIO = require('socket.io');
+
 const app = require('../app');
 const { createToken } = require('../lib/jwt');
 const DBInMemory = require('../services/db-in-memory');
 const { User } = require('../models/user');
 const { Message } = require('../models/message');
+
+const server = http.createServer(app);
+const io = socketIO.listen(server);
+app.set('io', io);
 
 beforeAll(DBInMemory.connect);
 afterAll(DBInMemory.close);
@@ -97,7 +104,7 @@ describe('POST /messages/private/:roomId', () => {
 
   test('Invalid roomId', async () => {
     const response = await request(app)
-      .get('/api/messages/private/MikeJohn')
+      .post('/api/messages/private/MikeJohn')
       .set('Cookie', `jwt=${token}`);
     expect(response.statusCode).toBe(400);
     expect(response.text).toBe('room id is not valid');
@@ -105,7 +112,7 @@ describe('POST /messages/private/:roomId', () => {
 
   test('Missing sender', async () => {
     const response = await request(app)
-      .get('/api/messages/private/JohnMike')
+      .post('/api/messages/private/JohnMike')
       .set('Cookie', `jwt=${token}`)
       .send({
         recipient: 'John',
@@ -117,7 +124,7 @@ describe('POST /messages/private/:roomId', () => {
 
   test('Successfully post a new private message', async () => {
     const response = await request(app)
-      .get('/api/messages/private/JohnMike')
+      .post('/api/messages/private/JohnMike')
       .set('Cookie', `jwt=${token}`)
       .send({
         sender: 'Mike',
@@ -126,6 +133,6 @@ describe('POST /messages/private/:roomId', () => {
         roomId: 'JohnMike',
       });
     expect(response.statusCode).toBe(201);
-    expect(response.body).toBe('success');
+    expect(response.body.message).toBe('success');
   });
 });

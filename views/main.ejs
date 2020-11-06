@@ -23,42 +23,44 @@
     <div class="container directory-container">
       <div class="row">
         <div class="col-lg col-md-3 "></div>
-        <div class="col-lg col-md-6 col">
+        <div class="col-lg col-md-6 col esn-screen">
           <div class="row directory-header">
             <h5>ESN Chatroom</h5>
           </div>
 
-            <div class="row searchbar p-3">
-              <a href="/search?context=directory"><input type="text" placeholder="Search.."></a>
-            </div>
-  
-            <ul class="list-group list-group-flush directory-category">
-              <ui><h6>Channels</h6></ui>
-              <li class="list-group-item list-group-item-action" style="border-radius: 0.5rem;">
-                <a href="/public-wall"># Public</a>
-              </li>
-            </ul>
-    
-            <ul class="list-group list-group-flush directory-category">
-              <ui>
-                <div class="direct-msg mb-3">
-                  <span><h6>Directory</h6></span>
-                </div>
-              </ui>
-              <div class="online-offline-list">
-                <div id="online-list"></div>
-                <div id="offline-list"></div>
-              </div>
-              <br>            
-            </ul>
-
-
           <!-- navigation bar -->
-          <nav class="navbar fixed-bottom custom-nav px-5">
+          <div class="row">
+            <nav class="navbar custom-nav px-5">
               <a class="navbar-brand" href="/main" style="color: #17a2b8;"><i class="fas fa-home"></i></a>
               <a class="navbar-brand" href="/announcement"><i class="far fa-bell"></i></a>
               <a class="navbar-brand" href="/profile"><i class="far fa-user"></i></a>
-          </nav>
+            </nav>
+          </div>
+  
+          <ul class="list-group list-group-flush directory-category">
+            <ui>
+              <h6 class="mb-2">Channels</h6>
+            </ui>
+            <li class="list-group-item list-group-item-action" style="border-radius: 0.5rem;">
+              <a href="/public-wall"># Public</a>
+            </li>
+          </ul>
+  
+          <ul class="list-group list-group-flush directory-category">
+            <ui>
+              <div class="direct-msg mb-2">
+                <span><h6>Directory</h6></span>
+                <a id="searchBtn" style="position: absolute; right: 1rem;" href="/search?context=directory"><i class="fas fa-search ml-3"></i></a>
+              </div>
+            </ui>
+
+            <div class="online-offline-list">
+              <div id="online-list"></div>
+              <div id="offline-list"></div>
+            </div>
+            <br>            
+          </ul>
+          
 
         </div>
 

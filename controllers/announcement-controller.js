@@ -14,7 +14,7 @@ class AnnouncementController {
           .send({ message: 'successfully create an announcement' });
       })
       .catch((e) => {
-        res.status(400).send(e);
+        res.status(400).json({ error: e });
       });
   }
 

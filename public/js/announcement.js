@@ -1,7 +1,7 @@
-const createAnnounce = $('#create-announcement');
-const announceModal = $('#announceModal');
 const socket = io();
 
+const createAnnounce = $('#create-announcement');
+const announceModal = $('#announceModal');
 const announcements = $('.announcements');
 const text = $('#announcement-text');
 const post = $('#confirmBtn');
@@ -12,8 +12,6 @@ function outputAnnouncement(newAnnouncement) {
   const announce = document.createElement('div');
   announce.classList.add('announcement');
   announce.classList.add('p-3');
-  //TODO: need unique id to replace collapseExample -> each announcement matches with one show button
-  //TODO: show button won't show unless the announcement is long
   const announcementId = `ann-${newAnnouncement._id}`;
   announce.innerHTML = `<p class="meta mb-1"> ${newAnnouncement.sender} <span class="ml-3"> ${timestamp} </span></p><p class="collapse" id=${announcementId} aria-expanded="false"> ${newAnnouncement.message} </p><a role="button" class="collapsed" data-toggle="collapse" href="#${announcementId}"aria-expanded="false" aria-controls=${announcementId}></a>`;
   announcements.prepend(announce);
