@@ -49,7 +49,9 @@ class searchInfoController {
     if(filteredKeywords.length === 0)
       res.status(400).json({ error: "no valid keyword" });
     else
-      Annoucement.searchAnnoucement(filteredKeywords, pagination).then((data)=>res.send(data));
+      Annoucement.searchAnnouncement(filteredKeywords, pagination).then((data) =>
+        res.send(data)
+      );
   }
 }
 

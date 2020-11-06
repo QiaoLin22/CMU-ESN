@@ -142,6 +142,29 @@ function searchMessage(keywords, roomId, pagination){
     });
 }
 
+function searchAnnouncement(keywords, pagination) {
+  fetch(`/api/search/announcements/${keywords}/${pagination}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
+    .then((res) => res.json())
+    .then((json) => {
+      if (json.error === 'no valid keyword') {
+        displayNotification('Please enter a valid keyword');
+      } else if (json.length === 0) displayNotification('no result found');
+      else {
+        json.forEach((result) => {
+          outputAnnouncement(result);
+        });
+      }
+    })
+    .catch((e) => {
+      console.log(e);
+    });
+}
+
 function searchStatus(roomId) {
   fetch(`/api/search/messages/${roomId}`, {
     method: 'GET',
