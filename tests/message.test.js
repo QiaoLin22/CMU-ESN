@@ -1,5 +1,5 @@
 // const DAO = require('../services/dao');
-const DBInMemory = require('../services/dbInMemory');
+const DBInMemory = require('../services/db-in-memory');
 
 const { User } = require('../models/user');
 const {
@@ -7,7 +7,7 @@ const {
   createNewMessage,
   getHistoricalMessages,
   updateAllToRead,
-  checkUnreadMessage,
+  numUnreadMessages,
 } = require('../models/message');
 
 // const dao = new DAO(DBInMemory)
@@ -15,50 +15,72 @@ const {
 beforeAll(DBInMemory.connect);
 afterAll(DBInMemory.close);
 
-describe('use case chat publicly', () => {
-  it('create new message successfully', async () => {
-    // create a new user
-    await new User({
+beforeEach(async () => {
+  // create new users
+  await User.insertMany([
+    {
       username: 'John',
       hash: '001',
       salt: '110',
-    }).save();
+      statusArray: [
+        {
+          timestamp: '1',
+          status: 'Undefined',
+        },
+        {
+          timestamp: '2',
+          status: 'OK',
+        },
+      ],
+    },
+    {
+      username: 'Mike',
+      hash: '002',
+      salt: '111',
+    },
+  ]);
+});
 
-    // console.log(newUser);
+afterEach(DBInMemory.cleanup);
 
-    await createNewMessage('John', 'test', 'public');
+describe('use case chat publicly', () => {
+  it('create new message successfully', async () => {
+    await createNewMessage('John', 'public', 'test', 'public');
 
-    const actual = await Message.find({ username: 'John' });
+    const result = await Message.findOne(
+      { sender: 'John' },
+      { _id: 0, __v: 0, timestamp: 0 }
+    );
+    const actual = result.toJSON();
 
-    const expected = [
-      {
-        read: false,
-        username: 'John',
-        message: 'test',
-        roomId: 'public',
-        status: 'Undefined',
-      },
-    ];
-    expect(actual[0].username).toEqual(expected[0].username);
-    expect(actual[0].read).toEqual(expected[0].read);
-    expect(actual[0].message).toEqual(expected[0].message);
-    expect(actual[0].roomId).toEqual(expected[0].roomId);
-    expect(actual[0].status).toEqual(expected[0].status);
+    const expected = {
+      read: false,
+      sender: 'John',
+      recipient: 'public',
+      message: 'test',
+      roomId: 'public',
+      status: 'OK',
+    };
+    expect(actual).toEqual(expected);
   });
 
   it('get historical message successfully', async () => {
+    await createNewMessage('John', 'public', 'test', 'public');
+
     const actual = await getHistoricalMessages('public');
 
     const expected = [
       {
         read: false,
-        username: 'John',
+        sender: 'John',
+        recipient: 'public',
         message: 'test',
         roomId: 'public',
-        status: 'Undefined',
+        status: 'OK',
       },
     ];
-    expect(actual[0].username).toEqual(expected[0].username);
+    expect(actual[0].sender).toEqual(expected[0].sender);
+    expect(actual[0].recipient).toEqual(expected[0].recipient);
     expect(actual[0].read).toEqual(expected[0].read);
     expect(actual[0].message).toEqual(expected[0].message);
     expect(actual[0].roomId).toEqual(expected[0].roomId);
@@ -67,32 +89,29 @@ describe('use case chat publicly', () => {
 });
 
 describe('use case chat privately', () => {
-  it('update message to read successfully', async () => {
-    await updateAllToRead('public');
-    const actual = await Message.find({ read: 0, roomId: 'public' });
-
-    expect(actual.length).toEqual(0);
+  beforeEach(async () => {
+    await Message.insertMany(
+      {
+        sender: 'John',
+        recipient: 'Mike',
+        message: 'hello',
+        roomId: 'JohnMike',
+        status: 'OK',
+      },
+      {
+        sender: 'Mike',
+        recipient: 'John',
+        message: 'hi',
+        roomId: 'JohnMike',
+        status: 'Undefined',
+      }
+    );
   });
 
-  it('get unread message successfully', async () => {
-    const otherUser = new User({
-      username: 'Mike',
-      hash: '00001',
-      salt: '0101001',
-      timestamp: '2020-10-21T05:08:23.867Z',
-    });
-    await otherUser.save();
+  it('update message to read successfully', async () => {
+    await updateAllToRead('JohnMike');
+    const actual = await Message.find({ read: false, roomId: 'JohnMike' });
 
-    const messageSentByMike = new Message({
-      username: 'Mike',
-      message: 'Unread',
-      roomId: 'JohnMike',
-      timestamp: '2020-10-21T05:08:23.867Z',
-    });
-    await messageSentByMike.save();
-
-    const actual = await checkUnreadMessage('John', 'Mike');
-
-    expect(actual.length).toEqual(1);
+    expect(actual.length).toEqual(0);
   });
 });

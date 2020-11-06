@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const reservedUsernames = require('../lib/reserved_usernames.json').usernames;
+const reservedUsernames = require('../lib/reserved-usernames.json').usernames;
 
 const userSchema = new mongoose.Schema({
   username: {
@@ -48,19 +48,42 @@ function createNewUser(username, hash, salt) {
   return newUser.save();
 }
 
-function retrieveUsers() {
-  return User.find(
-    {},
-    { _id: 0, __v: 0, hash: 0, salt: 0},
-    { sort: { online: -1, username: 1 } },
-  )
+async function retrieveUsers(username) {
+  return User.aggregate([
+    {
+      $lookup: {
+        from: 'messages',
+        let: { curr_username: '$username' },
+        pipeline: [
+          {
+            $match: {
+              $expr: {
+                $and: [
+                  { $eq: ['$recipient', username] },
+                  { $eq: ['$sender', '$$curr_username'] },
+                  { $eq: ['$read', false] },
+                ],
+              },
+            },
+          },
+        ],
+        as: 'unreadMessages',
+      },
+    },
+    {
+      $project: {
+        username: 1,
+        online: 1,
+        latestStatus: { $arrayElemAt: ['$statusArray', -1] },
+        numUnreadMessages: { $size: '$unreadMessages' },
+      },
+    },
+    { $sort: { online: -1, username: 1 } },
+  ]);
 }
 
 function findUserByUsername(username) {
-  return User.findOne(
-    { username: username },
-    { _id: 0, __v: 0},
-    );
+  return User.findOne({ username: username }, { _id: 0, __v: 0 });
 }
 
 function updateOnlineStatus(username, online) {
@@ -76,20 +99,16 @@ function updateStatusIcon(username, status) {
   return User.update(
     { username: username },
     { $push: { statusArray: objStatus } }
-  )
+  );
 }
 
-function getStatusByUsername(username) {
-  //TODO
-  return User.findOne(
-    { username: username }, 
-    { statusArray: 1 }
-    ).then((arr) => {
-      return arr.statusArray[arr.statusArray.length-1].status
-    }).catch((e) => {
-      console.log(e)
-    })
-    
+async function getStatusByUsername(username) {
+  const result = await User.aggregate([
+    { $match: { username: username } },
+    { $project: { status: { $arrayElemAt: ['$statusArray', -1] } } },
+  ]);
+
+  return result[0].status;
 }
 
 function validateUsernamePassword(username, password) {
@@ -102,23 +121,22 @@ function validateUsernamePassword(username, password) {
     throw Error('Passwords should be at least 4 characters long');
 }
 
-function retrieveUserStatus(username){
-  return User.find(
-    {username: username},
-    {statusArray:{$slice:-10}}
-    );
+function retrieveUserStatus(username) {
+  return User.find({ username: username }, { statusArray: { $slice: -10 } });
 }
 
 function findUserByKeyword(keyword) {
   return User.find(
     { username:{ $regex : keyword}}, 
     { _id: 0, __v: 0},
-    { sort: { online: -1, username: 1 } },
+    { sort: { online: -1, username: 1 } }
     );
 }
 
 function findUserByStatus(keyword) {
-  return User.find({$expr: {$eq: [{"$arrayElemAt": ["$statusArray.status", -1]}, keyword]}});
+  return User.find({
+    $expr: { $eq: [{ $arrayElemAt: ['$statusArray.status', -1] }, keyword] },
+  });
 }
 
 module.exports = {

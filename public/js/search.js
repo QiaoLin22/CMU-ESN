@@ -33,7 +33,7 @@ function outputMessage(message) {
   const timestamp = new Date(message.timestamp).toLocaleString();
   const msg = document.createElement('div');
   msg.classList.add('message');
-  msg.innerHTML = `<p class="meta mb-1"> ${message.username} <span>${icon}</span> <span class="ml-3"> ${timestamp} </span></p> <p class="text"> ${message.message} </p>`;
+  msg.innerHTML = `<p class="meta mb-1"> ${message.sender} <span>${icon}</span> <span class="ml-3"> ${timestamp} </span></p> <p class="text"> ${message.message} </p>`;
   chatMessages.append(msg);
 
   // scroll to the bottom
@@ -119,7 +119,7 @@ function searchUser(keywords) {
     });
 }
 
-function searchMessage(keywords, roomId) {
+function searchMessage(keywords, roomId, pagination){
   fetch(`/api/search/messages/${roomId}/${keywords}/${pagination}`, {
     method: 'GET',
     headers: {
@@ -169,6 +169,7 @@ $('#submitBtn').on('click', (element) => {
   element.preventDefault();
   pagination = 0;
   const keywords = msgEle.val();
+<<<<<<< HEAD
   if (searchContext === 'directory') {
     searchUser(keywords);
   } else if (searchContext === 'message') {
@@ -180,6 +181,23 @@ $('#submitBtn').on('click', (element) => {
       searchMessage(keywords, roomId);
     }
   } else {
+=======
+  if(!keywords){
+    //TODO add alert
+  }else{
+    if (searchContext === 'directory') {
+      searchUser(keywords);
+    } else if (searchContext === 'message') {
+      const roomId = urlParams.get('roomid');
+      if (keywords === 'status') {
+        searchStatus(roomId);
+      }else{
+        document.getElementById("loadBtn").style.visibility = "visible";
+        searchMessage(keywords, roomId, pagination);
+      }
+    } else {
+    }
+>>>>>>> c5319117e8d4915b1f8f6f0b93eeb30a00c5962e
   }
 });
 
@@ -205,8 +223,13 @@ $('#loadBtn').on('click', (element) => {
     const roomId = urlParams.get('roomid');
     if (keywords === 'status') {
       searchStatus(roomId);
+<<<<<<< HEAD
     } else {
       searchMessage(keywords, roomId);
+=======
+    }else{
+      searchMessage(keywords, roomId, pagination);
+>>>>>>> c5319117e8d4915b1f8f6f0b93eeb30a00c5962e
     }
   }
 });

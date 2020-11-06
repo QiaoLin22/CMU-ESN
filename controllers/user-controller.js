@@ -3,14 +3,14 @@ const {
   retrieveUsers,
   updateStatusIcon,
 } = require('../models/user');
-const utils = require('../lib/utils');
+const { genHashAndSalt } = require('../lib/password');
 
 class UserController {
   static createUser(req, res) {
     const { username, password } = req.body;
 
     // create new user and save to db
-    const { hash, salt } = utils.genHashAndSalt(password);
+    const { hash, salt } = genHashAndSalt(password);
     createNewUser(username, hash, salt)
       .then(() => {
         req.io.emit('updateDirectory');
@@ -29,8 +29,8 @@ class UserController {
   }
 
   static retrieveUsers(req, res, next) {
-    retrieveUsers()
-      .then((users) => res.status(200).json({ users }))
+    retrieveUsers(res.locals.username)
+      .then((users) => res.status(200).json(users))
       .catch((err) => next(err));
   }
 
@@ -40,7 +40,7 @@ class UserController {
       .then(() => {
         req.io.emit('updateDirectory');
         req.io.emit('updateMsgStatus', username);
-        res.status(201).send({ message: 'success' });
+        res.status(200).send({ message: 'success' });
       })
       .catch((err) => {
         console.log(err);
