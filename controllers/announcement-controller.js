@@ -8,7 +8,7 @@ class AnnouncementController {
     const { sender, message } = req.body;
     createNewAnnouncement(sender, message)
       .then((newAnnouncement) => {
-        req.io.emit('new announcement', newAnnouncement);
+        req.app.get('io').emit('new announcement', newAnnouncement);
         res
           .status(201)
           .send({ message: 'successfully create an announcement' });
@@ -17,6 +17,7 @@ class AnnouncementController {
         res.status(400).send(e);
       });
   }
+
   static getHistoricalAnnouncements(req, res) {
     getAllAnnouncements().then((announcements) => res.send(announcements));
   }
