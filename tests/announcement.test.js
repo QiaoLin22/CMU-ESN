@@ -6,17 +6,13 @@ const {
     Announcement,
     createNewAnnouncement,
     getAllAnnouncements,
-    searchAnnoucement,
 } = require('../models/announcement');
 const dbInMemory = require('../services/db-in-memory');
 
 // const dao = new DAO(DBInMemory);
 
 beforeAll(DBInMemory.connect);
-afterAll(done => {
-  DBInMemory.close();
-  done();
-});
+afterAll(DBInMemory.close);
 beforeEach(async () => {
   await Announcement.create({
     sender: 'John',
@@ -41,5 +37,15 @@ describe('use case post announcement', () => {
     expect(actual).toEqual(expected);
   });
 
-  
+  it('retrieve all announcements successfully', async () => {
+    const actual = await getAllAnnouncements();
+    console.log(actual)
+    const expected = ([
+      {
+      sender: 'John',
+      message: 'Hi',
+    }
+  ]);
+    expect(actual.length).toEqual(expected.length);
+  });
 });

@@ -7,10 +7,7 @@ const { Message } = require('../models/message');
 const { Announcement} = require('../models/announcement')
 
 beforeAll(DBInMemory.connect);
-afterAll(done => {
-  DBInMemory.close();
-  done();
-});
+afterAll(DBInMemory.close);
 beforeEach(async () => {
   // create new users
   await User.insertMany([
@@ -46,7 +43,7 @@ beforeEach(async () => {
     },
   ]);
 
-  await Message.insertMany([
+  await Message.insertMany(
     {
       sender: 'John',
       recipient: 'Mike',
@@ -61,7 +58,8 @@ beforeEach(async () => {
       roomId: 'JohnMike',
       status: 'Undefined',
     }
-  ]);
+  );
+
   await Announcement.insertMany([
     {
       sender: 'John',
@@ -70,13 +68,14 @@ beforeEach(async () => {
     },
     {
       sender: 'John',
-      timestamp: '1',
+      timestamp: '2',
       message: 'World',
     },
   ]);
 });
 
 afterEach(DBInMemory.cleanup);
+
 describe("GET '/messages/:roomId/:keywords/:pagination'", () => {
   test('It should respond with an array of messages with keyword', async () => {
     const token = createToken({ _id: '000', username: 'John' });
@@ -93,6 +92,7 @@ describe("GET '/messages/:roomId/:keywords/:pagination'", () => {
         status: 'OK',
       },
     ];
+    console.log(response.statusCode)
     expect(response.body.length).toEqual(expected.length);
     expect(response.body[0].message).toEqual(expected[0].message);
     expect(response.body[0].roomId).toEqual(expected[0].roomId);
@@ -101,7 +101,7 @@ describe("GET '/messages/:roomId/:keywords/:pagination'", () => {
 });
 
 describe("GET '/messages/:roomId'", () => {
-  test('It should respond with an array of user\'s status', async () => {
+  test("It should respond with an array of user\'s status", async () => {
     const token = createToken({ _id: '000', username: 'John' });
 
     const response = await request(app)
@@ -199,13 +199,11 @@ describe("GET '/users/:keywords'", () => {
 });
 
 
-
 describe("GET '/announcements/:keywords/:pagination'", () => {
   test('It should respond with an array of announcement with keyword', async () => {
     const token = createToken({ _id: '000', username: 'John' });
-    console.log(Announcement.find())
     const response = await request(app)
-      .get('/api/search/announcement/hello/0')
+      .get('/api/search/announcements/hello/0')
       .set('Cookie', `jwt=${token}`);
       console.log(response.body)
       console.log(response.statusCode)

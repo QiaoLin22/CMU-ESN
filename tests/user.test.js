@@ -15,10 +15,7 @@ const dbInMemory = require('../services/db-in-memory');
 // const dao = new DAO(DBInMemory);
 
 beforeAll(DBInMemory.connect);
-afterAll(done => {
-  DBInMemory.close();
-  done();
-});
+afterAll(DBInMemory.close);
 beforeEach(async () => {
   await User.create({
     username: 'Jack',
