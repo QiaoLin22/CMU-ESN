@@ -41,16 +41,16 @@ describe('GET /announcements', () => {
 describe('POST /announcements', () => {
   test('It should respond with the newly created announcement', async () => {
     const token = createToken({ _id: '000', username: 'John' });
-
+    const oneAnnouncement = {
+      sender: 'John',
+      message: 'Hi',
+    };
     const newAnnouncement = await request(app)
       .post('/api/announcements')
       .set('Cookie', `jwt=${token}`)
-      .send({
-        sender: 'John',
-        message: 'Hi',
-      });
+      .send(oneAnnouncement);
 
-    console.log(newAnnouncement.body);
+    console.log(newAnnouncement);
     // make sure we add it correctly
     expect(newAnnouncement.body).toHaveProperty('sender');
     expect(newAnnouncement.body).toHaveProperty('message');
