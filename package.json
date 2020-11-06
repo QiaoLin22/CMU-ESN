@@ -16,7 +16,8 @@
     "devStart": "nodemon -r dotenv/config app.js -e js,ejs,css",
     "start": "node app.js",
     "lint": "eslint",
-    "test": "jest --runInBand ./test"
+    "test": "jest --runInBand ./test",
+    "coverage": "jest tests/ --coverage"
   },
   "dependencies": {
     "bootstrap": "^4.5.2",
@@ -48,7 +49,8 @@
     }
   },
   "lint-staged": {
-    "!(*.ejs)": "prettier --write"
+    "*.js": "eslint --fix",
+    "*.{js,json,css,yml,md}": "prettier --write"
   },
   "jest": {
     "testEnvironment": "node"

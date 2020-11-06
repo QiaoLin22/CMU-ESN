@@ -14,7 +14,7 @@ const announcementsRouter = require('./routes/announcements');
 const searchRouter = require('./routes/search');
 
 const PORT = process.env.PORT || 3000;
-require('./services/db-production');
+// require('./services/db-production');
 
 // pass io to following middleware/router
 app.use((req, res, next) => {
@@ -64,3 +64,5 @@ io.on('connection', (socket) => {
     io.emit('displayUsers');
   });
 });
+
+module.exports = app;

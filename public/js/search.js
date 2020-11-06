@@ -119,11 +119,7 @@ function searchUser(keywords) {
     });
 }
 
-<<<<<<< HEAD
-function searchMessage(keywords, roomId) {
-=======
 function searchMessage(keywords, roomId, pagination){
->>>>>>> c5319117e8d4915b1f8f6f0b93eeb30a00c5962e
   fetch(`/api/search/messages/${roomId}/${keywords}/${pagination}`, {
     method: 'GET',
     headers: {
@@ -173,19 +169,6 @@ $('#submitBtn').on('click', (element) => {
   element.preventDefault();
   pagination = 0;
   const keywords = msgEle.val();
-<<<<<<< HEAD
-  if (searchContext === 'directory') {
-    searchUser(keywords);
-  } else if (searchContext === 'message') {
-    const roomId = urlParams.get('roomid');
-    if (keywords === 'status') {
-      searchStatus(roomId);
-    } else {
-      document.getElementById('loadBtn').style.visibility = 'visible';
-      searchMessage(keywords, roomId);
-    }
-  } else {
-=======
   if(!keywords){
     //TODO add alert
   }else{
@@ -201,7 +184,6 @@ $('#submitBtn').on('click', (element) => {
       }
     } else {
     }
->>>>>>> c5319117e8d4915b1f8f6f0b93eeb30a00c5962e
   }
 });
 
@@ -227,13 +209,8 @@ $('#loadBtn').on('click', (element) => {
     const roomId = urlParams.get('roomid');
     if (keywords === 'status') {
       searchStatus(roomId);
-<<<<<<< HEAD
-    } else {
-      searchMessage(keywords, roomId);
-=======
     }else{
       searchMessage(keywords, roomId, pagination);
->>>>>>> c5319117e8d4915b1f8f6f0b93eeb30a00c5962e
     }
   }
 });
