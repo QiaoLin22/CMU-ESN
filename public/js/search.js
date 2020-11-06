@@ -166,6 +166,7 @@ function searchAnnouncement(keywords, pagination) {
         displayNotification('Please enter a valid keyword');
       } else if (json.length === 0) displayNotification('no result found');
       else {
+        document.getElementById('loadBtn').style.visibility = 'visible';
         json.forEach((result) => {
           outputAnnouncement(result);
         });
