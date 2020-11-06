@@ -29,6 +29,16 @@ beforeEach(async () => {
       username: 'Mike',
       hash: '002',
       salt: '111',
+      statusArray: [
+        {
+          timestamp: '1',
+          status: 'Undefined',
+        },
+        {
+          timestamp: '2',
+          status: 'Help',
+        },
+      ],
     },
   ]);
 
@@ -49,6 +59,7 @@ beforeEach(async () => {
     }
   );
 });
+afterEach(DBInMemory.cleanup);
 
 describe("GET '/messages/:roomId/:keywords/:pagination'", () => {
   test('It should respond with an array of messages with keyword', async () => {
@@ -57,7 +68,6 @@ describe("GET '/messages/:roomId/:keywords/:pagination'", () => {
     const response = await request(app)
       .get('/api/search/messages/JohnMike/hello/0')
       .set('Cookie', `jwt=${token}`);
-    console.log(response.body);
     const expected = [
       {
         sender: 'John',
@@ -67,10 +77,44 @@ describe("GET '/messages/:roomId/:keywords/:pagination'", () => {
         status: 'OK',
       },
     ];
-    console.log(response.statusCode);
     expect(response.body.length).toEqual(expected.length);
     expect(response.body[0].message).toEqual(expected[0].message);
     expect(response.body[0].roomId).toEqual(expected[0].roomId);
+    expect(response.statusCode).toBe(200);
+  });
+});
+
+describe("GET '/messages/:roomId'", () => {
+  test('It should respond with an array of user\'s status', async () => {
+    const token = createToken({ _id: '000', username: 'John' });
+
+    const response = await request(app)
+      .get('/api/search/messages/JohnMike')
+      .set('Cookie', `jwt=${token}`);
+    console.log(response.body);
+    const expected = [
+      {
+        username: 'Mike',
+        hash: '002',
+        salt: '111',
+        statusArray: [
+          {
+            timestamp: '1',
+            status: 'Undefined',
+          },
+          {
+            timestamp: '2',
+            status: 'Help',
+          },
+        ],
+      },
+    ];
+    console.log(response.statusCode);
+    expect(response.body.length).toEqual(expected.length);
+    expect(response.body[0].username).toEqual(expected[0].username);
+    expect(response.body[0].statusArray.length).toEqual(
+      expected[0].statusArray.length
+    );
     expect(response.statusCode).toBe(200);
   });
 });

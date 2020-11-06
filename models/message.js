@@ -59,10 +59,10 @@ function updateAllToRead(roomId) {
   return Message.updateMany({ roomId: roomId }, { read: true });
 }
 
-function searchMessage(roomId, filteredKeywords, pagination){
+function searchMessage(roomId, filteredKeywords, pagination) {
   const query = [];
-  filteredKeywords.forEach(keyword => {
-    query.push({ roomId: roomId, message: { $regex: keyword, $options:'i'}});
+  filteredKeywords.forEach((keyword) => {
+    query.push({ roomId: roomId, message: { $regex: keyword, $options: 'i' } });
   });
   return Message.find({ $and: query })
     .sort({ timestamp: -1 })
