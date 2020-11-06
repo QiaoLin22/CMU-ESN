@@ -84,7 +84,7 @@ describe("GET '/messages/:roomId/:keywords/:pagination'", () => {
 });
 
 describe("GET '/messages/:roomId'", () => {
-  test('It should respond with an array of user\'s status', async () => {
+  test("It should respond with an array of user's status", async () => {
     const token = createToken({ _id: '000', username: 'John' });
 
     const response = await request(app)

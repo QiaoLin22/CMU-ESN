@@ -29,6 +29,6 @@ router.get(
   `/announcement/:keywords/:pagination`,
   authenticateUser,
   SearchInfoController.searchAnnouncement
-)
+);
 
 module.exports = router;
