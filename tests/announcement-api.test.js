@@ -1,8 +1,15 @@
 const request = require('supertest');
+const http = require('http');
+const socketIO = require('socket.io');
+
 const app = require('../app');
 const DBInMemory = require('../services/db-in-memory');
 const { createToken } = require('../lib/jwt');
 const { Announcement } = require('../models/announcement');
+
+const server = http.createServer(app);
+const io = socketIO.listen(server);
+app.set('io', io);
 
 beforeAll(DBInMemory.connect);
 afterAll(DBInMemory.close);
@@ -23,10 +30,10 @@ beforeEach(async () => {
 });
 afterEach(DBInMemory.cleanup);
 
+const token = createToken({ _id: '000', username: 'John' });
+
 describe('GET /announcements', () => {
   test('It should respond with an array of announcements', async () => {
-    const token = createToken({ _id: '000', username: 'John' });
-
     const response = await request(app)
       .get('/api/announcements')
       .set('Cookie', `jwt=${token}`);
@@ -40,7 +47,6 @@ describe('GET /announcements', () => {
 
 describe('POST /announcements', () => {
   test('It should respond with the newly created announcement', async () => {
-    const token = createToken({ _id: '000', username: 'John' });
     const oneAnnouncement = {
       sender: 'John',
       message: 'Hi',
@@ -50,12 +56,13 @@ describe('POST /announcements', () => {
       .set('Cookie', `jwt=${token}`)
       .send(oneAnnouncement);
 
-    console.log(newAnnouncement);
     // make sure we add it correctly
     expect(newAnnouncement.statusCode).toBe(201);
 
     // make sure we have 3 announcements now
-    const response = await request(app).get('/api/announcements');
+    const response = await request(app)
+      .get('/api/announcements')
+      .set('Cookie', `jwt=${token}`);
     expect(response.body.length).toBe(3);
   });
 });
