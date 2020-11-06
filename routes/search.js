@@ -25,4 +25,10 @@ router.get(
   SearchInfoController.searchUser
 );
 
+router.get(
+  `/announcement/:keywords/:pagination`,
+  authenticateUser,
+  SearchInfoController.searchAnnouncement
+)
+
 module.exports = router;

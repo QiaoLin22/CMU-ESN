@@ -119,7 +119,11 @@ function searchUser(keywords) {
     });
 }
 
+<<<<<<< HEAD
+function searchMessage(keywords, roomId) {
+=======
 function searchMessage(keywords, roomId, pagination){
+>>>>>>> c5319117e8d4915b1f8f6f0b93eeb30a00c5962e
   fetch(`/api/search/messages/${roomId}/${keywords}/${pagination}`, {
     method: 'GET',
     headers: {
