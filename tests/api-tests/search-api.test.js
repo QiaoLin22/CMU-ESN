@@ -1,10 +1,17 @@
 const request = require('supertest');
+const http = require('http');
+const socketIO = require('socket.io');
+
 const app = require('../../app');
 const { createToken } = require('../../lib/jwt');
 const DBInMemory = require('../../services/db-in-memory');
 const { User } = require('../../models/user');
 const { Message } = require('../../models/message');
 const { Announcement } = require('../../models/announcement');
+
+const server = http.createServer(app);
+const io = socketIO.listen(server);
+app.set('io', io);
 
 beforeAll(DBInMemory.connect);
 afterAll(DBInMemory.close);

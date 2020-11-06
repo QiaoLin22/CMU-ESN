@@ -95,6 +95,18 @@ function outputUser(result) {
   }
 }
 
+/* display searched announcement */
+function outputAnnouncement(newAnnouncement) {
+  const timestamp = new Date(newAnnouncement.timestamp).toLocaleString();
+  const announce = document.createElement('div');
+  announce.classList.add('announcement');
+  announce.classList.add('p-3');
+
+  const announcementId = `ann-${newAnnouncement._id}`;
+  announce.innerHTML = `<p class="meta mb-1"> ${newAnnouncement.sender} <span class="ml-3"> ${timestamp} </span></p><p class="collapse" id=${announcementId} aria-expanded="false"> ${newAnnouncement.message} </p><a role="button" class="collapsed" data-toggle="collapse" href="#${announcementId}"aria-expanded="false" aria-controls=${announcementId}></a>`;
+  chatMessages.append(announce);
+}
+
 function searchUser(keywords) {
   fetch(`/api/search/users/${keywords}`, {
     method: 'GET',
@@ -155,6 +167,7 @@ function searchAnnouncement(keywords, pagination) {
         displayNotification('Please enter a valid keyword');
       } else if (json.length === 0) displayNotification('no result found');
       else {
+        document.getElementById('loadBtn').style.visibility = 'visible';
         json.forEach((result) => {
           outputAnnouncement(result);
         });
