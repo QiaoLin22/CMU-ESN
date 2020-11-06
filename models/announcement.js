@@ -32,20 +32,20 @@ function getAllAnnouncements() {
   return Announcement.find({});
 }
 
-function searchAnnoucement(filteredKeywords, pagination){
+function searchAnnouncement(filteredKeywords, pagination) {
   const query = [];
-  filteredKeywords.forEach(keyword => {
-    query.push({ message: { $regex: keyword, $options:'i'}});
+  filteredKeywords.forEach((keyword) => {
+    query.push({ message: { $regex: keyword, $options: 'i' } });
   });
-  return Announcement.find( {$and: query})
-  .sort({timestamp:-1})
-  .skip(pagination*10)
-  .limit(10);
+  return Announcement.find({ $and: query })
+    .sort({ timestamp: -1 })
+    .skip(pagination * 10)
+    .limit(10);
 }
 
 module.exports = {
   Announcement,
   createNewAnnouncement,
   getAllAnnouncements,
-  searchAnnoucement,
+  searchAnnouncement,
 };
