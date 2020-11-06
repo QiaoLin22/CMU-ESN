@@ -21,16 +21,21 @@ class MessageController {
 
   static createPrivateMessage(req, res) {
     const { sender, recipient, message, roomId } = req.body;
-    createNewMessage(sender, recipient, message, roomId)
-      .then((newMessage) => {
-        req.app.get('io').in(roomId).emit('new private message', newMessage);
-        req.app.get('io').emit('updateDirectory');
-        res.status(201).send({ message: 'successfully create a message' });
-      })
-      .catch((e) => {
-        console.log(e);
-        res.status(400).send(e);
-      });
+    if (!sender || !recipient || !message || !roomId) {
+      res.status(400).end();
+    } else {
+      createNewMessage(sender, recipient, message, roomId)
+        .then((newMessage) => {
+          req.app.get('io').in(roomId).emit('new private message', newMessage);
+          req.app.get('io').emit('updateDirectory');
+          console.log('201');
+          res.status(201).send({ message: 'success' });
+        })
+        .catch((e) => {
+          console.log(e);
+          res.status(400).send(e);
+        });
+    }
   }
 
   static getPublicMessage(req, res) {

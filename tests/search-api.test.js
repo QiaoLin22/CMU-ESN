@@ -99,7 +99,6 @@ describe("GET '/messages/:roomId/:keywords/:pagination'", () => {
         status: 'OK',
       },
     ];
-    console.log(response.statusCode)
     expect(response.body.length).toEqual(expected.length);
     expect(response.body[0].message).toEqual(expected[0].message);
     expect(response.body[0].roomId).toEqual(expected[0].roomId);
@@ -172,7 +171,6 @@ describe("GET '/users/:keywords'", () => {
     expect(response.statusCode).toBe(200);
   });
 
-
   test('It should respond with an array of user with status', async () => {
     const token = createToken({ _id: '000', username: 'John' });
 
@@ -205,25 +203,21 @@ describe("GET '/users/:keywords'", () => {
   });
 });
 
-
 describe("GET '/announcements/:keywords/:pagination'", () => {
   test('It should respond with an array of announcement with keyword', async () => {
     const token = createToken({ _id: '000', username: 'John' });
     const response = await request(app)
       .get('/api/search/announcements/hello/0')
       .set('Cookie', `jwt=${token}`);
-      console.log(response.body)
-      console.log(response.statusCode)
-      const expected = [
-        {
-          sender: 'John',
-          timestamp: '1',
-          message: 'Hello',
-        },
-      ];
+    const expected = [
+      {
+        sender: 'John',
+        timestamp: '1',
+        message: 'Hello',
+      },
+    ];
     expect(response.body.length).toEqual(expected.length);
     expect(response.body[0].message).toEqual(expected[0].message);
     expect(response.statusCode).toBe(200);
   });
 });
-

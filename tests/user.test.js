@@ -10,7 +10,6 @@ const {
   getStatusByUsername,
   findUserByUsername,
 } = require('../models/user');
-const dbInMemory = require('../services/db-in-memory');
 
 // const dao = new DAO(DBInMemory);
 
@@ -23,7 +22,7 @@ beforeEach(async () => {
     salt: '001',
   });
 });
-afterEach(dbInMemory.cleanup);
+afterEach(DBInMemory.cleanup);
 
 describe('use case join community', () => {
   it('create new user successfully', async () => {
