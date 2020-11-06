@@ -7,7 +7,6 @@ const {
   createNewMessage,
   getHistoricalMessages,
   updateAllToRead,
-  numUnreadMessages,
 } = require('../models/message');
 
 // const dao = new DAO(DBInMemory)
