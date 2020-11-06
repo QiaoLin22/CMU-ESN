@@ -30,7 +30,7 @@ class LoginLogoutController {
         });
 
         updateOnlineStatus(username, true).then(() => {
-          req.io.emit('updateDirectory');
+          req.app.get('io').emit('updateDirectory');
           res.location('/main').json({});
         });
       } else {
@@ -47,7 +47,7 @@ class LoginLogoutController {
     const { username } = res.locals;
     updateOnlineStatus(username, false)
       .then(() => {
-        req.io.emit('updateDirectory');
+        req.app.get('io').emit('updateDirectory');
         res.status(200).end();
       })
       .catch((err) => {

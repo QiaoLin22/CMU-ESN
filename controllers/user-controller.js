@@ -13,7 +13,7 @@ class UserController {
     const { hash, salt } = genHashAndSalt(password);
     createNewUser(username, hash, salt)
       .then(() => {
-        req.io.emit('updateDirectory');
+        req.app.get('io').emit('updateDirectory');
         res.status(201).send({ message: 'success' });
       })
       .catch((err) => {
@@ -38,8 +38,8 @@ class UserController {
     const { status, username } = req.body;
     updateStatusIcon(username, status)
       .then(() => {
-        req.io.emit('updateDirectory');
-        req.io.emit('updateMsgStatus', username);
+        req.app.get('io').emit('updateDirectory');
+        req.app.get('io').emit('updateMsgStatus', username);
         res.status(200).send({ message: 'success' });
       })
       .catch((err) => {
