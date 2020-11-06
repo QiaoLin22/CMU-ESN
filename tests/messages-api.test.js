@@ -49,7 +49,7 @@ beforeEach(async () => {
     },
   ]);
 
-  await Message.insertMany(
+  await Message.insertMany([
     {
       sender: 'John',
       recipient: 'Mike',
@@ -63,8 +63,8 @@ beforeEach(async () => {
       message: 'World',
       roomId: 'JohnMike',
       status: 'Undefined',
-    }
-  );
+    },
+  ]);
 });
 
 afterEach(DBInMemory.cleanup);
@@ -90,7 +90,7 @@ describe('GET /messages/private/:roomId', () => {
       .get('/api/messages/private/JohnMike')
       .set('Cookie', `jwt=${token}`);
     expect(response.statusCode).toBe(200);
-    expect(response.body).toEqual([]);
+    expect(response.body.length).toBe(2);
   });
 });
 
