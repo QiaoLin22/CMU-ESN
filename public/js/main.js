@@ -4,11 +4,6 @@ const socket = io();
 const username = $('#username-data').val();
 socket.emit('join room', username);
 
-// const ok = $('.status-btn:nth-child(1)');
-// const help = $('.status-btn:nth-child(2)');
-// const emergency = $('.status-btn:nth-child(3)');
-// const na = $('.status-btn:nth-child(4)');
-
 function getGetOptions() {
   return {
     method: 'GET',
@@ -21,7 +16,7 @@ function getGetOptions() {
 function outputUser(user) {
   const { online, numUnreadMessages } = user;
   const otherUsername = user.username;
-  const status = user.latestStatus.status;
+  const { status } = user.latestStatus;
 
   let icon = '';
   if (status === 'OK') {

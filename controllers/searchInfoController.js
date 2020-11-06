@@ -18,8 +18,8 @@ class searchInfoController {
     const { pagination } = req.params;
     const keywordsArray = keywords.split(/[^A-Za-z0-9]/);
     const filteredKeywords = filterStopwords(keywordsArray);
-    if(filteredKeywords.length === 0)
-      res.status(400).json({ error: "no valid keyword" });
+    if (filteredKeywords.length === 0)
+      res.status(400).json({ error: 'no valid keyword' });
     else
       Messages.searchMessage(roomId, filteredKeywords, pagination).then((data)=>res.send(data));
   }
@@ -49,7 +49,9 @@ class searchInfoController {
     if(filteredKeywords.length === 0)
       res.status(400).json({ error: "no valid keyword" });
     else
-      Annoucement.searchAnnoucement(filteredKeywords, pagination).then((data)=>res.send(data));
+      Annoucement.searchAnnouncement(filteredKeywords, pagination).then((data) =>
+        res.send(data)
+      );
   }
 }
 

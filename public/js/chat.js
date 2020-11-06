@@ -106,6 +106,8 @@ function displayNotification(username) {
 socket.on('new private message', (newMsg) => {
   //if user is in the same room with the sender of the new message
   //display the new message
+  console.log(roomId);
+  console.log(newMsg.roomId)
   if (newMsg.roomId === roomId) {
     //if the message is not send by current user
     //mark the message as read
@@ -116,6 +118,7 @@ socket.on('new private message', (newMsg) => {
   } else {
     //if user is not in the same room with the sender of the new message
     //send notification
+    console.log("ok");
     displayNotification(newMsg.sender);
   }
 });
