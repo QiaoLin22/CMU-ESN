@@ -60,6 +60,7 @@ beforeEach(async () => {
   );
 });
 afterEach(DBInMemory.cleanup);
+
 describe("GET '/messages/:roomId/:keywords/:pagination'", () => {
   test('It should respond with an array of messages with keyword', async () => {
     const token = createToken({ _id: '000', username: 'John' });
@@ -90,7 +91,6 @@ describe("GET '/messages/:roomId'", () => {
     const response = await request(app)
       .get('/api/search/messages/JohnMike')
       .set('Cookie', `jwt=${token}`);
-    console.log(response.body);
     const expected = [
       {
         username: 'Mike',
@@ -108,7 +108,7 @@ describe("GET '/messages/:roomId'", () => {
         ],
       },
     ];
-    console.log(response.statusCode);
+
     expect(response.body.length).toEqual(expected.length);
     expect(response.body[0].username).toEqual(expected[0].username);
     expect(response.body[0].statusArray.length).toEqual(

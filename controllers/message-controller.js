@@ -21,11 +21,15 @@ class MessageController {
 
   static createPrivateMessage(req, res) {
     const { sender, recipient, message, roomId } = req.body;
+    if (!sender || !recipient || !message || !roomId) {
+      res.status(400).end();
+    }
     createNewMessage(sender, recipient, message, roomId)
       .then((newMessage) => {
         req.app.get('io').in(roomId).emit('new private message', newMessage);
         req.app.get('io').emit('updateDirectory');
-        res.status(201).send({ message: 'successfully create a message' });
+        console.log('201');
+        res.status(201).send({ message: 'success' });
       })
       .catch((e) => {
         console.log(e);
