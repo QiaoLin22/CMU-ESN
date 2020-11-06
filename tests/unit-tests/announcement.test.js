@@ -1,6 +1,4 @@
-// const DAO = require('../services/dao');
 const DBInMemory = require('../../services/db-in-memory');
-// console.log(DBInMemory);
 
 const {
   Announcement,
@@ -8,8 +6,6 @@ const {
   getAllAnnouncements,
 } = require('../../models/announcement');
 const dbInMemory = require('../../services/db-in-memory');
-
-// const dao = new DAO(DBInMemory);
 
 beforeAll(DBInMemory.connect);
 afterAll(DBInMemory.close);
