@@ -13,10 +13,11 @@
   "author": "",
   "main": "app.js",
   "scripts": {
-    "devStart": "nodemon -r dotenv/config app.js -e js,ejs,css",
-    "start": "node app.js",
+    "devStart": "nodemon -r dotenv/config server.js -e js,ejs,css",
+    "start": "node server.js",
     "lint": "eslint",
-    "test": "jest --runInBand ./test"
+    "test": "jest --runInBand ./test",
+    "coverage": "jest tests/ --coverage"
   },
   "dependencies": {
     "cookie-parser": "^1.4.5",
@@ -40,7 +41,7 @@
     "mongodb-memory-server": "^6.9.2",
     "nodemon": "^2.0.4",
     "prettier": "^2.1.2",
-    "supertest": "^6.0.0"
+    "supertest": "^6.0.1"
   },
   "husky": {
     "hooks": {
