@@ -8,7 +8,7 @@ const AnnouncementSchema = mongoose.Schema({
   timestamp: {
     type: String,
     required: [true, 'Timestamp is required'],
-    default: new Date(Date.now()).toISOString(),
+    default: () => new Date(Date.now()).toISOString(),
   },
   message: {
     type: String,
@@ -21,7 +21,6 @@ const Announcement = mongoose.model('Announcement', AnnouncementSchema);
 function createNewAnnouncement(sender, message) {
   const newAnnouncement = new Announcement({
     sender: sender,
-    timestamp: new Date(Date.now()).toISOString(),
     message: message,
   });
 
