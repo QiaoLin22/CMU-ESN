@@ -13,7 +13,7 @@ const MessageSchema = mongoose.Schema({
   timestamp: {
     type: String,
     required: [true, 'Timestamp is required'],
-    default: new Date(Date.now()).toISOString(),
+    default: () => new Date(Date.now()).toISOString(),
   },
   message: {
     type: String,

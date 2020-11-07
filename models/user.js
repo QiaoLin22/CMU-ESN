@@ -22,7 +22,7 @@ const userSchema = new mongoose.Schema({
     ],
     default: [
       {
-        timestamp: new Date(Date.now()).toISOString(),
+        timestamp: () => new Date(Date.now()).toISOString(),
         status: 'Undefined',
       },
     ],
@@ -39,7 +39,7 @@ function createNewUser(username, hash, salt) {
     online: false,
     statusArray: [
       {
-        timestamp: new Date(Date.now()).toISOString(),
+        timestamp: () => new Date(Date.now()).toISOString(),
         status: 'Undefined',
       },
     ],
@@ -127,10 +127,10 @@ function retrieveUserStatus(username) {
 
 function findUserByKeyword(keyword) {
   return User.find(
-    { username:{ $regex : keyword}}, 
-    { _id: 0, __v: 0},
+    { username: { $regex: keyword } },
+    { _id: 0, __v: 0 },
     { sort: { online: -1, username: 1 } }
-    );
+  );
 }
 
 function findUserByStatus(keyword) {
