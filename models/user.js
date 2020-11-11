@@ -27,6 +27,10 @@ const userSchema = new mongoose.Schema({
       },
     ],
   },
+  location: {
+    longitude: { type: Number },
+    latitude: { type: Number },
+  }
 });
 
 const User = mongoose.model('User', userSchema);
@@ -141,6 +145,14 @@ function findUserByStatus(keyword) {
   );
 }
 
+function updateUserLocation(username, lo, la) {
+  const newLocation = {longitude: lo, latitude: la};
+  return User.updateOne(
+    { username: username }, // Filter
+    { $set: { location: newLocation } } // Update
+  );
+}
+
 module.exports = {
   User,
   createNewUser,
@@ -153,4 +165,5 @@ module.exports = {
   retrieveUserStatus,
   findUserByKeyword,
   findUserByStatus,
+  updateUserLocation
 };

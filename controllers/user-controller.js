@@ -2,6 +2,7 @@ const {
   createNewUser,
   retrieveUsers,
   updateStatusIcon,
+  updateUserLocation
 } = require('../models/user');
 const { genHashAndSalt } = require('../lib/password');
 
@@ -46,6 +47,18 @@ class UserController {
         console.log(err);
         res.status(400).json({ error: err });
       });
+  }
+  static updateLocation(req, res, next) {
+    const {username,longitude, latitude} = req.body;
+    updateUserLocation(username,longitude,latitude)
+    .then(() => {
+      req.app.get('io').emit('updateMap', username);
+      res.status(200).send({ message: 'success' });
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(400).json({ error: err });
+    });
   }
 }
 

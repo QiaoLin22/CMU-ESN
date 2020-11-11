@@ -1,4 +1,5 @@
 const logoutBtn = $('#logoutBtn');
+const locationBtn = $('#locationBtn')
 const ok = $('.status-btn:nth-child(1)');
 const help = $('.status-btn:nth-child(2)');
 const emergency = $('.status-btn:nth-child(3)');
@@ -28,6 +29,14 @@ updateStatus(help);
 updateStatus(emergency);
 updateStatus(na);
 
+function displayNotification() {
+  $('.toast-body').replaceWith(
+    `<div class="toast-body pl-3 pt-2 pr-2 pb-2">Your location has been updated</div>`
+  );
+  $('.toast').css('zIndex', 1000);
+  $('.toast').toast('show');
+}
+
 logoutBtn.on('click', () => {
   fetch('/api/users/logout', {
     method: 'PUT',
@@ -42,3 +51,40 @@ logoutBtn.on('click', () => {
     }
   });
 });
+
+locationBtn.on('click', async() => {
+  const options = {
+    enableHighAccuracy: true,
+    timeout: 5000,
+    maximumAge: 0
+  };
+  await navigator.geolocation.getCurrentPosition(successLocation, errorLocation, options);
+  displayNotification();
+});
+
+function successLocation(position) {
+  const crd = position.coords;
+  console.log(`Latitude : ${crd.latitude}`);
+  console.log(`Longitude: ${crd.longitude}`);
+  const location = {
+    username: username,
+    longitude: crd.longitude,
+    latitude: crd.latitude,
+  };
+
+  fetch(`/api/users/location`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(location),
+  }).catch((e) => {
+    console.log(e);
+  });
+}
+
+function errorLocation(err) {
+  console.warn(`ERROR(${err.code}): ${err.message}`);
+}
+
+

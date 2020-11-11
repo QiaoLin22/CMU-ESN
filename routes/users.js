@@ -10,6 +10,8 @@ router.post('/', UserController.createUser);
 
 router.post('/login', LoginLogoutController.login);
 
+router.post('/location', UserController.updateLocation);
+
 router.put('/logout', authenticateUser, LoginLogoutController.logout);
 
 router.put('/', UserController.updateStatus);
