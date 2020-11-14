@@ -1,5 +1,6 @@
 const logoutBtn = $('#logoutBtn');
-const locationBtn = $('#locationBtn')
+const updateLocationBtn = $('.location-btn:nth-child(1)');
+const deleteLocationBtn = $('.location-btn:nth-child(2)');
 const ok = $('.status-btn:nth-child(1)');
 const help = $('.status-btn:nth-child(2)');
 const emergency = $('.status-btn:nth-child(3)');
@@ -37,6 +38,14 @@ function displayNotification() {
   $('.toast').toast('show');
 }
 
+function displayDeleteNotification() {
+  $('.toast-body').replaceWith(
+    `<div class="toast-body pl-3 pt-2 pr-2 pb-2">Your have stopped sharing location to others</div>`
+  );
+  $('.toast').css('zIndex', 1000);
+  $('.toast').toast('show');
+}
+
 logoutBtn.on('click', () => {
   fetch('/api/users/logout', {
     method: 'PUT',
@@ -52,7 +61,7 @@ logoutBtn.on('click', () => {
   });
 });
 
-locationBtn.on('click', async() => {
+updateLocationBtn.on('click', async() => {
   const options = {
     enableHighAccuracy: true,
     timeout: 5000,
@@ -86,5 +95,9 @@ function successLocation(position) {
 function errorLocation(err) {
   console.warn(`ERROR(${err.code}): ${err.message}`);
 }
+
+deleteLocationBtn.on('click', async() => {
+  displayDeleteNotification();
+});
 
 

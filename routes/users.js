@@ -6,6 +6,8 @@ const UserController = require('../controllers/user-controller');
 
 router.get('/', authenticateUser, UserController.retrieveUsers);
 
+router.get('/location', authenticateUser, UserController.retrieveUserLocations);
+
 router.post('/', UserController.createUser);
 
 router.post('/login', LoginLogoutController.login);

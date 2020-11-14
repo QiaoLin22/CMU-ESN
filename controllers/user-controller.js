@@ -2,7 +2,8 @@ const {
   createNewUser,
   retrieveUsers,
   updateStatusIcon,
-  updateUserLocation
+  updateUserLocation,
+  retrieveLocations
 } = require('../models/user');
 const { genHashAndSalt } = require('../lib/password');
 
@@ -59,6 +60,11 @@ class UserController {
       console.log(err);
       res.status(400).json({ error: err });
     });
+  }
+  static retrieveUserLocations(req, res, next) {
+    retrieveLocations()
+      .then((locations) => res.status(200).json(locations))
+      .catch((err) => next(err));
   }
 }
 
