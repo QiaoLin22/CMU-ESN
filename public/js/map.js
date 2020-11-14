@@ -49,7 +49,7 @@ function addMarker(map,locations,name,status) {
     '<div id="bodyContent">' +
     "<p>username:</p>" + "<p><b>" + name + "</b></p>" +
     "<p>status:</p>" + "<p><b>" + status + "</b></p>" +
-    '<p>Go to private chat: </p>' + `<a href="http://localhost:3000/private-chat/${roomId}"</a>Link to private chat with ${name}`
+    '<p>Go to private chat: </p>' + `<a href="/private-chat/${roomId}"</a>Link to private chat with ${name}`
     "</div>" +
     "</div>";
 
@@ -118,4 +118,6 @@ function initMap() {
   });
 }
 
-
+socket.on('updateMap', () => {
+  initMap();
+});

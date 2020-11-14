@@ -36,11 +36,12 @@ class UserController {
       .catch((err) => next(err));
   }
 
-  static updateStatus(req, res, next) {
+  static updateStatus(req, res) {
     const { status, username } = req.body;
     updateStatusIcon(username, status)
       .then(() => {
         req.app.get('io').emit('updateDirectory');
+        req.app.get('io').emit('updateMap');
         req.app.get('io').emit('updateMsgStatus', username);
         res.status(200).send({ message: 'success' });
       })
@@ -49,11 +50,11 @@ class UserController {
         res.status(400).json({ error: err });
       });
   }
-  static updateLocation(req, res, next) {
+  static updateLocation(req, res) {
     const {username,longitude, latitude} = req.body;
     updateUserLocation(username,longitude,latitude)
     .then(() => {
-      req.app.get('io').emit('updateMap', username);
+      req.app.get('io').emit('updateMap');
       res.status(200).send({ message: 'success' });
     })
     .catch((err) => {

@@ -61,20 +61,8 @@ logoutBtn.on('click', () => {
   });
 });
 
-updateLocationBtn.on('click', async() => {
-  const options = {
-    enableHighAccuracy: true,
-    timeout: 5000,
-    maximumAge: 0
-  };
-  await navigator.geolocation.getCurrentPosition(successLocation, errorLocation, options);
-  displayNotification();
-});
-
 function successLocation(position) {
   const crd = position.coords;
-  console.log(`Latitude : ${crd.latitude}`);
-  console.log(`Longitude: ${crd.longitude}`);
   const location = {
     username: username,
     longitude: crd.longitude,
@@ -95,6 +83,17 @@ function successLocation(position) {
 function errorLocation(err) {
   console.warn(`ERROR(${err.code}): ${err.message}`);
 }
+
+updateLocationBtn.on('click', async() => {
+  const options = {
+    enableHighAccuracy: true,
+    timeout: 5000,
+    maximumAge: 0
+  };
+  await navigator.geolocation.getCurrentPosition(successLocation, errorLocation, options);
+  displayNotification();
+});
+
 
 deleteLocationBtn.on('click', async() => {
   displayDeleteNotification();

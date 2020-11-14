@@ -47,20 +47,6 @@
             </span>
           </div>
 
-          <div class="direct-msg mt-3">
-            <span><h6>Location Options</h6></span>
-            <span class="dropdown">
-              <a class="btn btn-info dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Status
-              </a>
-              <div class="dropdown-menu dropdown-menu-right dropdown-container mt-2 pt-3 pb-3" aria-labelledby="dropdownMenuLink" >
-                <a class="dropdown-item location-btn" href="#">Update current Location<i class="fas fa-info-circle ml-2"></i></a>
-                <a class="dropdown-item location-btn" href="#">Stop sharing Location<i class="fas fa-info-circle ml-2"></i></a>
-              </div>
-            </span>
-          </div>
-
-          <!-- <button id="locationBtn" class="btn btn-info">Update Geolocation</button> -->
           <div class="toast toast-custom mt-2" role="alert" aria-live="polite" aria-atomic="true" data-animation = "true" data-autohide = "true" data-delay = "4000">
             <div role="alert" aria-live="assertive" aria-atomic="true">
               <div class="toast-header p-2">
@@ -71,9 +57,28 @@
               <div class="toast-body"></div>
             </div>
           </div>
+
           <div class="empty-block mb-3"></div>
+
+          <div class="direct-msg mt-3">
+            <span><h6>Location Options</h6></span>
+            <span class="dropdown">
+              <a class="btn btn-info dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Options
+              </a>
+              <div class="dropdown-menu dropdown-menu-right dropdown-container mt-2 pt-3 pb-3" aria-labelledby="dropdownMenuLink" >
+                <a class="dropdown-item location-btn" href="#">Share current Location<i class="fas fa-info-circle ml-2"></i></a>
+                <a class="dropdown-item location-btn" href="#">Stop sharing Location<i class="fas fa-info-circle ml-2"></i></a>
+              </div>
+            </span>
+          </div>
+
+          <div class="empty-block mb-3"></div>
+
+        
           <button id="logoutBtn" class="btn btn-info btn-block">Log out</button>
 
+          
           <!-- navigation bar -->
           <div class="row">
             <nav class="navbar custom-nav px-5">
