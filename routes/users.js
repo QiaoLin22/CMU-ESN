@@ -6,7 +6,7 @@ const UserController = require('../controllers/user-controller');
 
 router.get('/', authenticateUser, UserController.retrieveUsers);
 
-router.get('/location', authenticateUser, UserController.retrieveUserLocations);
+router.get('/locations', authenticateUser, UserController.retrieveLocations);
 
 router.post('/', UserController.createUser);
 
@@ -17,5 +17,7 @@ router.post('/location', UserController.updateLocation);
 router.put('/logout', authenticateUser, LoginLogoutController.logout);
 
 router.put('/', UserController.updateStatus);
+
+router.put('/location', UserController.deleteLocation);
 
 module.exports = router;

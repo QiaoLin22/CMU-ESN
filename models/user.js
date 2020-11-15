@@ -153,7 +153,7 @@ function updateUserLocation(username, lo, la) {
   );
 }
 
-function retrieveLocations() {
+function retrieveUserLocations() {
    return User.aggregate([
     { $match: { location: { $ne: null } } },
     { $project: { 
@@ -162,6 +162,13 @@ function retrieveLocations() {
       status: { $arrayElemAt: ['$statusArray', -1] } 
     }},
   ]);
+}
+
+function deleteUserLocations(username) {
+  return User.updateOne(
+    { username: username },
+    { $unset: { location: 1 } }
+  );
 }
 
 module.exports = {
@@ -177,5 +184,6 @@ module.exports = {
   findUserByKeyword,
   findUserByStatus,
   updateUserLocation,
-  retrieveLocations
+  retrieveUserLocations,
+  deleteUserLocations
 };

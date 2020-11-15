@@ -13,7 +13,6 @@ function updateStatus(status) {
       username: username,
       status: status.text(),
     };
-    console.log(newStatus);
     fetch('/api/users', {
       method: 'PUT',
       headers: {
@@ -95,8 +94,18 @@ updateLocationBtn.on('click', async() => {
 });
 
 
-deleteLocationBtn.on('click', async() => {
+deleteLocationBtn.on('click', () => {
+  fetch('/api/users/location', {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({username: username}),
+  }).catch((e) => {
+    console.log(e);
+  });
   displayDeleteNotification();
 });
+
 
 

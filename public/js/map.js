@@ -35,13 +35,12 @@ function errorLocation(err) {
 navigator.geolocation.getCurrentPosition(successLocation, errorLocation, options);
 
 function addMarker(map,locations,name,status) {
-  if(username === name)return;
   const roomId =
     username < name
       ? `${username}${name}`
       : `${name}${username}`;
 
-  const contentString = 
+  const contentStringOther = 
     '<div id="content">' +
     '<div id="siteNotice">' +
     "</div>" +
@@ -49,18 +48,30 @@ function addMarker(map,locations,name,status) {
     '<div id="bodyContent">' +
     "<p>username:</p>" + "<p><b>" + name + "</b></p>" +
     "<p>status:</p>" + "<p><b>" + status + "</b></p>" +
-    '<p>Go to private chat: </p>' + `<a href="/private-chat/${roomId}"</a>Link to private chat with ${name}`
+    '<p>Go to private chat: </p>' + `<a href="/private-chat/${roomId}"</a>Link to private chat with ${name}`+
+    "</div>" +
+    "</div>";
+
+    const contentStringSelf = 
+    '<div id="content">' +
+    '<div id="siteNotice">' +
+    "</div>" +
+    '<h5 id="firstHeading" class="firstHeading">UserInfo</h5>' +
+    '<div id="bodyContent">' +
+    "<p>username:</p>" + "<p><b>" + name + "</b></p>" +
+    "<p>status:</p>" + "<p><b>" + status + "</b></p>" +
     "</div>" +
     "</div>";
 
   const infowindow = new google.maps.InfoWindow({
-    content: contentString,
+    content: username === name? contentStringSelf : contentStringOther
   });
   const iconBase = 'http://maps.google.com/mapfiles/kml/paddle/';
   let icon;
   if(status === 'OK')icon = iconBase + 'grn-circle.png';
-  if(status === 'Help')icon = iconBase + 'ylw-circle.png';
-  if(status === 'Emergency')icon = iconBase + 'red-circle.png';
+  else if(status === 'Help')icon = iconBase + 'ylw-circle.png';
+  else if(status === 'Emergency')icon = iconBase + 'red-circle.png';
+  else if(status === 'Undefined')icon = iconBase + 'wht-circle.png';
   const marker = new google.maps.Marker({
     position: locations,
     icon: icon,
@@ -96,7 +107,7 @@ function initMap() {
   // New Map
   const map = new google.maps.Map(document.getElementById("map"), mapoptions);
   
-  fetch(`/api/users/location`, {
+  fetch(`/api/users/locations`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -108,9 +119,9 @@ function initMap() {
       const lat = e.location.latitude;
       const lng = e.location.longitude;
       const position = {lat: lat, lng: lng};
-      const username = e.username;
+      const name = e.username;
       const status = e.status.status;
-      addMarker(map,position,username,status)
+      addMarker(map,position,name,status)
     });
   })
   .catch((e) => {
