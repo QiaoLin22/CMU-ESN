@@ -27,6 +27,14 @@ const userSchema = new mongoose.Schema({
       },
     ],
   },
+  emergencyContact: {
+    type: [
+      {
+        name: { type: String },
+        phone: { type: String },
+      },
+    ],
+  },
 });
 
 const User = mongoose.model('User', userSchema);
@@ -43,6 +51,7 @@ function createNewUser(username, hash, salt) {
         status: 'Undefined',
       },
     ],
+    emergencyContact: [],
   });
 
   return newUser.save();
@@ -102,6 +111,25 @@ function updateStatusIcon(username, status) {
   );
 }
 
+function createNewEmergencyContact(username, name, phone) {
+  const newContact = { name: name, phone: phone };
+  return User.update(
+    { username: username },
+    { $pull: { emergencyContact: newContact } }
+  );
+}
+
+function removeEmergencyContact(username, name) {
+  return User.update(
+    { username: username },
+    { $pull: { emergencyContact: { name: name } } }
+  );
+}
+
+function getEmergencyContacts(username) {
+  return User.find({ username: username }, { statusArray: 1 });
+}
+
 async function getStatusByUsername(username) {
   const result = await User.aggregate([
     { $match: { username: username } },
@@ -135,7 +163,9 @@ function findUserByKeyword(keyword) {
 
 function findUserByStatus(keyword) {
   return User.find(
-    {$expr: { $eq: [{ $arrayElemAt: ['$statusArray.status', -1] }, keyword] }},
+    {
+      $expr: { $eq: [{ $arrayElemAt: ['$statusArray.status', -1] }, keyword] },
+    },
     { _id: 0, __v: 0},
     { sort: { online: -1, username: 1 } }
   );
@@ -149,6 +179,9 @@ module.exports = {
   updateOnlineStatus,
   updateStatusIcon,
   getStatusByUsername,
+  createNewEmergencyContact,
+  removeEmergencyContact,
+  getEmergencyContacts,
   validateUsernamePassword,
   retrieveUserStatus,
   findUserByKeyword,

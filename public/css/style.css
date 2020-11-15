@@ -395,6 +395,44 @@ a:hover {
   height: 84vh;
 }
 
+/* Emergency contact */
+.create-contact-input {
+  width: 100%;
+  border-radius: 5px;
+  border-width: 1px;
+  border-color: #17a2b8;
+  padding: 0.8rem;
+  background-color: #f5fafb;
+}
+
+.contacts {
+  width: 100%;
+}
+
+.contact {
+  display: flex;
+  justify-content: space-between;
+  background-color: #ffffff;
+  border-bottom: #d7d7d7;
+  border-bottom-width: 1px;
+  border-bottom-style: solid;
+  color: #065a67;
+}
+
+.contact span {
+  align-self: center;
+}
+
+.contact h6 {
+  margin-bottom: 0px;
+}
+
+.contact-edit-button {
+  color: #1b5058;
+  cursor: pointer;
+  /* display: inline-block; */
+  display: none;
+}
 /* bootstrap style override */
 .list-group-item {
   border-width: 0px;

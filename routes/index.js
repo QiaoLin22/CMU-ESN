@@ -17,6 +17,10 @@ router.get('/profile', authenticateUser, (req, res) => {
   res.render('profile', { username: res.locals.username });
 });
 
+router.get('/profile/emergency', authenticateUser, (req, res) => {
+  res.render('emergency-contact', { username: res.locals.username });
+});
+
 router.get('/public-wall', authenticateUser, (req, res) => {
   res.render('chat', { username: res.locals.username });
 });

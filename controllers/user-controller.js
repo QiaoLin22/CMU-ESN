@@ -2,6 +2,9 @@ const {
   createNewUser,
   retrieveUsers,
   updateStatusIcon,
+  createNewEmergencyContact,
+  removeEmergencyContact,
+  getEmergencyContacts,
 } = require('../models/user');
 const { genHashAndSalt } = require('../lib/password');
 
@@ -18,7 +21,7 @@ class UserController {
       })
       .catch((err) => {
         let message;
-
+        // duplicate key in Mongo
         if (err.code === 11000) {
           message = 'Username already exists';
         } else {
@@ -40,6 +43,37 @@ class UserController {
       .then(() => {
         req.app.get('io').emit('updateDirectory');
         req.app.get('io').emit('updateMsgStatus', username);
+        res.status(200).send({ message: 'success' });
+      })
+      .catch((err) => {
+        console.log(err);
+        res.status(400).json({ error: err });
+      });
+  }
+
+  static createContact(req, res, next) {
+    const { username, name, phone } = req.body;
+    createNewEmergencyContact(username, name, phone)
+      .then(() => {
+        req.app.get('io').emit('update Emergency Contact');
+        res.status(201).send({ message: 'send' });
+      })
+      .catch((err) => {
+        console.log(err);
+        res.status(400).json({ error: err });
+      });
+  }
+
+  static getAllContacts(req, res, next) {
+    const username = req.body;
+    getEmergencyContacts(username).then((contacts) => res.send(contacts));
+  }
+
+  static removeContact(req, res, next) {
+    const { username, name } = req.body;
+    removeEmergencyContact(username, name)
+      .then(() => {
+        req.app.get('io').emit('remove a contact', username);
         res.status(200).send({ message: 'success' });
       })
       .catch((err) => {
