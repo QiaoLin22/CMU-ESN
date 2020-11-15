@@ -51,11 +51,12 @@ class UserController {
       });
   }
 
-  static createContact(req, res, next) {
+  static createContact(req, res) {
     const { username, name, phone } = req.body;
     createNewEmergencyContact(username, name, phone)
       .then(() => {
-        req.app.get('io').emit('update Emergency Contact');
+        const newContact = { name: name, phone: phone };
+        req.app.get('io').emit('create new contact', newContact);
         res.status(201).send({ message: 'send' });
       })
       .catch((err) => {
@@ -64,12 +65,13 @@ class UserController {
       });
   }
 
-  static getAllContacts(req, res, next) {
-    const username = req.body;
-    getEmergencyContacts(username).then((contacts) => res.send(contacts));
+  static getAllContacts(req, res) {
+    getEmergencyContacts(res.locals.username).then((contacts) => {
+      res.send(contacts[0].emergencyContact);
+    });
   }
 
-  static removeContact(req, res, next) {
+  static removeContact(req, res) {
     const { username, name } = req.body;
     removeEmergencyContact(username, name)
       .then(() => {

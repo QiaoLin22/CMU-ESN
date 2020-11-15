@@ -6,15 +6,19 @@ const editContact = $('#edit-contact');
 const editButton = $('.contact-edit-button');
 
 const contactModal = $('#contactModal');
+const confirmBtn = $('#confirmBtn');
+const removeContactModal = $('#removeContactModal');
+const removeConfirmBtn = $('#removeConfirmBtn');
+
 const contactName = $('#emergency-name');
-const contactNum = $('#emergency-phone');
+const contactPhone = $('#emergency-phone');
 const contacts = $('.contacts');
 
-function outputContact(newContact){
+function outputContact(newContact) {
   const contact = document.createElement('div');
   contact.classList.add('contact');
   contact.classList.add('p-3');
-  contact.innerHTML = `<span><h6> ${newContact.name} </h6></span><span class="ml-3">${newContact.phone}<span class="ml-2 contact-edit-button" id="${newContact.name}"><i class="fas fa-minus-circle"></i></span></span>`;
+  contact.innerHTML = `<span><h6> ${newContact.name} </h6></span><span class="ml-3">${newContact.phone}<span class="ml-2 contact-edit-button"><i class="fas fa-minus-circle"></i></span></span>`;
   contacts.append(contact);
 }
 
@@ -33,7 +37,9 @@ function loadContact() {
     });
 }
 
-socket.on('update Emergency Contact', (newContact) => {
+jQuery(loadContact);
+
+socket.on('create new contact', (newContact) => {
   outputContact(newContact);
 });
 
@@ -49,6 +55,30 @@ editContact.on('click', () => {
   }
 });
 
+editButton.on('click', () => {
+  removeContactModal.modal('show');
+});
+
 createContact.on('click', () => {
   contactModal.modal('show');
+});
+
+confirmBtn.on('click', (event) => {
+  event.preventDefault();
+
+  const newContact = {
+    username: username,
+    name: contactName.val(),
+    phone: contactPhone.val(),
+  };
+
+  fetch(`/api/contacts`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(newContact),
+  }).catch((e) => {
+    console.log(e);
+  });
 });

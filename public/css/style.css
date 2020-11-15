@@ -431,7 +431,7 @@ a:hover {
   color: #1b5058;
   cursor: pointer;
   /* display: inline-block; */
-  display: none;
+  display: inline-block;
 }
 /* bootstrap style override */
 .list-group-item {

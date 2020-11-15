@@ -115,7 +115,7 @@ function createNewEmergencyContact(username, name, phone) {
   const newContact = { name: name, phone: phone };
   return User.update(
     { username: username },
-    { $pull: { emergencyContact: newContact } }
+    { $push: { emergencyContact: newContact } }
   );
 }
 
@@ -127,7 +127,7 @@ function removeEmergencyContact(username, name) {
 }
 
 function getEmergencyContacts(username) {
-  return User.find({ username: username }, { statusArray: 1 });
+  return User.find({ username: username }, { emergencyContact: 1 });
 }
 
 async function getStatusByUsername(username) {
