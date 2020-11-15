@@ -37,7 +37,7 @@ class UserController {
       .catch((err) => next(err));
   }
 
-  static updateStatus(req, res, next) {
+  static updateStatus(req, res) {
     const { status, username } = req.body;
     updateStatusIcon(username, status)
       .then(() => {

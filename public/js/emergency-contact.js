@@ -44,14 +44,16 @@ socket.on('create new contact', (newContact) => {
 });
 
 socket.on('remove a contact', () => {
+  contacts.empty();
   loadContact();
 });
 
-editContact.on('click', () => {
-  if (editButton.css('display') === 'none') {
-    editButton.css('display', 'inline-block');
+editContact.on('click', '.contact-edit-button', () => {
+  console.log('click');
+  if ($(this).css('display') === 'none') {
+    $(this).css('display', 'inline-block');
   } else {
-    editButton.css('display', 'none');
+    $(this).css('display', 'none');
   }
 });
 
@@ -61,6 +63,24 @@ editButton.on('click', () => {
 
 createContact.on('click', () => {
   contactModal.modal('show');
+});
+
+removeConfirmBtn.on('click', (event) => {
+  event.preventDefault();
+  const remove = {
+    username: username,
+    // TODO: get the correct name through id
+    name: 'Mom',
+  };
+  fetch(`/api/contacts`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(remove),
+  }).catch((e) => {
+    console.log(e);
+  });
 });
 
 confirmBtn.on('click', (event) => {
