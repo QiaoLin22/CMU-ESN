@@ -167,7 +167,7 @@ function retrieveUserLocations() {
 function deleteUserLocations(username) {
   return User.updateOne(
     { username: username },
-    { $unset: { location: 1 } }
+    { $unset: { location: ""}},
   );
 }
 

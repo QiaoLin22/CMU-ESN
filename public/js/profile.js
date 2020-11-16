@@ -62,6 +62,8 @@ logoutBtn.on('click', () => {
 
 function successLocation(position) {
   const crd = position.coords;
+  console.log(crd.longitude);
+  console.log(crd.latitude);
   const location = {
     username: username,
     longitude: crd.longitude,
@@ -77,6 +79,7 @@ function successLocation(position) {
   }).catch((e) => {
     console.log(e);
   });
+  displayNotification();
 }
 
 function errorLocation(err) {
@@ -90,7 +93,6 @@ updateLocationBtn.on('click', async() => {
     maximumAge: 0
   };
   await navigator.geolocation.getCurrentPosition(successLocation, errorLocation, options);
-  displayNotification();
 });
 
 

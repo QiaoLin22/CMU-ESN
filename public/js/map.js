@@ -9,23 +9,6 @@ const options = {
 
 function successLocation(position) {
   const crd = position.coords;
-  console.log(`Latitude : ${crd.latitude}`);
-  console.log(`Longitude: ${crd.longitude}`);
-  const location = {
-    username: username,
-    longitude: crd.longitude,
-    latitude: crd.latitude,
-  };
-
-  fetch(`/api/users/location`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(location),
-  }).catch((e) => {
-    console.log(e);
-  });
 }
 
 function errorLocation(err) {
@@ -84,7 +67,6 @@ function addMarker(map,locations,name,status) {
 
 function initMap() {
   // Map options
-  
   const mapoptions = {
       zoom: 12,
       center: { lat: 37.410600, lng: -122.059732 },
