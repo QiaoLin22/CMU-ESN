@@ -2,24 +2,48 @@ const socket = io();
 
 const username = $('#username-data').val();
 const createContact = $('#create-contact');
-const editContact = $('#edit-contact');
-const editButton = $('.contact-edit-button');
-
-const contactModal = $('#contactModal');
-const confirmBtn = $('#confirmBtn');
-const removeContactModal = $('#removeContactModal');
-const removeConfirmBtn = $('#removeConfirmBtn');
-
 const contactName = $('#emergency-name');
 const contactPhone = $('#emergency-phone');
 const contacts = $('.contacts');
+const contactModal = $('#contactModal');
+const confirmBtn = $('#confirmBtn');
+
+const removeContactModal = $('#removeContactModal');
+const removeConfirmBtn = $('#removeConfirmBtn');
+const deleteText = $('#delete-text');
+const deleteName = $('#delete-name');
+
+function removeContact(name) {
+  const remove = {
+    username: username,
+    name: name,
+  };
+  console.log(`remove ${name} from frontend`);
+  fetch(`/api/contacts`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(remove),
+  }).catch((e) => {
+    console.log(e);
+  });
+}
 
 function outputContact(newContact) {
   const contact = document.createElement('div');
   contact.classList.add('contact');
   contact.classList.add('p-3');
-  contact.innerHTML = `<span><h6> ${newContact.name} </h6></span><span class="ml-3">${newContact.phone}<span class="ml-2 contact-edit-button"><i class="fas fa-minus-circle"></i></span></span>`;
-  contacts.append(contact);
+  const id = `del-${newContact.name}`;
+  contact.innerHTML = `<span><h6> ${newContact.name} </h6></span><span class="ml-3">${newContact.phone}<span class="ml-2 contact-edit-button" id="${id}" ><i class="far fa-edit" style="cursor: pointer;"></i></span></span>`;
+  contacts.append(contact).on('click', `#${id}`, () => {
+    deleteText.text(
+      `Are you sure you want to remove ${newContact.name} as your emergency contact?`
+    );
+    deleteName.text(`${newContact.name}`);
+    removeContactModal.modal('show');
+    // TODO: check how many times the program calls
+  });
 }
 
 function loadContact() {
@@ -39,8 +63,13 @@ function loadContact() {
 
 jQuery(loadContact);
 
-socket.on('create new contact', (newContact) => {
-  outputContact(newContact);
+removeConfirmBtn.on('click', (event) => {
+  event.preventDefault();
+  removeContact(deleteName.text());
+});
+
+createContact.on('click', () => {
+  contactModal.modal('show');
 });
 
 socket.on('remove a contact', () => {
@@ -48,39 +77,9 @@ socket.on('remove a contact', () => {
   loadContact();
 });
 
-editContact.on('click', '.contact-edit-button', () => {
-  console.log('click');
-  if ($(this).css('display') === 'none') {
-    $(this).css('display', 'inline-block');
-  } else {
-    $(this).css('display', 'none');
-  }
-});
-
-editButton.on('click', () => {
-  removeContactModal.modal('show');
-});
-
-createContact.on('click', () => {
-  contactModal.modal('show');
-});
-
-removeConfirmBtn.on('click', (event) => {
-  event.preventDefault();
-  const remove = {
-    username: username,
-    // TODO: get the correct name through id
-    name: 'Mom',
-  };
-  fetch(`/api/contacts`, {
-    method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(remove),
-  }).catch((e) => {
-    console.log(e);
-  });
+// Create a new contact
+socket.on('create new contact', (newContact) => {
+  outputContact(newContact);
 });
 
 confirmBtn.on('click', (event) => {

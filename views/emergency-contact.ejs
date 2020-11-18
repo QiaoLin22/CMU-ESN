@@ -29,15 +29,15 @@
           <div class="row announcement-header">
               <a href="/profile" class="ml-3" ><</a>
               <h5>Emergency Contact</h5>
-              <span class="mr-3" id="edit-contact"><i class="far fa-edit" style="cursor: pointer;"></i></span>
+              <!-- <span class="mr-3" id="edit-contact"><i class="far fa-edit" style="cursor: pointer;"></i></span> -->
           </div>
 
           <div class="row contact-container">
             <div class="contacts">
-              <div class="contact p-3">
+              <!-- <div class="contact p-3">
                 <span><h6>Dad</h6></span>
                 <span class="ml-3">9087397839<span class="ml-2 contact-edit-button"><i class="fas fa-minus-circle"></i></span></span>
-              </div>
+              </div> -->
             </div>
           </div>
 
@@ -78,6 +78,7 @@
           </div>
 
           <!-- Remove Contact modal -->
+          <div class="modals"></div>
           <div class="modal fade border-info" id="removeContactModal" tabindex="-1" aria-labelledby="announceModalLabel" aria-hidden="true">
             <div class="modal-dialog">
               <div class="modal-content modal-lg">
@@ -92,7 +93,8 @@
                   <div class="alert" id="announceAlert" role="alert" hidden></div>
                   <div class="container-fluid">
                     <div class="row text-left text-info">
-                      <p>Are you sure you want to remove Mom as your emergency contact?</p>
+                      <p id="delete-name" style="display: none;"></p>
+                      <p id="delete-text"></p>
                     </div>
                   </div>
                 </div>

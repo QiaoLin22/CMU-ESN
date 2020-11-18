@@ -56,6 +56,7 @@ class UserController {
     createNewEmergencyContact(username, name, phone)
       .then(() => {
         const newContact = { name: name, phone: phone };
+        // console.log(`create new contact: ${newContact.name}`);
         req.app.get('io').emit('create new contact', newContact);
         res.status(201).send({ message: 'send' });
       })
@@ -73,8 +74,10 @@ class UserController {
 
   static removeContact(req, res) {
     const { username, name } = req.body;
+    // console.log(`${username} ${name}`);
     removeEmergencyContact(username, name)
       .then(() => {
+        // console.log(`Remove a contact: ${name}`);
         req.app.get('io').emit('remove a contact', username);
         res.status(200).send({ message: 'success' });
       })
