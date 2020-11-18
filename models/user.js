@@ -164,6 +164,10 @@ function retrieveUserLocations() {
   ]);
 }
 
+function retrieveUserLocation(username) {
+  return User.findOne({ username: username }, { location: 1})
+}
+
 function deleteUserLocations(username) {
   return User.updateOne(
     { username: username },
@@ -185,5 +189,6 @@ module.exports = {
   findUserByStatus,
   updateUserLocation,
   retrieveUserLocations,
+  retrieveUserLocation,
   deleteUserLocations
 };

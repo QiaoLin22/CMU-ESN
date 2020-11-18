@@ -1,21 +1,44 @@
 const socket = io();
 const username = $('#username-data').val();
-
+const confirmModal = $('#confirmModal');
 const options = {
     enableHighAccuracy: true,
     timeout: 5000,
     maximumAge: 0
   };
-
+  function displayNotification() {
+    $('.toast-body').replaceWith(
+      `<div class="toast-body pl-3 pt-2 pr-2 pb-2">Your location has been updated</div>`
+    );
+    $('.toast').css('zIndex', 1000);
+    $('.toast').toast('show');
+  }
 function successLocation(position) {
   const crd = position.coords;
+  const location = {
+    username: username,
+    longitude: crd.longitude,
+    latitude: crd.latitude,
+  };
+
+  fetch(`/api/users/location`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(location),
+  }).catch((e) => {
+    console.log(e);
+  });
+  displayNotification();
 }
 
 function errorLocation(err) {
   console.warn(`ERROR(${err.code}): ${err.message}`);
 }
-
-navigator.geolocation.getCurrentPosition(successLocation, errorLocation, options);
+function saveCurrentLocation() {
+  navigator.geolocation.getCurrentPosition(successLocation, errorLocation, options);
+}
 
 function addMarker(map,locations,name,status) {
   const roomId =
@@ -65,7 +88,29 @@ function addMarker(map,locations,name,status) {
   });
 }
 
-function initMap() {
+function getLocationByUsername() {
+  return fetch('/api/users/location', {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+  })
+  .then((res) => res.json())
+  .then((json) => {
+    if(json.location === undefined)return undefined;
+    return json.location;
+  })
+  .catch((e) => {
+    console.log(e);
+  });
+}
+
+async function initMap() {
+  const location = await getLocationByUsername(username);
+  // saveCurrentLocation if user doesn't have a location
+  if(location === undefined){
+    confirmModal.modal('show');
+  }
   // Map options
   const mapoptions = {
       zoom: 12,
@@ -88,7 +133,6 @@ function initMap() {
   }
   // New Map
   const map = new google.maps.Map(document.getElementById("map"), mapoptions);
-  
   fetch(`/api/users/locations`, {
     method: 'GET',
     headers: {
@@ -114,3 +158,9 @@ function initMap() {
 socket.on('updateMap', () => {
   initMap();
 });
+
+$('#updateMapBtn').on('click', () => {
+  saveCurrentLocation();
+  confirmModal.modal('hide');
+});
+

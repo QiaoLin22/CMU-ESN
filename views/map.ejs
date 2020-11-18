@@ -39,11 +39,42 @@
         <div class="col-lg col-md-6 col-sm-8 esn-screen">
           <div class="row announcement-header">
               <h5>Geolocation</h5>
-              <a href="/search?context=announcement"><i class="fas fa-search mr-3"></i></a>
           </div>
 
           <div id="map"></div>
-
+          <div class="toast toast-custom mt-2" role="alert" aria-live="polite" aria-atomic="true" data-animation = "true" data-autohide = "true" data-delay = "4000">
+            <div role="alert" aria-live="assertive" aria-atomic="true">
+              <div class="toast-header p-2">
+                <i class="fas fa-bell mr-2" style="color: #07869a;"></i>
+                <strong class="mr-auto">Geolocation Updated</strong>
+                <small>a second ago</small>
+              </div>
+              <div class="toast-body"></div>
+            </div>
+          </div>
+  <div class="modal fade border-info" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-body">
+          <div class="alert" id="confirmAlert" role="alert" hidden></div>
+          <div class="container-fluid">
+            <div class="row text-left text-info">
+              <p>Do you want to update your current location?</p>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">
+            No
+          </button>
+          <button type="button" class="btn btn-info" id="updateMapBtn">
+            Yes
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
 
 
           <!-- navigation bar -->
@@ -71,9 +102,8 @@
     </div>
   </body>
   <script defer
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB8iCpWya7S90OCUCGW5sRqd4ZYMnzXhDI&callback=initMap">
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCxS_Ew0rBAneBhesPDucDVRXBg_KbWeJU&callback=initMap">
 </script>
-
   <script
     src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
     integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"

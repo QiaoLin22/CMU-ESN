@@ -8,6 +8,8 @@ router.get('/', authenticateUser, UserController.retrieveUsers);
 
 router.get('/locations', authenticateUser, UserController.retrieveLocations);
 
+router.get('/location', authenticateUser, UserController.retrieveLocation);
+
 router.post('/', UserController.createUser);
 
 router.post('/login', LoginLogoutController.login);

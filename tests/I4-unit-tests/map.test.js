@@ -4,9 +4,9 @@ const {
     User,
     updateUserLocation,
     retrieveUserLocations,
+    retrieveUserLocation,
     deleteUserLocations
   } = require('../../models/user');
-const dbInMemory = require('../../services/db-in-memory');
 
 beforeAll(DBInMemory.connect);
 afterAll(DBInMemory.close);
@@ -86,6 +86,15 @@ describe('use case update location', () => {
     expect(actual[1].username).toEqual(expected[1].username);
     expect(actual[0].status.status).toEqual(expected[0].status.status);
     expect(actual[1].status.status).toEqual(expected[1].status.status);
+  });
+
+  it('should get one user location successfully', async () => {
+    const actual = await retrieveUserLocation('John');
+    const expected ={
+      location: { longitude: 1, latitude: 2 },
+    }
+    expect(actual.location.longitude).toEqual(expected.location.longitude);
+    expect(actual.location.latitude).toEqual(expected.location.latitude);
   });
 
   it('should delete location successfully', async () => {
