@@ -32,7 +32,6 @@ const userSchema = new mongoose.Schema({
       {
         name: {
           type: String,
-          unique: true,
         },
         phone: { type: String },
       },
@@ -116,7 +115,6 @@ function updateStatusIcon(username, status) {
 
 function createNewEmergencyContact(username, name, phone) {
   const newContact = { name: name, phone: phone };
-  console.log(`create ${name}`);
   return User.update(
     { username: username },
     { $push: { emergencyContact: newContact } }
@@ -124,7 +122,6 @@ function createNewEmergencyContact(username, name, phone) {
 }
 
 function removeEmergencyContact(username, name) {
-  console.log(`remove ${name}`);
   return User.update(
     { username: username },
     { $pull: { emergencyContact: { name: name } } }
@@ -132,7 +129,7 @@ function removeEmergencyContact(username, name) {
 }
 
 function getEmergencyContacts(username) {
-  return User.find({ username: username }, { emergencyContact: 1 });
+  return User.find({ username: username }, { _id: 0, emergencyContact: 1 });
 }
 
 async function getStatusByUsername(username) {

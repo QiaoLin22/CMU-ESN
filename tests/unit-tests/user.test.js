@@ -25,7 +25,7 @@ beforeEach(async () => {
 afterEach(DBInMemory.cleanup);
 
 describe('use case join community', () => {
-  it('create new user successfully', async () => {
+  it('create new emergency contact successfully', async () => {
     await createNewUser('John', '001', '1110');
 
     const result = await User.findOne(
@@ -34,27 +34,13 @@ describe('use case join community', () => {
     );
     const actual = result.toJSON();
 
-    // const actualStatus = actual.statusArray[0].status
-
     const expected = {
       username: 'John',
       hash: '001',
       salt: '1110',
       online: false,
-      // statusArray: [
-      //   {
-      //     status: 'Undefined',
-      //   },
-      // ],
     };
     expect(actual).toEqual(expected);
-    // expect(actual.username).toEqual(expected[0].username);
-    // expect(actual.hash).toEqual(expected[0].hash);
-    // expect(actual.salt).toEqual(expected[0].salt);
-    // expect(actual.online).toEqual(expected[0].online);
-    // expect(actual.statusArray[0].status).toEqual(
-    //   expected[0].statusArray[0].status
-    // );
   });
 
   it('Find user by username successfully', async () => {
