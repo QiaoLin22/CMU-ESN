@@ -104,6 +104,16 @@ describe("GET '/messages/:roomId/:keywords/:pagination'", () => {
     expect(response.body[0].roomId).toEqual(expected[0].roomId);
     expect(response.statusCode).toBe(200);
   });
+
+  test('It should respond with no valid keyword message', async () => {
+    const token = createToken({ _id: '000', username: 'John' });
+
+    const response = await request(app)
+      .get('/api/search/messages/JohnMike/a/0')
+      .set('Cookie', `jwt=${token}`);
+    expect(response.body.error).toEqual('no valid keyword');
+    expect(response.statusCode).toBe(400);
+  });
 });
 
 describe("GET '/messages/:roomId'", () => {
@@ -220,5 +230,15 @@ describe("GET '/announcements/:keywords/:pagination'", () => {
     expect(response.body.length).toEqual(expected.length);
     expect(response.body[0].message).toEqual(expected[0].message);
     expect(response.statusCode).toBe(200);
+  });
+
+  test('It should respond with no valid keyword message', async () => {
+    const token = createToken({ _id: '000', username: 'John' });
+    const response = await request(app)
+      .get('/api/search/announcements/a/0')
+      .set('Cookie', `jwt=${token}`);
+
+    expect(response.body.error).toEqual('no valid keyword');
+    expect(response.statusCode).toBe(400);
   });
 });
