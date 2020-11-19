@@ -5,7 +5,7 @@ const socketIO = require('socket.io');
 const app = require('../../app');
 const { createToken } = require('../../lib/jwt');
 const DBInMemory = require('../../services/db-in-memory');
-const { User, updateOnlineStatus } = require('../../models/user');
+const { User } = require('../../models/user');
 
 const server = http.createServer(app);
 const io = socketIO.listen(server);
@@ -53,7 +53,7 @@ describe('GET /', () => {
 });
 
 describe('POST /', () => {
-  test('It should responds with the newly created user', async () => {
+  test('It should responds with the newly created emergency contact', async () => {
     const token = createToken({ _id: '000', username: 'John' });
     const newContact = await request(app)
       .post('/api/contacts/')
@@ -69,5 +69,36 @@ describe('POST /', () => {
       .get('/api/contacts/')
       .set('Cookie', `jwt=${token}`);
     expect(response.body.length).toBe(2);
+  });
+});
+
+describe('PUT /', () => {
+  test('Remove a contact', async () => {
+    const token = createToken({ _id: '111', username: 'John' });
+    const result = await request(app)
+      .put('/api/contacts/')
+      .set('Cookie', `jwt=${token}`)
+      .send({
+        username: 'John',
+        name: 'Mike',
+      });
+
+    // Make sure we can logout successfully
+    expect(result.statusCode).toBe(200);
+    const response = await request(app)
+      .get('/api/contacts/')
+      .set('Cookie', `jwt=${token}`);
+    expect(response.body.length).toBe(0);
+  });
+});
+
+describe('POST /sms', () => {
+  test('Send SMS to all emergency contacts', async () => {
+    const token = createToken({ _id: '000', username: 'John' });
+    const response = await request(app)
+      .post('/api/contacts/sms/')
+      .set('Cookie', `jwt=${token}`);
+
+    expect(response.statusCode).toBe(200);
   });
 });
