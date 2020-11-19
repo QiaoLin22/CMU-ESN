@@ -91,8 +91,8 @@ class UserController {
       .then((contacts) => {
         contacts[0].emergencyContact.forEach((contact) => {
           createNewSMS(username, contact.name, contact.phone);
-          res.status(200).send({ message: 'success' });
         });
+        res.status(200).send({ message: 'success' });
       })
       .catch((err) => {
         console.log(err);

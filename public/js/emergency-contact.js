@@ -49,6 +49,7 @@ function outputContact(newContact) {
 function loadContact() {
   fetch(`/api/contacts`, {
     method: 'GET',
+    
   })
     .then((res) => res.json())
     .then((json) => {

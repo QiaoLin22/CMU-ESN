@@ -30,7 +30,7 @@ describe('use case join community', () => {
 
     const result = await User.findOne(
       { username: 'John' },
-      { _id: 0, __v: 0, timestamp: 0, statusArray: 0 }
+      { _id: 0, __v: 0, timestamp: 0, statusArray: 0, emergencyContact: 0 }
     );
     const actual = result.toJSON();
 
