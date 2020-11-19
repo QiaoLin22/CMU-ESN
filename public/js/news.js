@@ -1,9 +1,12 @@
+
+
 const socket = io();
 
 const createNews = $('#create-news');
 const newsModal = $('#newsModal');
 const news = $('.news');
 const text = $('#news-text');
+const photo = $('news-photo');
 const post = $('#confirmBtn');
 const username = $('#username-data').val();
 const citynameBtn = $('#cityNameBtn');
@@ -59,22 +62,28 @@ socket.on('new news', (newMsg) => {
   //outputAnnouncement(newMsg);
 });
 
-post.on('click', (event) => {
+post.on('click', () => {
   const cityname = $('#cityname-data').text();
- 
-  const newNews = {
-    sender: username,
-    message: text.val(),
-    cityname: cityname,
-  };
-
+  //console.log(photo)
+  const inputPhoto = document.querySelector("input[type='file'");
+  const pond = FilePond.create(inputPhoto);
+  console.log(pond.getFiles())
+  /*const pond = FilePond.create({
+    files: [{
+      sender: username,
+      message: text.val(),
+      photo: photo,
+      cityname: cityname,
+    }]
+  })
+  console.log(pond.getFile)
   fetch(`/api/news/`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify(newNews),
+    body: pond,
   }).catch((e) => {
     console.log(e);
-  });
+  });*/
 });

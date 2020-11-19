@@ -5,9 +5,9 @@ const {
 
 class NewsController {
   static createNews(req, res) {
-    const { sender, message, cityname } = req.body;
-    console.log(cityname)
-    createNewNews(sender, message, cityname)
+    const { sender, message, photo, cityname  } = req.body;
+    console.log(req.body)
+    createNewNews(sender, message, cityname, photo)
       .then((newNews) => {
         req.app.get('io').emit('new news', newNews);
         res
