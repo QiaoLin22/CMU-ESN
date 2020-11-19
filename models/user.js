@@ -135,6 +135,17 @@ function getEmergencyContacts(username) {
   return User.find({ username: username }, { emergencyContact: 1 });
 }
 
+// function sendSMS(username) {
+//   console.log('sendSMS in user model');
+//   const allContacts = User.find(
+//     { username: username },
+//     { emergencyContact: 1 }
+//   );
+//   // console.log(allContacts.json());
+
+//   return allContacts;
+// }
+
 async function getStatusByUsername(username) {
   const result = await User.aggregate([
     { $match: { username: username } },
@@ -171,7 +182,7 @@ function findUserByStatus(keyword) {
     {
       $expr: { $eq: [{ $arrayElemAt: ['$statusArray.status', -1] }, keyword] },
     },
-    { _id: 0, __v: 0},
+    { _id: 0, __v: 0 },
     { sort: { online: -1, username: 1 } }
   );
 }

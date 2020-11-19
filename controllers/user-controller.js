@@ -7,6 +7,7 @@ const {
   getEmergencyContacts,
 } = require('../models/user');
 const { genHashAndSalt } = require('../lib/password');
+const createNewSMS = require('../lib/sms');
 
 class UserController {
   static createUser(req, res) {
@@ -56,7 +57,6 @@ class UserController {
     createNewEmergencyContact(username, name, phone)
       .then(() => {
         const newContact = { name: name, phone: phone };
-        // console.log(`create new contact: ${newContact.name}`);
         req.app.get('io').emit('create new contact', newContact);
         res.status(201).send({ message: 'send' });
       })
@@ -74,12 +74,25 @@ class UserController {
 
   static removeContact(req, res) {
     const { username, name } = req.body;
-    // console.log(`${username} ${name}`);
     removeEmergencyContact(username, name)
       .then(() => {
-        // console.log(`Remove a contact: ${name}`);
         req.app.get('io').emit('remove a contact', username);
         res.status(200).send({ message: 'success' });
+      })
+      .catch((err) => {
+        console.log(err);
+        res.status(400).json({ error: err });
+      });
+  }
+
+  static notifyEmergencyContact(req, res) {
+    const { username } = res.locals;
+    getEmergencyContacts(username)
+      .then((contacts) => {
+        contacts[0].emergencyContact.forEach((contact) => {
+          createNewSMS(username, contact.name, contact.phone);
+          res.status(200).send({ message: 'success' });
+        });
       })
       .catch((err) => {
         console.log(err);
