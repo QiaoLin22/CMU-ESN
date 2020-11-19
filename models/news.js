@@ -14,13 +14,10 @@ const NewsSchema = mongoose.Schema({
     type: String,
     required: [true, 'Message is required'],
   },
-  photo: {
-    type: Buffer,
-    required: true
-  },
-  photoType: {
-    type: String,
-    required: true
+  photo: { 
+     data: Buffer, 
+     contentType: String,
+     
   },
   cityname:{
     type: String,
@@ -30,27 +27,13 @@ const NewsSchema = mongoose.Schema({
 
 const News = mongoose.model('News', NewsSchema);
 
-NewsSchema.virtual('photoPath').get(()=>{
-  if (this.photo != null && this.photoType != null) {
-    return `data:${this.photoType};charset=utf-8;base64,${this.photo.toString('base64')}`;
-  }
-});
-
-function savePhoto(newNews, photoEncoded) {
-  if (photoEncoded == null) return;
-  const photo = JSON.parse(photoEncoded);
-  if (photo != null && imageMimeTypes.includes(photo.type)) {
-    newNews.photo = new Buffer.from(photo.data, 'base64');
-    newNews.photoType = photo.type;
-  }
-}
-function createNewNews(sender, message, cityname, photoEncoded) {
+function createNewNews(sender, message, cityname, photo) {
   const newNews= new News({
     sender: sender,
     message: message,
     cityname: cityname,
+    photo: photo,
   });
-  savePhoto(newNews, photoEncoded)
   return newNews.save();
 }
 

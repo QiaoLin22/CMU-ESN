@@ -1,3 +1,4 @@
+const fs = require('fs');
 const {
   createNewNews,
   getAllNews,
@@ -5,9 +6,14 @@ const {
 
 class NewsController {
   static createNews(req, res) {
-    const { sender, message, photo, cityname  } = req.body;
-    console.log(req.body)
-    createNewNews(sender, message, cityname, photo)
+    const { sender, message, cityname  } = req.body;
+    var img = fs.readFileSync(req.file.path);
+    //var encodePhoto = img.toString('base64');
+    var photo = {
+      data:  Buffer.from(img, 'binary'),
+      contentType: req.file.mimetype
+   };
+    createNewNews(sender, message, cityname, photo )
       .then((newNews) => {
         req.app.get('io').emit('new news', newNews);
         res
@@ -21,7 +27,7 @@ class NewsController {
 
   static getHistoricalNews(req, res) {
     const { cityname } = req.params;
-    getAllNews(cityname).then((news) => console.log(news));//res.send(announcements));
+    getAllNews(cityname).then((news) => res.send(news));
   }
 }
 
