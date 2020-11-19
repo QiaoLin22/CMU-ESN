@@ -17,7 +17,6 @@ const NewsSchema = mongoose.Schema({
   photo: { 
      data: Buffer, 
      contentType: String,
-     
   },
   cityname:{
     type: String,
@@ -42,6 +41,10 @@ function getAllNews(cityname) {
   return News.find({ cityname:  { $regex : new RegExp(cityname, "i") }});
 }
 
+
+function getNewsByNewsId(newsId){
+  return  News.find({_id: newsId});
+}
 /*
 function searchAnnouncement(filteredKeywords, pagination) {
   const query = [];
@@ -58,5 +61,6 @@ module.exports = {
   News,
   createNewNews,
   getAllNews,
+  getNewsByNewsId,
   //searchAnnouncement,
 };

@@ -2,7 +2,7 @@ const socket = io();
 
 const createNews = $('#create-news');
 const newsModal = $('#newsModal');
-const userlistModal = $('userlistModal');
+const userlistModal = $('#userlistModal');
 const news = $('.news');
 const text = $('#news-text');
 const post = $('#confirmBtn');
@@ -18,6 +18,75 @@ function toBase64(arr) {
   );
 }
 
+function forwardNews(recipient, newsId){
+  const formData = {
+    sender: username,
+    recipient: recipient,
+    newsId: newsId,
+  };
+
+  fetch(`/api/news/forward`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(formData),
+  }).catch((e) => {
+    console.log(e);
+  });
+}
+
+function outputUser(user, newsId) {
+  const { online, numUnreadMessages } = user;
+  const { status } = user.latestStatus;
+
+  let icon = '';
+  if (status === 'OK') {
+    icon = '<i class="far fa-check-circle ml-1" style="color: #18b87e"></i>';
+  } else if (status === 'Help') {
+    icon = '<i class="fas fa-info-circle ml-1" style="color: #ffd500"></i>';
+  } else if (status === 'Emergency') {
+    icon = '<i class="fas fa-first-aid ml-1" style="color: #fb5252"></i>';
+  } else if (status === undefined || status === 'Undefined') {
+    icon = '<i class="far fa-question-circle ml-1" style="color: #d8d8d8"></i>';
+  }
+
+  const userDiv = document.createElement('div');
+  userDiv.classList.add('online-item');
+  if (user.username === username) {
+    userDiv.style.cursor = 'not-allowed';
+    userDiv.style.pointerEvents = 'none';
+  }
+
+  if (online) {
+    userDiv.innerHTML = `<li class="list-group-item list-group-item-action online-list-item" >${`${user.username}${icon}`}</li>`;
+    $('#online-list').append(userDiv);
+  } else {
+    userDiv.innerHTML = `<li class="list-group-item list-group-item-action offline-list-item">${`${user.username}${icon}`}</>`;
+    $('#offline-list').append(userDiv);
+  }
+  userDiv.addEventListener('click', () => {
+    forwardNews(user.username, newsId);
+    userlistModal.modal('hide');
+  });
+}
+
+
+function getUserList(newsId){
+  fetch('/api/users',{
+    method: 'GET',
+  })
+    .then((res) => {
+      return res.json();
+    })
+    .then((data) => {
+      data.forEach((user) => outputUser(user, newsId));
+    })
+    .catch((e) => {
+      console.log(e);
+    });
+
+}
 
 function outputNews(newNews) {
   const timestamp = new Date(newNews.timestamp).toLocaleString();
@@ -31,7 +100,8 @@ function outputNews(newNews) {
   news.prepend(newsdiv);
 
   document.getElementById("forwardBtn").addEventListener('click', () => {
-    newsModal.modal('show');
+    userlistModal.modal('show');
+    getUserList(newNews._id);
   });
 }
 
