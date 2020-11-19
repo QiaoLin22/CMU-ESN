@@ -17,11 +17,10 @@ class LoginLogoutController {
       if (!user) {
         validateUsernamePassword(username, password);
         // ask the user to confirm the creation of a new user
-        return res.status(200).send({ message: 'create new user?' });
+        res.status(200).send({ message: 'create new user?' });
       }
-
       // user exists, check if password is correct
-      if (validatePassword(password, user.hash, user.salt)) {
+      else if (validatePassword(password, user.hash, user.salt)) {
         // generate jwt and return it in response
         const token = createToken(user);
         const cookieMaxAge = 3 * 24 * 60 * 60;

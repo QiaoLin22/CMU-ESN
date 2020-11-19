@@ -135,8 +135,10 @@ function findUserByKeyword(keyword) {
 
 function findUserByStatus(keyword) {
   return User.find(
-    {$expr: { $eq: [{ $arrayElemAt: ['$statusArray.status', -1] }, keyword] }},
-    { _id: 0, __v: 0},
+    {
+      $expr: { $eq: [{ $arrayElemAt: ['$statusArray.status', -1] }, keyword] },
+    },
+    { _id: 0, __v: 0 },
     { sort: { online: -1, username: 1 } }
   );
 }

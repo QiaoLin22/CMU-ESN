@@ -9,7 +9,11 @@ const {
   findUserByStatus,
   retrieveUserStatus,
 } = require('../../models/user');
-const { searchAnnouncement, Announcement } = require('../../models/announcement');
+
+const {
+  searchAnnouncement,
+  Announcement,
+} = require('../../models/announcement');
 
 const { searchMessage, Message } = require('../../models/message');
 // const {
