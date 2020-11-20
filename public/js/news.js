@@ -102,6 +102,8 @@ function getUserList(newsId){
       return res.json();
     })
     .then((data) => {
+      $('#offline-list').empty();
+      $('#online-list').empty();
       data.forEach((user) => outputUser(user, newsId));
     })
     .catch((e) => {
