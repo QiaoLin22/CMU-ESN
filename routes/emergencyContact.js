@@ -1,14 +1,14 @@
 const router = require('express').Router();
 const { authenticateUser } = require('../middleware/auth');
 
-const userController = require('../controllers/user-controller');
+const contactController = require('../controllers/contact-controller');
 
-router.post('/', authenticateUser, userController.createContact);
+router.post('/', authenticateUser, contactController.createContact);
 
-router.post('/sms', authenticateUser, userController.notifyEmergencyContact);
+router.post('/sms', authenticateUser, contactController.notifyEmergencyContact);
 
-router.get('/', authenticateUser, userController.getAllContacts);
+router.get('/', authenticateUser, contactController.getAllContacts);
 
-router.put('/', authenticateUser, userController.removeContact);
+router.put('/', authenticateUser, contactController.removeContact);
 
 module.exports = router;
