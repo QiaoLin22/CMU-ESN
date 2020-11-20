@@ -42,14 +42,12 @@ function outputContact(newContact) {
     );
     deleteName.text(`${newContact.name}`);
     removeContactModal.modal('show');
-    // TODO: check how many times the program calls
   });
 }
 
 function loadContact() {
   fetch(`/api/contacts`, {
     method: 'GET',
-    
   })
     .then((res) => res.json())
     .then((json) => {
@@ -98,7 +96,12 @@ confirmBtn.on('click', (event) => {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(newContact),
-  }).catch((e) => {
-    console.log(e);
-  });
+  })
+    .then(() => {
+      contactName.val('');
+      contactPhone.val('');
+    })
+    .catch((e) => {
+      console.log(e);
+    });
 });
