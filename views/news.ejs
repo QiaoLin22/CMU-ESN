@@ -27,9 +27,8 @@
 
         <div class="col-lg col-md-6 col-sm-8 esn-screen">
           <div class="row news-header">
-              <h5>News</h5><br>
-              <h5 id = "cityname-data"></h5>
-              <!--<a href="/search?context=announcement"><i class="fas fa-search mr-3"></i></a>-->
+              <!--<h5>News</h5>-->
+              <h5 id = "cityname-data">News</h5>
           </div>
           <!-- Enter Cityname -->
           <div class="row searchbar p-3" style="background: white; height: 8vh;">
@@ -109,7 +108,26 @@
                     </ul>
                   </div>
                 </div>
-                
+              </div>
+            </div>
+          </div>
+           <!-- Confirm modal -->
+          <div class="modal fade border-info" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+              <div class="modal-content">
+                <div class="modal-body">
+                  <div class="alert" id="confirmAlert" role="alert" hidden></div>
+                  <div class="container-fluid">
+                    <div class="row text-left text-info">
+                      <p id="forwardNotifyMessage"></p>
+                    </div>
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-info" id="forwardNotifyBtn">
+                    OK
+                  </button>
+                </div>
               </div>
             </div>
           </div>

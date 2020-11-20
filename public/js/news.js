@@ -2,6 +2,7 @@ const socket = io();
 
 const createNews = $('#create-news');
 const newsModal = $('#newsModal');
+const confirmModal = $('#confirmModal');
 const userlistModal = $('#userlistModal');
 const news = $('.news');
 const text = $('#news-text');
@@ -12,10 +13,20 @@ document.getElementById('create-news').style.visibility = 'hidden';
 
 
 function toBase64(arr) {
-  //arr = new Uint8Array(arr) if it's an ArrayBuffer
   return btoa(
      arr.reduce((data, byte) => data + String.fromCharCode(byte), '')
   );
+}
+
+
+
+/** Alert */
+function displayNotification(notifyMessage) {
+  $('#forwardNotifyMessage').text(notifyMessage);
+  confirmModal.modal('show');
+  $('#forwardNotifyBtn').on('click', ()=>{
+    confirmModal.modal('hide');
+  })
 }
 
 function forwardNews(recipient, newsId){
@@ -31,7 +42,13 @@ function forwardNews(recipient, newsId){
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(formData),
-  }).catch((e) => {
+  }).then((res)=>{
+    return res.json();
+  }).then((data)=>{
+    userlistModal.modal('hide');
+    displayNotification(data.message);
+  })
+  .catch((e) => {
     console.log(e);
   });
 }
@@ -67,7 +84,6 @@ function outputUser(user, newsId) {
   }
   userDiv.addEventListener('click', () => {
     forwardNews(user.username, newsId);
-    userlistModal.modal('hide');
   });
 }
 
@@ -94,9 +110,14 @@ function outputNews(newNews) {
   newsdiv.classList.add('news');
   newsdiv.classList.add('p-3');
   const newsId = `ann-${newNews._id}`;
-  newsdiv.innerHTML = `<p class="meta mb-1"> ${newNews.sender} <span class="ml-3"> ${timestamp} </span></p>
-  <p id=${newsId}> ${newNews.message}<button type="button" id = "forwardBtn" class="btn btn-info float-right" >FORWARD</button></p>
-  <img src="data:image/png;base64,${toBase64( newNews.photo.data.data)}"> `;
+  if(newNews.photo === undefined){
+    newsdiv.innerHTML = `<p class="meta mb-1"> ${newNews.sender} <span class="ml-3"> ${timestamp} </span></p>
+    <p id=${newsId}> ${newNews.message}<button type="button" id = "forwardBtn" class="btn btn-info float-right" >FORWARD</button></p> `;
+  }else{
+    newsdiv.innerHTML = `<p class="meta mb-1"> ${newNews.sender} <span class="ml-3"> ${timestamp} </span></p>
+    <p id=${newsId}> ${newNews.message}<button type="button" id = "forwardBtn" class="btn btn-info float-right" >FORWARD</button></p>
+    <img src="data:image/png;base64,${toBase64( newNews.photo.data.data)}"> `;
+  }
   news.prepend(newsdiv);
 
   document.getElementById("forwardBtn").addEventListener('click', () => {
@@ -112,7 +133,6 @@ function loadNews(cityname) {
     .then((res) => res.json())
     .then((json) => {
       json.forEach((news) => {
-        console.log(news)
         outputNews(news);
       });
     })

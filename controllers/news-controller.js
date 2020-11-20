@@ -10,12 +10,16 @@ const {createNewNewsMessage} = require('../models/message');
 class NewsController {
   static createNews(req, res) {
     const { sender, message, cityname  } = req.body;
-    var img = fs.readFileSync(req.file.path);
-    //var encodePhoto = img.toString('base64');
-    var photo = {
-      data:  Buffer.from(img, 'binary'),
-      contentType: req.file.mimetype
-   };
+    var photo;
+    if(req.file !== undefined){
+      var img = fs.readFileSync(req.file.path);
+      //var encodePhoto = img.toString('base64');
+    
+      photo = {
+        data:  Buffer.from(img, 'binary'),
+        contentType: req.file.mimetype
+      };
+    }
     createNewNews(sender, message, cityname, photo )
       .then((newNews) => {
         req.app.get('io').emit('new news', newNews);
@@ -53,7 +57,7 @@ class NewsController {
     .then((newMessage) => {
       req.app.get('io').in(roomId).emit('new private message', newMessage);
       req.app.get('io').emit('updateDirectory');
-      res.status(201).send({ message: 'success' });
+      res.status(201).send({ message: 'Forward Successfully' });
     })
     .catch((e) => {
       console.log(e);
