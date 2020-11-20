@@ -60,19 +60,19 @@ class UserController {
         req.app.get('io').emit('create new contact', newContact);
         res.status(201).send({ message: 'send' });
       })
-      .catch((err) => {
-        console.log(err);
-        res.status(400).json({ error: err });
+      .catch(() => {
+        // console.log(err);
+        res.status(401);
       });
   }
 
-  static getAllContacts(req, res, next) {
+  static getAllContacts(req, res) {
     getEmergencyContacts(res.locals.username)
       .then((contacts) => {
         res.send(contacts[0].emergencyContact);
       })
-      .catch((err) => {
-        next(err);
+      .catch(() => {
+        res.status(401);
       });
   }
 
@@ -83,9 +83,9 @@ class UserController {
         req.app.get('io').emit('remove a contact', username);
         res.status(200).send({ message: 'success' });
       })
-      .catch((err) => {
-        console.log(err);
-        res.status(400).json({ error: err });
+      .catch(() => {
+        // console.log(err);
+        res.status(401);
       });
   }
 
@@ -98,9 +98,9 @@ class UserController {
         });
         res.status(200).send({ message: 'success' });
       })
-      .catch((err) => {
-        console.log(err);
-        res.status(400).json({ error: err });
+      .catch(() => {
+        // console.log(err);
+        res.status(401);
       });
   }
 }

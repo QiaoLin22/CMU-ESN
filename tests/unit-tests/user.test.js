@@ -25,7 +25,7 @@ beforeEach(async () => {
 afterEach(DBInMemory.cleanup);
 
 describe('use case join community', () => {
-  it('create new emergency contact successfully', async () => {
+  it('create new user successfully', async () => {
     await createNewUser('John', '001', '1110');
 
     const result = await User.findOne(
