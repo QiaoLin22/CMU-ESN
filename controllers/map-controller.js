@@ -10,11 +10,12 @@ class MapController {
     const { username, longitude, latitude } = req.body;
     if (!longitude || !latitude) {
       res.status(400).json({ message: 'longitude and latitude are required' });
+    } else {
+      updateUserLocation(username, longitude, latitude).then(() => {
+        req.app.get('io').emit('updateMap');
+        res.status(200).send({ message: 'success' });
+      });
     }
-    updateUserLocation(username, longitude, latitude).then(() => {
-      req.app.get('io').emit('updateMap');
-      res.status(200).send({ message: 'success' });
-    });
   }
 
   static retrieveLocations(req, res) {
@@ -34,11 +35,12 @@ class MapController {
     const { username } = req.body;
     if (!username) {
       res.status(400).json({ message: 'username is required' });
+    } else {
+      deleteUserLocations(username).then(() => {
+        req.app.get('io').emit('updateMap');
+        res.status(200).send({ message: 'success' });
+      });
     }
-    deleteUserLocations(username).then(() => {
-      req.app.get('io').emit('updateMap');
-      res.status(200).send({ message: 'success' });
-    });
   }
 }
 
