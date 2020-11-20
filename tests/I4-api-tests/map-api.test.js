@@ -147,14 +147,15 @@ describe('POST /', () => {
   });
 });
 
-// describe('POST /', () => {
-//   test('It should respond with 400 bad request', async () => {
-//     const response = await request(app)
-//       .post('/api/users/location')
+describe('POST / negative', () => {
+  test('It should respond with 400 bad request', async () => {
+    const response = await request(app).post('/api/users/location').send({
+      username: 'Jack',
+    });
 
-//     expect(response.statusCode).toBe(400)
-//   });
-// });
+    expect(response.statusCode).toBe(400);
+  });
+});
 
 describe('PUT /', () => {
   test('It should respond user location successfully update', async () => {
@@ -163,5 +164,13 @@ describe('PUT /', () => {
     });
     // Make sure the location is deleted successfully
     expect(response.statusCode).toBe(200);
+  });
+});
+
+describe('PUT / negative', () => {
+  test('It should respond with 400 bad request', async () => {
+    const response = await request(app).put('/api/users/location');
+    // Make sure the location is deleted successfully
+    expect(response.statusCode).toBe(400);
   });
 });
