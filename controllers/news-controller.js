@@ -51,7 +51,6 @@ class NewsController {
     if (!sender || !recipient || !newsId || !roomId) {
       res.status(400).end();
     } else {
-      console.log(roomId)
       const news = await getNewsByNewsId(newsId);
       await createNewNewsMessage(sender, recipient, news[0].message, roomId, news[0].photo)
       .then((newMessage) => {

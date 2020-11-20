@@ -113,7 +113,7 @@ function getUserList(newsId){
 function outputNews(newNews) {
   const timestamp = new Date(newNews.timestamp).toLocaleString();
   const newsdiv = document.createElement('div');
-  newsdiv.classList.add('news');
+  newsdiv.classList.add('news-content');
   newsdiv.classList.add('p-3');
   const newsId = `ann-${newNews._id}`;
   if(newNews.photo === undefined){

@@ -429,6 +429,9 @@ a:hover {
   border-bottom-style: solid;
 }
 
+.news-content {
+  height: auto;
+}
 .news .meta {
   margin-bottom: 0.8rem;
   font-weight: bold;
