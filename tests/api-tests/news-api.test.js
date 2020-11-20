@@ -129,6 +129,7 @@ describe('POST /news/forward', () => {
         sender: 'John',
         recipient: 'Mike',
         newsId: newsId,
+        roomId:'JohnMike',
     };
     const response = await request(app)
       .post('/api/news/forward')

@@ -29,11 +29,12 @@ function displayNotification(notifyMessage) {
   })
 }
 
-function forwardNews(recipient, newsId){
+function forwardNews(recipient, newsId, roomId){
   const formData = {
     sender: username,
     recipient: recipient,
     newsId: newsId,
+    roomId: roomId,
   };
 
   fetch(`/api/news/forward`, {
@@ -83,7 +84,12 @@ function outputUser(user, newsId) {
     $('#offline-list').append(userDiv);
   }
   userDiv.addEventListener('click', () => {
-    forwardNews(user.username, newsId);
+    const recipient = user.username
+    const roomId =
+    username < recipient
+        ? `${username}${recipient}`
+        : `${recipient}${username}`;
+    forwardNews(recipient, newsId, roomId);
   });
 }
 

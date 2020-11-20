@@ -47,15 +47,12 @@ class NewsController {
   
 
   static async forwardNews(req, res){
-   const {sender, recipient, newsId} = req.body;
-    if (!sender || !recipient || !newsId) {
+   const {sender, recipient, newsId, roomId} = req.body;
+    if (!sender || !recipient || !newsId || !roomId) {
       res.status(400).end();
     } else {
+      console.log(roomId)
       const news = await getNewsByNewsId(newsId);
-      const roomId =
-      sender < recipient
-        ? `${sender}${recipient}`
-        : `${recipient}${sender}`;
       await createNewNewsMessage(sender, recipient, news[0].message, roomId, news[0].photo)
       .then((newMessage) => {
         req.app.get('io').in(roomId).emit('new private message', newMessage);
