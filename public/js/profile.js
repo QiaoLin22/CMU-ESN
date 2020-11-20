@@ -24,15 +24,27 @@ function updateAPI(status) {
   });
 }
 
+function displayNotification() {
+  $('.toast-body').replaceWith(
+    `<div class="toast-body pl-3 pt-2 pr-2 pb-2">Successfully sent SMS to your contacts</div>`
+  );
+  $('.toast').css('zIndex', 1000);
+  $('.toast').toast('show');
+}
+
 function sendNewSMS() {
   fetch('/api/contacts/sms', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-  }).catch((e) => {
-    console.log(e);
-  });
+  })
+    .then(() => {
+      displayNotification();
+    })
+    .catch((e) => {
+      console.log(e);
+    });
 }
 
 function updateStatus(status) {
