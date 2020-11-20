@@ -32,7 +32,12 @@ beforeEach(async () => {
 afterEach(DBInMemory.cleanup);
 
 describe('GET /', () => {
-  test('It should respond with all emergency contacts', async () => {
+  test('Not authorized get', async () => {
+    const response = await request(app).get('/api/contacts/');
+    expect(response.statusCode).toBe(401);
+  });
+
+  test('Respond with all emergency contacts', async () => {
     const token = createToken({ _id: '000', username: 'John' });
 
     const response = await request(app)
@@ -53,6 +58,11 @@ describe('GET /', () => {
 });
 
 describe('POST /', () => {
+  test('Not authorized post', async () => {
+    const response = await request(app).post('/api/contacts/').send({});
+    expect(response.statusCode).toBe(401);
+  });
+
   test('It should responds with the newly created emergency contact', async () => {
     const token = createToken({ _id: '000', username: 'John' });
     const newContact = await request(app)
@@ -73,6 +83,11 @@ describe('POST /', () => {
 });
 
 describe('PUT /', () => {
+  test('Not authorized put', async () => {
+    const response = await request(app).put('/api/contacts/').send({});
+    expect(response.statusCode).toBe(401);
+  });
+
   test('Remove a contact', async () => {
     const token = createToken({ _id: '111', username: 'John' });
     const result = await request(app)
@@ -82,8 +97,6 @@ describe('PUT /', () => {
         username: 'John',
         name: 'Mike',
       });
-
-    // Make sure we can logout successfully
     expect(result.statusCode).toBe(200);
     const response = await request(app)
       .get('/api/contacts/')
@@ -93,6 +106,11 @@ describe('PUT /', () => {
 });
 
 describe('POST /sms', () => {
+  test('Not authorized post to sms', async () => {
+    const response = await request(app).post('/api/contacts/sms/');
+    expect(response.statusCode).toBe(401);
+  });
+
   test('Send SMS to all emergency contacts', async () => {
     const token = createToken({ _id: '000', username: 'John' });
     const response = await request(app)

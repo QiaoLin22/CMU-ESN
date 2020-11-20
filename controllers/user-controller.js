@@ -66,10 +66,12 @@ class UserController {
       });
   }
 
-  static getAllContacts(req, res) {
-    getEmergencyContacts(res.locals.username).then((contacts) => {
-      res.send(contacts[0].emergencyContact);
-    });
+  static getAllContacts(req, res, next) {
+    getEmergencyContacts(res.locals.username)
+      .then((contacts) => {
+        res.send(contacts[0].emergencyContact);
+      })
+      .catch((err) => next(err));
   }
 
   static removeContact(req, res) {
