@@ -13,10 +13,7 @@ class MapController {
         req.app.get('io').emit('updateMap');
         res.status(200).send({ message: 'success' });
       })
-      .catch((err) => {
-        console.log(err);
-        res.status(400).json({ error: err });
-      });
+      .catch((err) => next(err));
   }
 
   static retrieveLocations(req, res) {
