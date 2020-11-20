@@ -5,6 +5,8 @@ const socketIO = require('socket.io');
 const app = require('../../app');
 const DBInMemory = require('../../services/db-in-memory');
 const { createToken } = require('../../lib/jwt');
+const { User } = require('../../models/user');
+const { Message } = require('../../models/message');
 const { News } = require('../../models/news');
 
 const server = http.createServer(app);
@@ -15,6 +17,39 @@ beforeAll(DBInMemory.connect);
 afterAll(DBInMemory.close);
 
 beforeEach(async () => {
+  await User.insertMany([
+    {
+      username: 'John',
+      hash: '001',
+      salt: '110',
+      statusArray: [
+        {
+          timestamp: '1',
+          status: 'Undefined',
+        },
+        {
+          timestamp: '2',
+          status: 'OK',
+        },
+      ],
+    },
+    {
+      username: 'Mike',
+      hash: '002',
+      salt: '111',
+      statusArray: [
+        {
+          timestamp: '1',
+          status: 'Undefined',
+        },
+        {
+          timestamp: '2',
+          status: 'Help',
+        },
+      ],
+    },
+  ]);
+
   await News.insertMany([
     {
       sender: 'John',
@@ -70,27 +105,30 @@ describe('POST /news', () => {
   });
 });
 
-/*
+
 describe('POST /news/forward', () => {
   test('It should respond with forward successfully message ', async () => {
+    const findResult = await News.find({cityname: 'New York'});
+    const newsId = findResult[0]._id
+    
     const newsFormData = {
         sender: 'John',
-        timestamp: '1',
-        message: 'Hello',
-        cityname: 'San Jose',
+        recipient: 'Mike',
+        newsId: newsId,
     };
-    const newNews = await request(app)
-      .post('/api/news')
+    const response = await request(app)
+      .post('/api/news/forward')
       .set('Cookie', `jwt=${token}`)
       .send(newsFormData);
 
     // make sure we add it correctly
-    expect(newNews.statusCode).toBe(201);
+    expect(response.statusCode).toBe(201);
 
-    // make sure we have 1 news in Los Angeles now
-    const response = await request(app)
-      .get('/api/news/Los Angeles')
-      .set('Cookie', `jwt=${token}`);
-    expect(response.body.length).toBe(1);
+    // make sure we have 1 item in message now
+    const findMessage = await Message.find();
+    expect(findMessage.length).toBe(1);
+    expect(findMessage[0].sender).toBe('John');
+    expect(findMessage[0].recipient).toBe('Mike');
+    expect(findMessage[0].message).toBe('World');
   });
-});*/
+});

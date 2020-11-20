@@ -52,9 +52,9 @@ describe('use case share news by multimedia', () => {
   });
 
   it('get news by news ID successfully', async () => {
-    const all = await getAllNews();
-    const newId = all[0]._id;
-    const actual = await getNewsByNewsId(newId);
+    const findResult = await News.find({cityname: 'San Jose'});
+    const newsId = findResult[0]._id
+    const actual = await getNewsByNewsId(newsId);
     const expected = [
         {
           sender: 'John',
