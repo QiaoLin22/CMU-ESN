@@ -31,12 +31,10 @@ class MapController {
 
   static deleteLocation(req, res) {
     const { username } = req.body;
-    deleteUserLocations(username)
-      .then(() => {
-        req.app.get('io').emit('updateMap');
-        res.status(200).send({ message: 'success' });
-      })
-      .catch((err) => next(err));
+    deleteUserLocations(username).then(() => {
+      req.app.get('io').emit('updateMap');
+      res.status(200).send({ message: 'success' });
+    });
   }
 }
 
