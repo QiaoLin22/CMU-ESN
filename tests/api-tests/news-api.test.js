@@ -96,12 +96,26 @@ describe('POST /news', () => {
 
     // make sure we add it correctly
     expect(newNews.statusCode).toBe(201);
-
     // make sure we have 1 news in Los Angeles now
     const response = await request(app)
       .get('/api/news/Los Angeles')
       .set('Cookie', `jwt=${token}`);
     expect(response.body.length).toBe(1);
+  });
+});
+
+describe('POST /news', () => {
+  test('It should respond with status code 400', async () => {
+    const newsFormData = {
+      sender: 'John',
+      message: 'Hi',
+    };
+    const newNews = await request(app)
+      .post('/api/news')
+      .set('Cookie', `jwt=${token}`)
+      .send(newsFormData);
+    // make sure we add it correctly
+    expect(newNews.statusCode).toBe(400);
   });
 });
 
@@ -132,3 +146,23 @@ describe('POST /news/forward', () => {
     expect(findMessage[0].message).toBe('World');
   });
 });
+
+describe('POST /news/forward', () => {
+  test('It should respond with status code 400', async () => {
+    const findResult = await News.find({cityname: 'New York'});
+    const newsId = findResult[0]._id
+    
+    const newsFormData = {
+        sender: 'John',
+        recipient: 'Mike',
+    };
+    const response = await request(app)
+      .post('/api/news/forward')
+      .set('Cookie', `jwt=${token}`)
+      .send(newsFormData);
+
+    // make sure we add it correctly
+    expect(response.statusCode).toBe(400);
+  });
+});
+
