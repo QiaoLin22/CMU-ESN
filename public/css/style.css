@@ -396,17 +396,42 @@ a:hover {
 }
 
 /* Resources page */
-.resources-container {
+.posts-container {
   width: 100%;
   height: 84vh;
   overflow-y: scroll;
   background-color: #ecf5f7;
 }
 
+.resource-post {
+  background-color: #ffffff;
+  border-bottom: #d3d3d3 1px solid;
+}
+
+.resource-post:hover {
+  background-color: #d3d3d3;
+  cursor: pointer;
+}
+
 .resource-post .meta {
   margin-bottom: 0.8rem;
   font-weight: bold;
   color: #07869a;
+}
+
+.resource-post #timestamp {
+  font-weight: 400;
+  color: rgb(187 210 214);
+  font-size: 0.8rem;
+  float: right;
+}
+
+.resource-post:hover #timestamp {
+  color: #07869a;
+}
+
+.resource-post #post-type {
+  float: right;
 }
 
 /* bootstrap style override */

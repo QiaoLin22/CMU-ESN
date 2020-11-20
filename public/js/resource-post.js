@@ -10,15 +10,10 @@ const addPostModal = $('#add-post-modal');
 const newPostMessage = $('#new-post-message');
 const submitPostBtn = $('#submit-post-btn');
 
-function capitalizeFirstLetter(str) {
-  return str.charAt(0).toUpperCase() + str.slice(1);
-}
-
 function renderResourcePost(post) {
   const { _id, sender, timestamp, postType, resourceType, message } = post;
 
   const localTime = new Date(timestamp).toLocaleString();
-  const postTypeColor = postType === 'request' ? 'red' : 'blue';
 
   const postDiv = $('<div></div>').addClass('resource-post p-3');
 
@@ -27,16 +22,12 @@ function renderResourcePost(post) {
   });
   postDiv.html(
     $(`
-      <div>
+      <div class="row">
         <span class="meta">${sender}</span>
-        <span id="timestamp">${localTime}</span>
+        <span class="ml-3">${localTime}</span>
       </div>
-      <div>
-        <span>${capitalizeFirstLetter(resourceType)}</span>
-        <span id="post-type" style="color:${postTypeColor}">
-          ${capitalizeFirstLetter(postType)}
-        </span>
-      </div>
+      <div>${postType}</div>
+      <div>${resourceType}</div>
       <div>${message}</div>
   `)
   );

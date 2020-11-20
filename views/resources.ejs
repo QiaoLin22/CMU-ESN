@@ -12,7 +12,7 @@
       integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z"
       crossorigin="anonymous"
     />
-    <link rel="stylesheet" href="../css/style.css" />
+    <link rel="stylesheet" href="/css/style.css" />
     <script
       src="https://use.fontawesome.com/releases/v5.15.1/js/all.js"
       data-auto-a11y="true"
@@ -37,7 +37,7 @@
           <!-- Create new Post modal -->
           <div
             class="modal fade border-info"
-            id="postModal"
+            id="add-post-modal"
             tabindex="-1"
             aria-labelledby="postModalLabel"
             aria-hidden="true"
@@ -47,7 +47,7 @@
                 <div class="modal-header">
                   <div class="container-fluid">
                     <div class="row text-left text-info">
-                      <h6 class="mb-2">New Announcement</h6>
+                      <h6 class="mb-2">New Resource Post</h6>
                     </div>
                   </div>
                 </div>
@@ -60,11 +60,63 @@
                   ></div>
                   <div class="container-fluid">
                     <div class="row text-left text-info">
-                      <textarea
-                        id="announcement-text"
-                        class="create-announcement-text"
-                        placeholder="New Announcement"
-                      ></textarea>
+                      <!-- Post type -->
+                      <label class="form-label">
+                        Request or Share Resource?
+                      </label>
+                      <div class="form-check form-check-inline">
+                        <input
+                          class="form-check-input"
+                          type="radio"
+                          name="inlineRadioOptions"
+                          id="requestRadio"
+                          value="request"
+                        />
+                        <label class="form-check-label" for="requestRadio"
+                          >Request</label
+                        >
+                      </div>
+                      <div class="form-check form-check-inline">
+                        <input
+                          class="form-check-input"
+                          type="radio"
+                          name="inlineRadioOptions"
+                          id="shareRadio"
+                          value="share"
+                        />
+                        <label class="form-check-label" for="shareRadio"
+                          >Share</label
+                        >
+                      </div>
+
+                      <!-- Resource Type  -->
+                      <div>
+                        <label class="mr-sm-2" for="inlineFormCustomSelect"
+                          >Resource Type</label
+                        >
+                        <select
+                          class="custom-select mr-sm-2"
+                          id="new-post-resource-type"
+                        >
+                          <option selected>Choose...</option>
+                          <option value="shelter">Shelter</option>
+                          <option value="food">Food</option>
+                          <option value="medicine">Medicine</option>
+                          <option value="medical-devices">
+                            Medical Devices
+                          </option>
+                          <option value="masks">Masks</option>
+                        </select>
+                      </div>
+
+                      <!-- Message -->
+                      <div class="row text-left text-info">
+                        <textarea
+                          id="new-post-message"
+                          class="create-announcement-text"
+                          placeholder="Message"
+                        ></textarea>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -80,7 +132,7 @@
                     type="button"
                     class="btn btn-info"
                     data-dismiss="modal"
-                    id="confirmBtn"
+                    id="submit-post-btn"
                   >
                     Post
                   </button>
@@ -91,7 +143,7 @@
 
           <!-- add new post -->
           <div class="row">
-            <div id="create-post" class="create-announcement-button">
+            <div id="add-post-btn" class="create-announcement-button">
               <h6>+</h6>
             </div>
           </div>
