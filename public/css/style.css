@@ -395,6 +395,20 @@ a:hover {
   height: 84vh;
 }
 
+/* Resources page */
+.resources-container {
+  width: 100%;
+  height: 84vh;
+  overflow-y: scroll;
+  background-color: #ecf5f7;
+}
+
+.resource-post .meta {
+  margin-bottom: 0.8rem;
+  font-weight: bold;
+  color: #07869a;
+}
+
 /* bootstrap style override */
 .list-group-item {
   border-width: 0px;

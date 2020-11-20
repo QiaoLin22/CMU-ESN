@@ -34,4 +34,8 @@ router.get('/search', authenticateUser, (req, res) => {
   res.render('search', { username: res.locals.username });
 });
 
+router.get('/resources', authenticateUser, (req, res) => {
+  res.render('resources', { username: res.locals.username });
+});
+
 module.exports = router;
