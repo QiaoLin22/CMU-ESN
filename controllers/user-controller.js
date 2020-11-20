@@ -71,7 +71,9 @@ class UserController {
       .then((contacts) => {
         res.send(contacts[0].emergencyContact);
       })
-      .catch((err) => next(err));
+      .catch((err) => {
+        next(err);
+      });
   }
 
   static removeContact(req, res) {
