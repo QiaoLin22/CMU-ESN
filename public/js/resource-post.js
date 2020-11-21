@@ -2,80 +2,124 @@
 const socket = io();
 
 const username = $('#username-data').val();
-const postsContainer = $('.posts-container');
-const addPostBtn = $('#add-post-btn');
-const addPostModal = $('#add-post-modal');
+const resourcePost = $('#post');
+const commentsContainer = $('#comments-container');
+const commentEle = $('#comment');
 
-// const newPostResourceType = $('#new-post-resource-type');
-const newPostMessage = $('#new-post-message');
-const submitPostBtn = $('#submit-post-btn');
+const postId = new URL(window.location.href).pathname.split('/')[3];
 
-function renderResourcePost(post) {
-  const { _id, sender, timestamp, postType, resourceType, message } = post;
+function capitalizeFirstLetter(str) {
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
+function resourceTypeIcon(resourceType) {
+  switch (resourceType) {
+    case 'shelter':
+      return '<i class="fas fa-home mr-1"></i>';
+    case 'food':
+      return '<i class="fas fa-utensils mr-1"></i>';
+    case 'medicine':
+      return '<i class="fas fa-capsules mr-1"></i>';
+    case 'medical-devices':
+      return '<i class="fas fa-first-aid mr-1"></i>';
+    case 'masks':
+      return '<i class="fas fa-head-side-mask mr-1"></i>';
+    default:
+      return undefined;
+  }
+}
+
+function renderComment(commentObj) {
+  const { sender, timestamp, comment } = commentObj;
 
   const localTime = new Date(timestamp).toLocaleString();
 
-  const postDiv = $('<div></div>').addClass('resource-post p-3');
-
-  postDiv.click(() => {
-    window.location.href = `/resources/posts/${_id}`;
-  });
-  postDiv.html(
-    $(`
-      <div class="row">
+  const commentDiv = $('<div></div>').addClass('comment p-3');
+  commentDiv.html(
+    $(`      
+      <div>
         <span class="meta">${sender}</span>
-        <span class="ml-3">${localTime}</span>
+        <span id="timestamp">${localTime}</span>
       </div>
-      <div>${postType}</div>
-      <div>${resourceType}</div>
-      <div>${message}</div>
-  `)
+      <div>
+        ${comment}
+      </div>
+    `)
   );
-  postsContainer.append(postDiv);
+  commentsContainer.prepend(commentDiv);
 }
 
-function loadResourcePosts() {
-  fetch(`/api/resource-posts`, {
+function renderPost(post) {
+  const { sender, timestamp, postType, resourceType, message, comments } = post;
+
+  $('#resource-post-title').text(`${sender}'s Post`);
+
+  const localTime = new Date(timestamp).toLocaleString();
+  const postTypeColor = postType === 'request' ? 'red' : 'blue';
+
+  resourcePost.html(
+    $(`
+      <div>
+        <span class="meta">${sender}</span>
+        <span id="timestamp">${localTime}</span>
+      </div>
+      <div>
+        <span>
+          ${resourceTypeIcon(resourceType)}
+          ${capitalizeFirstLetter(resourceType)}
+        </span>
+        <span id="post-type" style="color:${postTypeColor}">
+          ${capitalizeFirstLetter(postType)}
+        </span>
+      </div>
+    <div>${message}</div>
+  `)
+  );
+
+  comments.forEach((comment) => {
+    renderComment(comment);
+  });
+}
+
+function loadResourcePost() {
+  fetch(`/api/resource-posts/${postId}`, {
     method: 'GET',
   })
     .then((res) => res.json())
-    .then((posts) => {
-      posts.forEach((post) => {
-        renderResourcePost(post);
-      });
+    .then((post) => {
+      renderPost(post);
     })
     .catch((e) => {
       console.log(e);
     });
 }
 
-addPostBtn.click(() => {
-  addPostModal.modal('show');
+socket.on('new resource post comment', (newComment) => {
+  console.log(newComment);
+  renderComment(newComment);
 });
 
-submitPostBtn.click((event) => {
+$('#submitBtn').click((event) => {
   event.preventDefault();
 
-  const newPost = {
+  const newComment = {
     sender: username,
-    postType: undefined,
-    resourceType: undefined,
-    message: newPostMessage.val(),
+    comment: commentEle.val(),
   };
-  console.log(newPost);
-  fetch(`/api/resource-posts`, {
+
+  fetch(`/api/resource-posts/${postId}/comments`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify(newPost),
-  }).catch((e) => {
-    console.log(e);
-  });
+    body: JSON.stringify(newComment),
+  })
+    .then(() => {
+      commentEle.val('');
+    })
+    .catch((e) => {
+      console.log(e);
+    });
 });
 
-socket.on('new resource post', (newPost) => {
-  renderResourcePost(newPost);
-});
-
-jQuery(loadResourcePosts);
+jQuery(loadResourcePost);

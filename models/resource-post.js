@@ -60,7 +60,8 @@ class ResourcePostClass {
   }
 
   static async createResourcePostComment(postId, comment) {
-    return this.update({ _id: postId }, { $push: { comments: comment } });
+    await this.update({ _id: postId }, { $push: { comments: comment } });
+    return { ...comment, timestamp: new Date(Date.now()).toISOString() };
   }
 }
 

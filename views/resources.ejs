@@ -52,73 +52,66 @@
                   </div>
                 </div>
                 <div class="modal-body">
-                  <div
-                    class="alert"
-                    id="announceAlert"
-                    role="alert"
-                    hidden
-                  ></div>
-                  <div class="container-fluid">
-                    <div class="row text-left text-info">
-                      <!-- Post type -->
-                      <label class="form-label">
+                  <form class="container-fluid">
+                    <!-- Post type -->
+                    <div class="form-group" id="new-post-type">
+                      <label class="form-label text-info">
                         Request or Share Resource?
                       </label>
-                      <div class="form-check form-check-inline">
+
+                      <div class="form-check">
                         <input
                           class="form-check-input"
                           type="radio"
-                          name="inlineRadioOptions"
                           id="requestRadio"
                           value="request"
+                          name="resourceTypeRadios"
                         />
                         <label class="form-check-label" for="requestRadio"
                           >Request</label
                         >
                       </div>
-                      <div class="form-check form-check-inline">
+                      <div class="form-check">
                         <input
                           class="form-check-input"
                           type="radio"
-                          name="inlineRadioOptions"
                           id="shareRadio"
                           value="share"
+                          name="resourceTypeRadios"
                         />
                         <label class="form-check-label" for="shareRadio"
                           >Share</label
                         >
                       </div>
-
-                      <!-- Resource Type  -->
-                      <div>
-                        <label class="mr-sm-2" for="inlineFormCustomSelect"
-                          >Resource Type</label
-                        >
-                        <select
-                          class="custom-select mr-sm-2"
-                          id="new-post-resource-type"
-                        >
-                          <option selected>Choose...</option>
-                          <option value="shelter">Shelter</option>
-                          <option value="food">Food</option>
-                          <option value="medicine">Medicine</option>
-                          <option value="medical-devices">
-                            Medical Devices
-                          </option>
-                          <option value="masks">Masks</option>
-                        </select>
-                      </div>
-
-                      <!-- Message -->
-                      <div class="row text-left text-info">
-                        <textarea
-                          id="new-post-message"
-                          class="create-announcement-text"
-                          placeholder="Message"
-                        ></textarea>
-                      </div>
                     </div>
-                  </div>
+
+                    <!-- Resource Type  -->
+                    <div class="form-group">
+                      <label for="new-post-resource-type" class="text-info"
+                        >Resource Type</label
+                      >
+                      <select class="form-control" id="new-post-resource-type">
+                        <option selected>Choose...</option>
+                        <option value="shelter">Shelter</option>
+                        <option value="food">Food</option>
+                        <option value="medicine">Medicine</option>
+                        <option value="medical-devices">Medical Devices</option>
+                        <option value="masks">Masks</option>
+                      </select>
+                    </div>
+
+                    <!-- Message -->
+                    <div class="form-group">
+                      <label for="new-post-message" class="text-info">
+                        Message
+                      </label>
+                      <textarea
+                        id="new-post-message"
+                        class="form-control"
+                        rows="4"
+                      ></textarea>
+                    </div>
+                  </form>
                 </div>
                 <div class="modal-footer">
                   <button
@@ -129,7 +122,7 @@
                     Cancel
                   </button>
                   <button
-                    type="button"
+                    type="submit"
                     class="btn btn-info"
                     data-dismiss="modal"
                     id="submit-post-btn"

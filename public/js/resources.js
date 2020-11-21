@@ -6,12 +6,29 @@ const postsContainer = $('.posts-container');
 const addPostBtn = $('#add-post-btn');
 const addPostModal = $('#add-post-modal');
 
-// const newPostResourceType = $('#new-post-resource-type');
+const newPostResourceType = $('#new-post-resource-type');
 const newPostMessage = $('#new-post-message');
 const submitPostBtn = $('#submit-post-btn');
 
 function capitalizeFirstLetter(str) {
   return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
+function resourceTypeIcon(resourceType) {
+  switch (resourceType) {
+    case 'shelter':
+      return '<i class="fas fa-home mr-1"></i>';
+    case 'food':
+      return '<i class="fas fa-utensils mr-1"></i>';
+    case 'medicine':
+      return '<i class="fas fa-capsules mr-1"></i>';
+    case 'medical-devices':
+      return '<i class="fas fa-first-aid mr-1"></i>';
+    case 'masks':
+      return '<i class="fas fa-head-side-mask mr-1"></i>';
+    default:
+      return undefined;
+  }
 }
 
 function renderResourcePost(post) {
@@ -32,7 +49,10 @@ function renderResourcePost(post) {
         <span id="timestamp">${localTime}</span>
       </div>
       <div>
-        <span>${capitalizeFirstLetter(resourceType)}</span>
+        <span>
+          ${resourceTypeIcon(resourceType)}
+          ${capitalizeFirstLetter(resourceType)}
+        </span>
         <span id="post-type" style="color:${postTypeColor}">
           ${capitalizeFirstLetter(postType)}
         </span>
@@ -40,7 +60,7 @@ function renderResourcePost(post) {
       <div>${message}</div>
   `)
   );
-  postsContainer.append(postDiv);
+  postsContainer.prepend(postDiv);
 }
 
 function loadResourcePosts() {
@@ -65,11 +85,14 @@ addPostBtn.click(() => {
 submitPostBtn.click((event) => {
   event.preventDefault();
 
+  const newPostType = $("input[name='resourceTypeRadios']:checked").val();
+
   const newPost = {
     sender: username,
-    postType: undefined,
-    resourceType: undefined,
+    postType: newPostType,
+    resourceType: newPostResourceType.val(),
     message: newPostMessage.val(),
+    zip: '94043',
   };
   console.log(newPost);
   fetch(`/api/resource-posts`, {
