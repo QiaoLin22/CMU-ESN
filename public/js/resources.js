@@ -10,6 +10,9 @@ const newPostResourceType = $('#new-post-resource-type');
 const newPostMessage = $('#new-post-message');
 const submitPostBtn = $('#submit-post-btn');
 
+let zipCode;
+const enterZipModal = $('#enter-zip-modal');
+
 function capitalizeFirstLetter(str) {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
@@ -64,7 +67,7 @@ function renderResourcePost(post) {
 }
 
 function loadResourcePosts() {
-  fetch(`/api/resource-posts`, {
+  fetch(`/api/resource-posts?zip=${zipCode}`, {
     method: 'GET',
   })
     .then((res) => res.json())
@@ -110,4 +113,46 @@ socket.on('new resource post', (newPost) => {
   renderResourcePost(newPost);
 });
 
-jQuery(loadResourcePosts);
+function showEnterZipModal() {
+  enterZipModal.modal('show');
+}
+
+$('#zip-save-btn').click(async (event) => {
+  event.preventDefault();
+  const zip = $('#zip-code').val();
+  console.log(zip);
+  await fetch(`/api/users/${username}/zip`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ zip }),
+  });
+  zipCode = zip;
+  enterZipModal.modal('hide');
+  loadResourcePosts();
+});
+
+async function getUserZip() {
+  const res = await fetch(`/api/users/${username}/zip`, {
+    method: 'GET',
+  });
+
+  const { zip } = await res.json();
+
+  if (!zip) {
+    return false;
+  } else {
+    zipCode = zip;
+    return true;
+  }
+}
+
+jQuery(async () => {
+  if (await getUserZip()) {
+    $('#curr-zip-code').text(zipCode);
+    loadResourcePosts();
+  } else {
+    showEnterZipModal();
+  }
+});

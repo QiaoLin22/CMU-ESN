@@ -1,8 +1,4 @@
-const {
-  createNewUser,
-  retrieveUsers,
-  updateStatusIcon,
-} = require('../models/user');
+const User = require('../models/user');
 const { genHashAndSalt } = require('../lib/password');
 
 class UserController {
@@ -11,7 +7,7 @@ class UserController {
 
     // create new user and save to db
     const { hash, salt } = genHashAndSalt(password);
-    createNewUser(username, hash, salt)
+    User.createNewUser(username, hash, salt)
       .then(() => {
         req.app.get('io').emit('updateDirectory');
         res.status(201).send({ message: 'success' });
@@ -29,14 +25,14 @@ class UserController {
   }
 
   static retrieveUsers(req, res, next) {
-    retrieveUsers(res.locals.username)
+    User.retrieveUsers(res.locals.username)
       .then((users) => res.status(200).json(users))
       .catch((err) => next(err));
   }
 
   static updateStatus(req, res) {
     const { status, username } = req.body;
-    updateStatusIcon(username, status)
+    User.updateStatusIcon(username, status)
       .then(() => {
         req.app.get('io').emit('updateDirectory');
         req.app.get('io').emit('updateMsgStatus', username);
@@ -46,6 +42,23 @@ class UserController {
         console.log(err);
         res.status(400).json({ error: err });
       });
+  }
+
+  static getZip(req, res) {
+    const { username } = req.params;
+    User.getZip(username).then((zip) => {
+      res.status(200).send(zip);
+    });
+  }
+
+  static updateZip(req, res) {
+    const { username } = req.params;
+    const { zip } = req.body;
+
+    console.log(req.body);
+    User.updateZip(username, zip).then(() => {
+      res.status(200).send('success');
+    });
   }
 }
 

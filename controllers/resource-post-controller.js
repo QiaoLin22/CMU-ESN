@@ -33,7 +33,6 @@ class ResourcePostController {
     const { postId } = req.params;
     ResourcePost.createResourcePostComment(postId, req.body)
       .then((newComment) => {
-        console.log(newComment);
         req.app.get('io').emit('new resource post comment', newComment);
         res.status(201).send({ message: 'success' });
       })

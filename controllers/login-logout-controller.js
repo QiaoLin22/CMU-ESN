@@ -1,8 +1,4 @@
-const {
-  updateOnlineStatus,
-  findUserByUsername,
-  validateUsernamePassword,
-} = require('../models/user');
+const User = require('../models/user');
 const { validatePassword } = require('../lib/password');
 const { createToken } = require('../lib/jwt');
 
@@ -11,11 +7,11 @@ class LoginLogoutController {
     const { username, password } = req.body;
 
     try {
-      const user = await findUserByUsername(username);
+      const user = await User.findUserByUsername(username);
 
       // username does not exists
       if (!user) {
-        validateUsernamePassword(username, password);
+        User.validateUsernamePassword(username, password);
         // ask the user to confirm the creation of a new user
         res.status(200).send({ message: 'create new user?' });
       }
@@ -28,7 +24,7 @@ class LoginLogoutController {
           maxAge: cookieMaxAge * 1000,
         });
 
-        updateOnlineStatus(username, true).then(() => {
+        User.updateOnlineStatus(username, true).then(() => {
           req.app.get('io').emit('updateDirectory');
           res.location('/main').json({});
         });
@@ -44,7 +40,7 @@ class LoginLogoutController {
 
   static logout(req, res) {
     const { username } = res.locals;
-    updateOnlineStatus(username, false)
+    User.updateOnlineStatus(username, false)
       .then(() => {
         req.app.get('io').emit('updateDirectory');
         res.status(200).end();

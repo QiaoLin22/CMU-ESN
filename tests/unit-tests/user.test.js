@@ -2,14 +2,7 @@
 const DBInMemory = require('../../services/db-in-memory');
 // console.log(DBInMemory);
 
-const {
-  User,
-  createNewUser,
-  retrieveUsers,
-  updateStatusIcon,
-  getStatusByUsername,
-  findUserByUsername,
-} = require('../../models/user');
+const User = require('../../models/user');
 
 // const dao = new DAO(DBInMemory);
 
@@ -26,7 +19,7 @@ afterEach(DBInMemory.cleanup);
 
 describe('use case join community', () => {
   it('create new user successfully', async () => {
-    await createNewUser('John', '001', '1110');
+    await User.createNewUser('John', '001', '1110');
 
     const result = await User.findOne(
       { username: 'John' },
@@ -58,7 +51,7 @@ describe('use case join community', () => {
   });
 
   it('Find user by username successfully', async () => {
-    const actual = await findUserByUsername('Jack');
+    const actual = await User.findUserByUsername('Jack');
 
     const expected = [
       {
@@ -81,7 +74,7 @@ describe('use case join community', () => {
   });
 
   it('Update status successfully', async () => {
-    await updateStatusIcon('Jack', 'OK');
+    await User.updateStatusIcon('Jack', 'OK');
 
     const expected = [
       {
@@ -103,13 +96,13 @@ describe('use case join community', () => {
   });
 
   it('get status by username successfully', async () => {
-    const actual = await getStatusByUsername('Jack');
+    const actual = await User.getStatusByUsername('Jack');
     const expected = 'Undefined';
     expect(actual.status).toEqual(expected);
   });
 
   it('retrieve users successfully', async () => {
-    const actual = await retrieveUsers();
+    const actual = await User.retrieveUsers();
 
     const expected = [
       {

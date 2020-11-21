@@ -31,9 +31,40 @@
           </div>
 
           <div class="row">
+            <span id="curr-zip-code"></span>
+            <i class="fas fa-pencil-alt"></i>
+          </div>
+
+          <div class="row">
             <div class="posts-container"></div>
           </div>
 
+          <!-- Enter zip modal -->
+          <div
+            class="modal fade border-info"
+            id="enter-zip-modal"
+            tabindex="-1"
+            aria-hidden="true"
+            data-backdrop="static" data-keyboard="false"
+          >
+            <div class="modal-dialog modal-dialog-centered">
+              <div class="modal-content modal-lg">
+                <div class="modal-body">
+                  <form>
+                    <label>
+                      This is your first time using <strong class="text-info">Resources</strong>. Please enter your
+                      zip code below to see the resources in your area.
+                    </label>
+                    <label class='text-info' >Zip code</label>
+                    <input class="form-control" type="text" id="zip-code"></input>
+                  </form>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-info" id="zip-save-btn">Save</button>
+                </div>
+              </div>
+            </div>
+          </div>
           <!-- Create new Post modal -->
           <div
             class="modal fade border-info"

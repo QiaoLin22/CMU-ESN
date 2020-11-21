@@ -5,7 +5,7 @@ const socketIO = require('socket.io');
 const app = require('../../app');
 const { createToken } = require('../../lib/jwt');
 const DBInMemory = require('../../services/db-in-memory');
-const { User } = require('../../models/user');
+const User = require('../../models/user');
 const { Message } = require('../../models/message');
 
 const server = http.createServer(app);
