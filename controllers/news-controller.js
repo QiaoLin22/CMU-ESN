@@ -52,7 +52,8 @@ class NewsController {
       res.status(400).end();
     } else {
       const news = await getNewsByNewsId(newsId);
-      await createNewNewsMessage(sender, recipient, news[0].message, roomId, news[0].photo)
+      const message = news[0].message === ''? ' ': news[0].message;
+      await createNewNewsMessage(sender, recipient, message, roomId, news[0].photo)
       .then((newMessage) => {
         req.app.get('io').in(roomId).emit('new private message', newMessage);
         req.app.get('io').emit('updateDirectory');

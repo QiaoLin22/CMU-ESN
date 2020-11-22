@@ -19,8 +19,7 @@ function toBase64(arr) {
 }
 
 
-
-/** Alert */
+/** Forward notification box */
 function displayNotification(notifyMessage) {
   $('#forwardNotifyMessage').text(notifyMessage);
   confirmModal.modal('show');
@@ -29,6 +28,7 @@ function displayNotification(notifyMessage) {
   })
 }
 
+/* Forward news function*/
 function forwardNews(recipient, newsId, roomId){
   const formData = {
     sender: username,
@@ -54,6 +54,7 @@ function forwardNews(recipient, newsId, roomId){
   });
 }
 
+/* Output user list */
 function outputUser(user, newsId) {
   const { online, numUnreadMessages } = user;
   const { status } = user.latestStatus;
@@ -124,7 +125,7 @@ function outputNews(newNews) {
   }else{
     newsdiv.innerHTML = `<p class="meta mb-1"> ${newNews.sender} <span class="ml-3"> ${timestamp} </span></p>
     <p id=${newsId}> ${newNews.message}<button type="button" id = "forwardBtn" class="btn btn-info float-right" >FORWARD</button></p>
-    <img src="data:image/png;base64,${toBase64( newNews.photo.data.data)}"> `;
+    <img class="img-thumbnail" src="data:image/png;base64,${toBase64( newNews.photo.data.data)}"> `;
   }
   news.prepend(newsdiv);
 
@@ -175,6 +176,7 @@ socket.on('new news', (newMsg) => {
   console.log(newMsg)
 });
 
+/* Post a new news */
 post.on('click', () => {
   const cityname = $('#cityname-data').text();
   var photo = document.querySelector('input[type="file"]');

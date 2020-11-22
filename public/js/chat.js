@@ -60,7 +60,7 @@ function outputMessage(message) {
     msg.innerHTML = `<p class="meta mb-1"> ${message.sender} <span>${icon}</span> <span class="ml-3"> ${timestamp} </span></p> <p class="text"> ${message.message} </p>`;
   }else{
     msg.innerHTML = `<p class="meta mb-1"> ${message.sender} <span>${icon}</span> <span class="ml-3"> ${timestamp} </span></p> 
-    <p class="text"> ${message.message} </p><img src="data:image/png;base64,${toBase64( message.photo.data.data)}">`;
+    <p class="text"> ${message.message} </p><img class="img-thumbnail" src="data:image/png;base64,${toBase64( message.photo.data.data)}">`;
   }
   chatMessages.append(msg);
 
