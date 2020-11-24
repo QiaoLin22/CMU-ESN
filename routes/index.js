@@ -13,6 +13,10 @@ router.get('/announcement', authenticateUser, (req, res) => {
   res.render('announcements');
 });
 
+router.get('/news', authenticateUser, (req, res) => {
+  res.render('news', { username: res.locals.username });
+});
+
 router.get('/profile', authenticateUser, (req, res) => {
   res.render('profile', { username: res.locals.username });
 });
