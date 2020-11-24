@@ -9,7 +9,6 @@ const username = $('#username-data').val();
 const sendSMS = $('#sendSmsModal');
 const sendConfirm = $('#sendConfirmBtn');
 
-<<<<<<< HEAD
 function updateAPI(status) {
   const newStatus = {
     username: username,
@@ -46,7 +45,9 @@ function sendNewSMS() {
       displayNotification();
     })
     .catch((e) => {
-=======
+      console.log(e);
+    })
+    
 function updateStatus(status) {
   status.on('click', () => {
     const newStatus = {
@@ -60,7 +61,6 @@ function updateStatus(status) {
       },
       body: JSON.stringify(newStatus),
     }).catch((e) => {
->>>>>>> master
       console.log(e);
     });
 }
@@ -79,14 +79,12 @@ updateStatus(help);
 updateStatus(emergency);
 updateStatus(na);
 
-<<<<<<< HEAD
 sendConfirm.on('click', () => {
   console.log('send new sms from frontend');
   sendNewSMS();
 });
 
 // add socket event 'sent SMS'
-=======
 function displayNotification() {
   $('.toast-body').replaceWith(
     `<div class="toast-body pl-3 pt-2 pr-2 pb-2">Your location has been updated</div>`
@@ -102,7 +100,6 @@ function displayDeleteNotification() {
   $('.toast').css('zIndex', 1000);
   $('.toast').toast('show');
 }
->>>>>>> master
 
 logoutBtn.on('click', () => {
   fetch('/api/users/logout', {
