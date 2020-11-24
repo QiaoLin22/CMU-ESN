@@ -5,7 +5,7 @@ const socketIO = require('socket.io');
 const app = require('../../app');
 const DBInMemory = require('../../services/db-in-memory');
 const { createToken } = require('../../lib/jwt');
-const { User } = require('../../models/user');
+const User  = require('../../models/user');
 const { Message } = require('../../models/message');
 const { News } = require('../../models/news');
 

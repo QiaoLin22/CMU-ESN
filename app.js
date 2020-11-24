@@ -10,6 +10,7 @@ const messagesRouter = require('./routes/messages');
 const announcementsRouter = require('./routes/announcements');
 const searchRouter = require('./routes/search');
 const newsRouter = require('./routes/news');
+const resourcePostsRouter = require('./routes/resource-posts');
 
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
@@ -25,5 +26,6 @@ app.use('/api/messages', messagesRouter);
 app.use('/api/announcements', announcementsRouter);
 app.use('/api/search', searchRouter);
 app.use('/api/news', newsRouter);
+app.use('/api/resource-posts', resourcePostsRouter);
 
 module.exports = app;

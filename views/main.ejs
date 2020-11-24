@@ -22,7 +22,7 @@
   <body>
     <div class="container directory-container">
       <div class="row">
-        <div class="col-lg col-md-3 "></div>
+        <div class="col-lg col-md-3"></div>
         <div class="col-lg col-md-6 col esn-screen">
           <div class="row directory-header">
             <h5>ESN Chatroom</h5>
@@ -33,25 +33,34 @@
             <nav class="navbar custom-nav px-5">
               <a class="navbar-brand" href="/main" style="color: #17a2b8;"><i class="fas fa-home"></i></a>
               <a class="navbar-brand" href="/announcement"><i class="far fa-bell"></i></a>
+              <a class="navbar-brand" href="/resources"><i class="fas fa-hands-helping"></i ></a>
               <a class="navbar-brand" href="/news"><i class="fas fa-bolt"></i></a>
               <a class="navbar-brand" href="/profile"><i class="far fa-user"></i></a>
             </nav>
           </div>
-  
+
           <ul class="list-group list-group-flush directory-category">
             <ui>
               <h6 class="mb-2">Channels</h6>
             </ui>
-            <li class="list-group-item list-group-item-action" style="border-radius: 0.5rem;">
+            <li
+              class="list-group-item list-group-item-action"
+              style="border-radius: 0.5rem"
+            >
               <a href="/public-wall"># Public</a>
             </li>
           </ul>
-  
+
           <ul class="list-group list-group-flush directory-category">
             <ui>
               <div class="direct-msg mb-2">
                 <span><h6>Directory</h6></span>
-                <a id="searchBtn" style="position: absolute; right: 1rem;" href="/search?context=directory"><i class="fas fa-search ml-3"></i></a>
+                <a
+                  id="searchBtn"
+                  style="position: absolute; right: 1rem"
+                  href="/search?context=directory"
+                  ><i class="fas fa-search ml-3"></i
+                ></a>
               </div>
             </ui>
 
@@ -59,21 +68,15 @@
               <div id="online-list"></div>
               <div id="offline-list"></div>
             </div>
-            <br>            
+            <br />
           </ul>
-          
-
         </div>
 
-        <div class="col-lg col-md-3 "></div>
+        <div class="col-lg col-md-3"></div>
       </div>
     </div>
     <!-- use only for passing the username -->
-    <input
-      id="username-data"
-      value="<%= username %>"
-      style="display: none"
-    />
+    <input id="username-data" value="<%= username %>" style="display: none" />
   </body>
   <script
     src="https://code.jquery.com/jquery-3.5.1.slim.min.js"

@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const { getStatusByUsername } = require('./user');
+const User = require('./user');
 
 const MessageSchema = mongoose.Schema({
   sender: {
@@ -41,7 +41,7 @@ const MessageSchema = mongoose.Schema({
 const Message = mongoose.model('Message', MessageSchema);
 
 async function createNewMessage(sender, recipient, message, roomId) {
-  const latestStatus = await getStatusByUsername(sender);
+  const latestStatus = await User.getStatusByUsername(sender);
 
   const newMessage = new Message({
     sender: sender,
@@ -56,7 +56,7 @@ async function createNewMessage(sender, recipient, message, roomId) {
 }
 
 async function createNewNewsMessage(sender, recipient, message, roomId, photo) {
-  const latestStatus = await getStatusByUsername(sender);
+  const latestStatus = await User.getStatusByUsername(sender);
   const newMessage = new Message({
     sender: sender,
     recipient: recipient,
