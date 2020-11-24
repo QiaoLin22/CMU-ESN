@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const { getStatusByUsername } = require('./user');
+const User = require('./user');
 
 const MessageSchema = mongoose.Schema({
   sender: {
@@ -32,12 +32,16 @@ const MessageSchema = mongoose.Schema({
     required: [true, 'Read status is required'],
     default: false,
   },
+  photo: { 
+    data: Buffer, 
+    contentType: String,
+ },
 });
 
 const Message = mongoose.model('Message', MessageSchema);
 
 async function createNewMessage(sender, recipient, message, roomId) {
-  const latestStatus = await getStatusByUsername(sender);
+  const latestStatus = await User.getStatusByUsername(sender);
 
   const newMessage = new Message({
     sender: sender,
@@ -46,6 +50,21 @@ async function createNewMessage(sender, recipient, message, roomId) {
     roomId: roomId,
     status: latestStatus.status,
     read: false,
+  });
+
+  return newMessage.save();
+}
+
+async function createNewNewsMessage(sender, recipient, message, roomId, photo) {
+  const latestStatus = await User.getStatusByUsername(sender);
+  const newMessage = new Message({
+    sender: sender,
+    recipient: recipient,
+    message: message,
+    roomId: roomId,
+    status: latestStatus.status,
+    read: false,
+    photo: photo,
   });
 
   return newMessage.save();
@@ -76,4 +95,5 @@ module.exports = {
   getHistoricalMessages,
   updateAllToRead,
   searchMessage,
+  createNewNewsMessage,
 };

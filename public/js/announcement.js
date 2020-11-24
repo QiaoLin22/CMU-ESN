@@ -1,3 +1,4 @@
+/* global io */
 const socket = io();
 
 const createAnnounce = $('#create-announcement');

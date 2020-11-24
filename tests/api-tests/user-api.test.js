@@ -5,7 +5,7 @@ const socketIO = require('socket.io');
 const app = require('../../app');
 const { createToken } = require('../../lib/jwt');
 const DBInMemory = require('../../services/db-in-memory');
-const { User, updateOnlineStatus } = require('../../models/user');
+const User = require('../../models/user');
 
 const server = http.createServer(app);
 const io = socketIO.listen(server);
@@ -113,7 +113,7 @@ describe('POST /login', () => {
 describe('PUT /logout', () => {
   test('It should respond with a user logout successfully', async () => {
     const token = createToken({ _id: '111', username: 'John' });
-    updateOnlineStatus('John', true);
+    User.updateOnlineStatus('John', true);
     const response = await request(app)
       .put('/api/users/logout')
       .set('Cookie', `jwt=${token}`);

@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+/* eslint import/no-extraneous-dependencies: ["error", {"devDependencies": true}] */
 const { MongoMemoryServer } = require('mongodb-memory-server');
 
 const mongoServer = new MongoMemoryServer();
