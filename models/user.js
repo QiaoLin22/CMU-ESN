@@ -27,6 +27,17 @@ const userSchema = mongoose.Schema({
       },
     ],
   },
+  emergencyContact: {
+    type: [
+      {
+        name: {
+          type: String,
+        },
+        phone: { type: String },
+      },
+    ],
+    default: [],
+  },
   location: {
     longitude: { type: Number },
     latitude: { type: Number },
@@ -43,7 +54,7 @@ class UserClass {
     });
   }
 
-  static retrieveUsers(username) {
+  static async retrieveUsers(username) {
     return this.aggregate([
       {
         $lookup: {
@@ -149,56 +160,58 @@ class UserClass {
     console.log(zip);
     return this.updateOne({ username }, { $set: { zip } });
   }
+
+  static updateUserLocation(username, lo, la) {
+    const newLocation = { longitude: lo, latitude: la };
+    return this.updateOne(
+      { username: username }, // Filter
+      { $set: { location: newLocation } } // Update
+    );
+  }
+
+  static createNewEmergencyContact(username, name, phone) {
+    const newContact = { name: name, phone: phone };
+    return this.update(
+      { username: username },
+      { $push: { emergencyContact: newContact } }
+    );
+  }
+
+  static removeEmergencyContact(username, name) {
+    return this.update(
+      { username: username },
+      { $pull: { emergencyContact: { name: name } } }
+    );
+  }
+
+  static getEmergencyContacts(username) {
+    return this.find({ username: username }, { _id: 0, emergencyContact: 1 });
+  }
+
+  static retrieveUserLocations() {
+    return this.aggregate([
+      { $match: { location: { $ne: null } } },
+      {
+        $project: {
+          username: 1,
+          location: 1,
+          status: { $arrayElemAt: ['$statusArray', -1] },
+        },
+      },
+    ]);
+  }
+
+  static retrieveUserLocation(username) {
+    return this.findOne({ username: username }, { location: 1 });
+  }
+
+  static deleteUserLocations(username) {
+    return this.updateOne({ username: username }, { $unset: { location: '' } });
+  }
 }
 
 userSchema.loadClass(UserClass);
 
 const User = mongoose.model('User', userSchema);
 
-function updateUserLocation(username, lo, la) {
-  const newLocation = { longitude: lo, latitude: la };
-  return User.updateOne(
-    { username: username }, // Filter
-    { $set: { location: newLocation } } // Update
-  );
-}
-
-function retrieveUserLocations() {
-  return User.aggregate([
-    { $match: { location: { $ne: null } } },
-    {
-      $project: {
-        username: 1,
-        location: 1,
-        status: { $arrayElemAt: ['$statusArray', -1] },
-      },
-    },
-  ]);
-}
-
-function retrieveUserLocation(username) {
-  return User.findOne({ username: username }, { location: 1 });
-}
-
-function deleteUserLocations(username) {
-  return User.updateOne({ username: username }, { $unset: { location: '' } });
-}
-
-module.exports = {
-  User,
-  createNewUser,
-  retrieveUsers,
-  findUserByUsername,
-  updateOnlineStatus,
-  updateStatusIcon,
-  getStatusByUsername,
-  validateUsernamePassword,
-  retrieveUserStatus,
-  findUserByKeyword,
-  findUserByStatus,
-  updateUserLocation,
-  retrieveUserLocations,
-  retrieveUserLocation,
-  deleteUserLocations,
-};
 module.exports = User;

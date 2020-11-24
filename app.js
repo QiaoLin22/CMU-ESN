@@ -9,6 +9,7 @@ const usersRouter = require('./routes/users');
 const messagesRouter = require('./routes/messages');
 const announcementsRouter = require('./routes/announcements');
 const searchRouter = require('./routes/search');
+const contactRouter = require('./routes/emergencyContact');
 const newsRouter = require('./routes/news');
 const resourcePostsRouter = require('./routes/resource-posts');
 
@@ -25,6 +26,7 @@ app.use('/api/users', usersRouter);
 app.use('/api/messages', messagesRouter);
 app.use('/api/announcements', announcementsRouter);
 app.use('/api/search', searchRouter);
+app.use('/api/contacts', contactRouter);
 app.use('/api/news', newsRouter);
 app.use('/api/resource-posts', resourcePostsRouter);
 

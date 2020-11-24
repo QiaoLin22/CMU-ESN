@@ -24,6 +24,17 @@
       <div class="row">
         <div class="col-lg col-md-3 "></div>
         <div class="col-lg col-md-6 col esn-screen">
+          <div class="toast toast-custom mt-2" role="alert" aria-live="polite" aria-atomic="true" data-animation = "true" data-autohide = "true" data-delay = "4000">
+            <div role="alert" aria-live="assertive" aria-atomic="true">
+              <div class="toast-header p-2">
+                <i class="fas fa-bell mr-2" style="color: #07869a;"></i>
+                <strong class="mr-auto">SMS Notification</strong>
+                <small>a second ago</small>
+              </div>
+              <div class="toast-body"></div>
+            </div>
+          </div>
+
           <div class="row directory-header">
             <h5>Profile</h5>
           </div>
@@ -33,7 +44,7 @@
           </div>
           
           <div class="direct-msg mt-3">
-            <span><h6>Update Status</h6></span>
+            <span><h6>User Status</h6></span>
             <span class="dropdown">
               <a class="btn btn-info dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 Status
@@ -45,6 +56,10 @@
                 <a class="dropdown-item status-btn" href="#">Undefined<i class="far fa-question-circle ml-2" style="color: white"></i></a>
               </div>
             </span>
+          </div>
+          <div class="direct-msg mt-1"> 
+            <span><h6>Emergency Contact</h6></span>
+            <span><a href="/profile/emergency">edit</a></span>
           </div>
 
           <div class="toast toast-custom mt-2" role="alert" aria-live="polite" aria-atomic="true" data-animation = "true" data-autohide = "true" data-delay = "4000">
@@ -78,7 +93,38 @@
         
           <button id="logoutBtn" class="btn btn-info btn-block">Log out</button>
 
-          
+          <!-- emergency send SMS confirm modal -->
+          <div class="modals"></div>
+          <div class="modal fade border-info" id="sendSmsModal" tabindex="-1" aria-labelledby="announceModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content modal-lg">
+                <div class="modal-header">
+                  <div class="container-fluid">
+                    <div class="row text-left text-info">
+                      <h6 class="mb-2">Send SMS to All Emergency Contacts</h6>
+                    </div>
+                  </div>
+                </div>
+                <div class="modal-body">
+                  <div class="alert" id="announceAlert" role="alert" hidden></div>
+                  <div class="container-fluid">
+                    <div class="row text-left text-info">
+                      <p>Do you want to notify all your contacts that you're in an emergency?</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal" id="dontSendBtn">
+                    No, Thanks
+                  </button>
+                  <button type="button" class="btn btn-info" data-dismiss="modal" id="sendConfirmBtn">
+                    Yes
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
           <!-- navigation bar -->
           <div class="row">
             <nav class="navbar custom-nav px-5">

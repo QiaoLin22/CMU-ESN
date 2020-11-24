@@ -23,31 +23,17 @@ describe('use case join community', () => {
 
     const result = await User.findOne(
       { username: 'John' },
-      { _id: 0, __v: 0, timestamp: 0, statusArray: 0 }
+      { _id: 0, __v: 0, timestamp: 0, statusArray: 0, emergencyContact: 0 }
     );
     const actual = result.toJSON();
-
-    // const actualStatus = actual.statusArray[0].status
 
     const expected = {
       username: 'John',
       hash: '001',
       salt: '1110',
       online: false,
-      // statusArray: [
-      //   {
-      //     status: 'Undefined',
-      //   },
-      // ],
     };
     expect(actual).toEqual(expected);
-    // expect(actual.username).toEqual(expected[0].username);
-    // expect(actual.hash).toEqual(expected[0].hash);
-    // expect(actual.salt).toEqual(expected[0].salt);
-    // expect(actual.online).toEqual(expected[0].online);
-    // expect(actual.statusArray[0].status).toEqual(
-    //   expected[0].statusArray[0].status
-    // );
   });
 
   it('Find user by username successfully', async () => {

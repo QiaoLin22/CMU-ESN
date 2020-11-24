@@ -14,7 +14,7 @@ class UserController {
       })
       .catch((err) => {
         let message;
-
+        // duplicate key in Mongo
         if (err.code === 11000) {
           message = 'Username already exists';
         } else {
