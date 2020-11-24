@@ -1,14 +1,10 @@
-const {
-  createNewEmergencyContact,
-  removeEmergencyContact,
-  getEmergencyContacts,
-} = require('../models/user');
+const User = require('../models/user');
 const createNewSMS = require('../lib/sms');
 
 class ContactController {
   static createContact(req, res) {
     const { username, name, phone } = req.body;
-    createNewEmergencyContact(username, name, phone)
+    User.createNewEmergencyContact(username, name, phone)
       .then(() => {
         const newContact = { name: name, phone: phone };
         req.app.get('io').emit('create new contact', newContact);
@@ -21,7 +17,7 @@ class ContactController {
   }
 
   static getAllContacts(req, res) {
-    getEmergencyContacts(res.locals.username)
+    User.getEmergencyContacts(res.locals.username)
       .then((contacts) => {
         res.send(contacts[0].emergencyContact);
       })
@@ -32,7 +28,7 @@ class ContactController {
 
   static removeContact(req, res) {
     const { username, name } = req.body;
-    removeEmergencyContact(username, name)
+    User.removeEmergencyContact(username, name)
       .then(() => {
         req.app.get('io').emit('remove a contact', username);
         res.status(200).send({ message: 'success' });
@@ -45,7 +41,7 @@ class ContactController {
 
   static notifyEmergencyContact(req, res) {
     const { username } = res.locals;
-    getEmergencyContacts(username)
+    User.getEmergencyContacts(username)
       .then((contacts) => {
         contacts[0].emergencyContact.forEach((contact) => {
           createNewSMS(username, contact.name, contact.phone);

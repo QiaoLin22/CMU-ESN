@@ -1,9 +1,4 @@
-const {
-  updateUserLocation,
-  retrieveUserLocations,
-  retrieveUserLocation,
-  deleteUserLocations,
-} = require('../models/user');
+const User = require('../models/user');
 
 class MapController {
   static updateLocation(req, res) {
@@ -11,7 +6,7 @@ class MapController {
     if (!longitude || !latitude) {
       res.status(400).json({ message: 'longitude and latitude are required' });
     } else {
-      updateUserLocation(username, longitude, latitude).then(() => {
+      User.updateUserLocation(username, longitude, latitude).then(() => {
         req.app.get('io').emit('updateMap');
         res.status(200).send({ message: 'success' });
       });
@@ -19,14 +14,14 @@ class MapController {
   }
 
   static retrieveLocations(req, res) {
-    retrieveUserLocations()
+    User.retrieveUserLocations()
       .then((locations) => res.status(200).json(locations))
       .catch((err) => next(err));
   }
 
   static retrieveLocation(req, res) {
     const { username } = res.locals;
-    retrieveUserLocation(username)
+    User.retrieveUserLocation(username)
       .then((location) => res.status(200).json(location))
       .catch((err) => next(err));
   }
@@ -36,7 +31,7 @@ class MapController {
     if (!username) {
       res.status(400).json({ message: 'username is required' });
     } else {
-      deleteUserLocations(username).then(() => {
+      User.deleteUserLocations(username).then(() => {
         req.app.get('io').emit('updateMap');
         res.status(200).send({ message: 'success' });
       });
