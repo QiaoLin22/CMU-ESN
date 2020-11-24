@@ -35,6 +35,7 @@ class UserController {
     User.updateStatusIcon(username, status)
       .then(() => {
         req.app.get('io').emit('updateDirectory');
+        req.app.get('io').emit('updateMap');
         req.app.get('io').emit('updateMsgStatus', username);
         res.status(200).send({ message: 'success' });
       })

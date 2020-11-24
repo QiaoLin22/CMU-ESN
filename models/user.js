@@ -27,6 +27,10 @@ const userSchema = mongoose.Schema({
       },
     ],
   },
+  location: {
+    longitude: { type: Number },
+    latitude: { type: Number },
+  },
   zip: String,
 });
 
@@ -151,4 +155,50 @@ userSchema.loadClass(UserClass);
 
 const User = mongoose.model('User', userSchema);
 
+function updateUserLocation(username, lo, la) {
+  const newLocation = { longitude: lo, latitude: la };
+  return User.updateOne(
+    { username: username }, // Filter
+    { $set: { location: newLocation } } // Update
+  );
+}
+
+function retrieveUserLocations() {
+  return User.aggregate([
+    { $match: { location: { $ne: null } } },
+    {
+      $project: {
+        username: 1,
+        location: 1,
+        status: { $arrayElemAt: ['$statusArray', -1] },
+      },
+    },
+  ]);
+}
+
+function retrieveUserLocation(username) {
+  return User.findOne({ username: username }, { location: 1 });
+}
+
+function deleteUserLocations(username) {
+  return User.updateOne({ username: username }, { $unset: { location: '' } });
+}
+
+module.exports = {
+  User,
+  createNewUser,
+  retrieveUsers,
+  findUserByUsername,
+  updateOnlineStatus,
+  updateStatusIcon,
+  getStatusByUsername,
+  validateUsernamePassword,
+  retrieveUserStatus,
+  findUserByKeyword,
+  findUserByStatus,
+  updateUserLocation,
+  retrieveUserLocations,
+  retrieveUserLocation,
+  deleteUserLocations,
+};
 module.exports = User;
