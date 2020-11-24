@@ -36,6 +36,7 @@ const userSchema = mongoose.Schema({
         phone: { type: String },
       },
     ],
+    default: [],
   },
   location: {
     longitude: { type: Number },
@@ -46,38 +47,29 @@ const userSchema = mongoose.Schema({
 
 class UserClass {
   static createNewUser(username, hash, salt) {
-    const newUser = new User({
-      username: username,
+    return this.create({
+      username,
       hash,
       salt,
-      online: false,
-      statusArray: [
-        {
-          timestamp: () => new Date(Date.now()).toISOString(),
-          status: 'Undefined',
-        },
-      ],
-      emergencyContact: [],
     });
-  
-    return newUser.save();
   }
 
-async retrieveUsers(username) {
-  return this.aggregate([
-    {
-      $lookup: {
-        from: 'messages',
-        let: { curr_username: '$username' },
-        pipeline: [
-          {
-            $match: {
-              $expr: {
-                $and: [
-                  { $eq: ['$recipient', username] },
-                  { $eq: ['$sender', '$$curr_username'] },
-                  { $eq: ['$read', false] },
-                ],
+  static async retrieveUsers(username) {
+    return this.aggregate([
+      {
+        $lookup: {
+          from: 'messages',
+          let: { curr_username: '$username' },
+          pipeline: [
+            {
+              $match: {
+                $expr: {
+                  $and: [
+                    { $eq: ['$recipient', username] },
+                    { $eq: ['$sender', '$$curr_username'] },
+                    { $eq: ['$read', false] },
+                  ],
+                },
               },
             },
           ],
@@ -168,99 +160,58 @@ async retrieveUsers(username) {
     console.log(zip);
     return this.updateOne({ username }, { $set: { zip } });
   }
+
+  static updateUserLocation(username, lo, la) {
+    const newLocation = { longitude: lo, latitude: la };
+    return this.updateOne(
+      { username: username }, // Filter
+      { $set: { location: newLocation } } // Update
+    );
+  }
+
+  static createNewEmergencyContact(username, name, phone) {
+    const newContact = { name: name, phone: phone };
+    return this.update(
+      { username: username },
+      { $push: { emergencyContact: newContact } }
+    );
+  }
+
+  static removeEmergencyContact(username, name) {
+    return this.update(
+      { username: username },
+      { $pull: { emergencyContact: { name: name } } }
+    );
+  }
+
+  static getEmergencyContacts(username) {
+    return this.find({ username: username }, { _id: 0, emergencyContact: 1 });
+  }
+
+  static retrieveUserLocations() {
+    return this.aggregate([
+      { $match: { location: { $ne: null } } },
+      {
+        $project: {
+          username: 1,
+          location: 1,
+          status: { $arrayElemAt: ['$statusArray', -1] },
+        },
+      },
+    ]);
+  }
+
+  static retrieveUserLocation(username) {
+    return this.findOne({ username: username }, { location: 1 });
+  }
+
+  static deleteUserLocations(username) {
+    return this.updateOne({ username: username }, { $unset: { location: '' } });
+  }
 }
 
 userSchema.loadClass(UserClass);
 
 const User = mongoose.model('User', userSchema);
 
-updateUserLocation(username, lo, la) {
-  const newLocation = { longitude: lo, latitude: la };
-  return User.updateOne(
-    { username: username }, // Filter
-    { $set: { location: newLocation } } // Update
-  );
-}
-
-createNewEmergencyContact(username, name, phone) {
-  const newContact = { name: name, phone: phone };
-  return User.update(
-    { username: username },
-    { $push: { emergencyContact: newContact } }
-  );
-}
-
-removeEmergencyContact(username, name) {
-  return User.update(
-    { username: username },
-    { $pull: { emergencyContact: { name: name } } }
-  );
-}
-
-getEmergencyContacts(username) {
-  return User.find({ username: username }, { _id: 0, emergencyContact: 1 });
-}
-
-async getStatusByUsername(username) {
-  const result = await User.aggregate([
-    { $match: { username: username } },
-    { $project: { status: { $arrayElemAt: ['$statusArray', -1] } } },
-
-    retrieveUserLocations() {
-  return User.aggregate([
-    { $match: { location: { $ne: null } } },
-    {
-      $project: {
-        username: 1,
-        location: 1,
-        status: { $arrayElemAt: ['$statusArray', -1] },
-      },
-    },
-  ]);
-}
-
-retrieveUserLocation(username) {
-  return User.findOne({ username: username }, { location: 1 });
-}
-
-findUserByKeyword(keyword) {
-  return User.find(
-    { username: { $regex: keyword } },
-    { _id: 0, __v: 0 },
-    { sort: { online: -1, username: 1 } }
-  );
-}
-
-findUserByStatus(keyword) {
-  return User.find(
-    {
-      $expr: { $eq: [{ $arrayElemAt: ['$statusArray.status', -1] }, keyword] },
-    },
-    { _id: 0, __v: 0 },
-    { sort: { online: -1, username: 1 } }
-  );
-deleteUserLocations(username) {
-  return User.updateOne({ username: username }, { $unset: { location: '' } });
-}
-
-module.exports = {
-  User,
-  createNewUser,
-  retrieveUsers,
-  findUserByUsername,
-  updateOnlineStatus,
-  updateStatusIcon,
-  getStatusByUsername,
-  createNewEmergencyContact,
-  removeEmergencyContact,
-  getEmergencyContacts,
-  validateUsernamePassword,
-  retrieveUserStatus,
-  findUserByKeyword,
-  findUserByStatus,
-  updateUserLocation,
-  retrieveUserLocations,
-  retrieveUserLocation,
-  deleteUserLocations,
-};
 module.exports = User;

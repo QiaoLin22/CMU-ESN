@@ -1,11 +1,6 @@
 const DBInMemory = require('../../services/db-in-memory');
 
-const {
-  User,
-  createNewEmergencyContact,
-  removeEmergencyContact,
-  getEmergencyContacts,
-} = require('../../models/user');
+const User = require('../../models/user');
 
 beforeAll(DBInMemory.connect);
 afterAll(DBInMemory.close);
@@ -26,7 +21,7 @@ afterEach(DBInMemory.cleanup);
 
 describe('I4-MimiShih emergency contact', () => {
   it('Create new emergency contact successfully', async () => {
-    await createNewEmergencyContact('Jack', 'John', '+19081234567');
+    await User.createNewEmergencyContact('Jack', 'John', '+19081234567');
 
     const result = await User.findOne(
       { username: 'Jack' },
@@ -57,7 +52,7 @@ describe('I4-MimiShih emergency contact', () => {
   });
 
   it('Get all emergency contacts successfully', async () => {
-    const actual = await getEmergencyContacts('Jack');
+    const actual = await User.getEmergencyContacts('Jack');
 
     const expected = [
       {
@@ -78,8 +73,8 @@ describe('I4-MimiShih emergency contact', () => {
   });
 
   it('Remove an emergency contact successfully', async () => {
-    await createNewEmergencyContact('Jack', 'John', '+19081234567');
-    await removeEmergencyContact('Jack', 'John');
+    await User.createNewEmergencyContact('Jack', 'John', '+19081234567');
+    await User.removeEmergencyContact('Jack', 'John');
     const result = await User.findOne({ username: 'Jack' });
     const actual = result.toJSON().emergencyContact;
 

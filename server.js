@@ -13,11 +13,6 @@ server.listen(port);
 // Socket.io
 const io = socketIO.listen(server);
 
-// pass io to following middleware/router
-// app.use((req, res, next) => {
-//   req.io = io;
-//   next();
-// });
 app.set('io', io);
 
 const User = require('./models/user');
