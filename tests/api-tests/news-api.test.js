@@ -5,7 +5,7 @@ const socketIO = require('socket.io');
 const app = require('../../app');
 const DBInMemory = require('../../services/db-in-memory');
 const { createToken } = require('../../lib/jwt');
-const User  = require('../../models/user');
+const User = require('../../models/user');
 const { Message } = require('../../models/message');
 const { News } = require('../../models/news');
 
@@ -102,9 +102,6 @@ describe('POST /news', () => {
       .set('Cookie', `jwt=${token}`);
     expect(response.body.length).toBe(1);
   });
-});
-
-describe('POST /news', () => {
   test('It should respond with status code 400', async () => {
     const newsFormData = {
       sender: 'John',
@@ -119,17 +116,16 @@ describe('POST /news', () => {
   });
 });
 
-
 describe('POST /news/forward', () => {
-  test('It should respond with forward successfully message ', async () => {
-    const findResult = await News.find({cityname: 'New York'});
-    const newsId = findResult[0]._id
-    
+  test('It should respond with forward successfully message', async () => {
+    const findResult = await News.find({ cityname: 'New York' });
+    const newsId = findResult[0]._id;
+
     const newsFormData = {
-        sender: 'John',
-        recipient: 'Mike',
-        newsId: newsId,
-        roomId:'JohnMike',
+      sender: 'John',
+      recipient: 'Mike',
+      newsId: newsId,
+      roomId: 'JohnMike',
     };
     const response = await request(app)
       .post('/api/news/forward')
@@ -146,16 +142,11 @@ describe('POST /news/forward', () => {
     expect(findMessage[0].recipient).toBe('Mike');
     expect(findMessage[0].message).toBe('World');
   });
-});
 
-describe('POST /news/forward', () => {
   test('It should respond with status code 400', async () => {
-    const findResult = await News.find({cityname: 'New York'});
-    const newsId = findResult[0]._id
-    
     const newsFormData = {
-        sender: 'John',
-        recipient: 'Mike',
+      sender: 'John',
+      recipient: 'Mike',
     };
     const response = await request(app)
       .post('/api/news/forward')
@@ -166,4 +157,3 @@ describe('POST /news/forward', () => {
     expect(response.statusCode).toBe(400);
   });
 });
-

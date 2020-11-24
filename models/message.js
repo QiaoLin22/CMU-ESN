@@ -32,10 +32,10 @@ const MessageSchema = mongoose.Schema({
     required: [true, 'Read status is required'],
     default: false,
   },
-  photo: { 
-    data: Buffer, 
+  photo: {
+    data: Buffer,
     contentType: String,
- },
+  },
 });
 
 const Message = mongoose.model('Message', MessageSchema);
