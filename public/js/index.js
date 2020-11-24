@@ -26,7 +26,7 @@ function checkStatus(res) {
   return res.json();
 }
 
-//Error handler
+// Error handler
 function catchError(err, alertElement) {
   if (err instanceof Error) {
     if (alertElement) {

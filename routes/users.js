@@ -14,4 +14,8 @@ router.put('/logout', authenticateUser, LoginLogoutController.logout);
 
 router.put('/', UserController.updateStatus);
 
+router.get('/:username/zip', UserController.getZip);
+
+router.put('/:username/zip', UserController.updateZip);
+
 module.exports = router;

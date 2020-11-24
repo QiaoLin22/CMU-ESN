@@ -3,13 +3,12 @@ const DBInMemory = require('../../services/db-in-memory');
 // const express = require("express");
 // const app = express();
 
+const User = require('../../models/user');
+
 const {
-  User,
-  findUserByKeyword,
-  findUserByStatus,
-  retrieveUserStatus,
-} = require('../../models/user');
-const { searchAnnouncement, Announcement } = require('../../models/announcement');
+  searchAnnouncement,
+  Announcement,
+} = require('../../models/announcement');
 
 const { searchMessage, Message } = require('../../models/message');
 // const {
@@ -79,7 +78,7 @@ afterEach(DBInMemory.cleanup);
 
 describe('use case search information', () => {
   it('search username by keyword', async () => {
-    const actual = await findUserByKeyword('John');
+    const actual = await User.findUserByKeyword('John');
 
     const expected = [
       {
@@ -91,7 +90,7 @@ describe('use case search information', () => {
   });
 
   it('search user by status', async () => {
-    const actual = await findUserByStatus('OK');
+    const actual = await User.findUserByStatus('OK');
     const expected = [
       {
         username: 'John',
@@ -147,7 +146,7 @@ describe('use case search information', () => {
   });
 
   it('retrieve user status', async () => {
-    const actual = await retrieveUserStatus('John');
+    const actual = await User.retrieveUserStatus('John');
 
     const expected = [
       {

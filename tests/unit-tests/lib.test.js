@@ -1,5 +1,5 @@
 const DBInMemory = require('../../services/db-in-memory');
-const { User } = require('../../models/user');
+const User = require('../../models/user');
 const { validatePassword, genHashAndSalt } = require('../../lib/password');
 const { isRoomIdValid } = require('../../lib/room-id');
 

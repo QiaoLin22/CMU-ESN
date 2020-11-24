@@ -23,6 +23,9 @@ const otherUsername = (() => {
   } else if (roomId.match(endRegex)) {
     return roomId.replace(endRegex, '');
   }
+
+  // TODO Needs to change
+  return '';
 })();
 
 $('#roomId-data').text(otherUsername);
@@ -35,7 +38,7 @@ const msgEle = $('#msg');
 function outputMessage(message) {
   let icon = '';
   const { status } = message;
-  //get status icon
+  // get status icon
   if (status === 'OK') {
     icon = '<i class="far fa-check-circle ml-1" style="color: #18b87e"></i>';
   } else if (status === 'Help') {
@@ -59,7 +62,7 @@ function outputMessage(message) {
 /* retrieve historical messages with specific roomId */
 function loadMessages() {
   // fetch "/api/messages/public"
-  //or "/api/messages/private/{roomId}" request to retrieve historical messages
+  // or "/api/messages/private/{roomId}" request to retrieve historical messages
   const fetchURL =
     roomId === 'public'
       ? '/api/messages/public'
@@ -82,21 +85,21 @@ jQuery(loadMessages);
 
 /* new public message request handler */
 socket.on('new public message', (newMsg) => {
-  //if user is in  public room, display message
+  // if user is in  public room, display message
   if (roomId === 'public') {
     outputMessage(newMsg);
   }
 });
 
-function updateReadStatus(roomId) {
-  fetch(`/api/messages/${roomId}/read`, {
+function updateReadStatus(_roomId) {
+  fetch(`/api/messages/${_roomId}/read`, {
     method: 'PUT',
   });
 }
 
-function displayNotification(username) {
+function displayNotification(_username) {
   $('.toast-body').replaceWith(
-    `<div class="toast-body pl-3 pt-2 pr-2 pb-2">${username} just sent you a message</div>`
+    `<div class="toast-body pl-3 pt-2 pr-2 pb-2">${_username} just sent you a message</div>`
   );
   $('.toast').css('zIndex', 1000);
   $('.toast').toast('show');
@@ -104,21 +107,21 @@ function displayNotification(username) {
 
 /*  new private message request handler */
 socket.on('new private message', (newMsg) => {
-  //if user is in the same room with the sender of the new message
-  //display the new message
+  // if user is in the same room with the sender of the new message
+  // display the new message
   console.log(roomId);
-  console.log(newMsg.roomId)
+  console.log(newMsg.roomId);
   if (newMsg.roomId === roomId) {
-    //if the message is not send by current user
-    //mark the message as read
+    // if the message is not send by current user
+    // mark the message as read
     if (newMsg.sender !== username) {
       updateReadStatus(roomId);
     }
     outputMessage(newMsg);
   } else {
-    //if user is not in the same room with the sender of the new message
-    //send notification
-    console.log("ok");
+    // if user is not in the same room with the sender of the new message
+    // send notification
+    console.log('ok');
     displayNotification(newMsg.sender);
   }
 });
@@ -151,7 +154,7 @@ $('#submitBtn').on('click', (element) => {
     });
 });
 
-$('#searchBtn').on('click', (element) => {
+$('#searchBtn').on('click', () => {
   const fetchURL = `/search?context=message&roomid=${roomId}`;
   window.location.href = fetchURL;
 });

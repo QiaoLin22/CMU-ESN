@@ -1,7 +1,7 @@
 // const DAO = require('../services/dao');
 const DBInMemory = require('../../services/db-in-memory');
 
-const { User } = require('../../models/user');
+const User = require('../../models/user');
 const {
   Message,
   createNewMessage,

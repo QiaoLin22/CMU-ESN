@@ -6,7 +6,7 @@ const searchContext = urlParams.get('context');
 document.getElementById('loadBtn').style.visibility = 'hidden';
 let pagination = 0;
 
-/*display no result alert*/
+/* display no result alert */
 function displayNotification(alterMessage) {
   $('.toast-body').replaceWith(
     `<div class="toast-body pl-3 pt-2 pr-2 pb-2">${alterMessage}</div>`
@@ -19,7 +19,7 @@ function displayNotification(alterMessage) {
 function outputMessage(message) {
   let icon = '';
   const { status } = message;
-  //get status icon
+  // get status icon
   if (status === 'OK') {
     icon = '<i class="far fa-check-circle ml-1" style="color: #18b87e"></i>';
   } else if (status === 'Help') {
@@ -44,7 +44,7 @@ function outputMessage(message) {
 function outputStatus(anotherUsername, statusArray) {
   statusArray.reverse().forEach((statusObj) => {
     let icon = '';
-    //get status icon
+    // get status icon
     if (statusObj.status === 'OK') {
       icon = '<i class="far fa-check-circle ml-1" style="color: #18b87e"></i>';
     } else if (statusObj.status === 'Help') {
@@ -131,8 +131,8 @@ function searchUser(keywords) {
     });
 }
 
-function searchMessage(keywords, roomId, pagination){
-  fetch(`/api/search/messages/${roomId}/${keywords}/${pagination}`, {
+function searchMessage(keywords, roomId, _pagination) {
+  fetch(`/api/search/messages/${roomId}/${keywords}/${_pagination}`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -155,8 +155,8 @@ function searchMessage(keywords, roomId, pagination){
     });
 }
 
-function searchAnnouncement(keywords, pagination) {
-  fetch(`/api/search/announcements/${keywords}/${pagination}`, {
+function searchAnnouncement(keywords, _pagination) {
+  fetch(`/api/search/announcements/${keywords}/${_pagination}`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -207,49 +207,46 @@ $('#submitBtn').on('click', (element) => {
   $('#search-results').empty();
   pagination = 0;
   const keywords = msgEle.val();
-  if(!keywords){
+  if (!keywords) {
     displayNotification('Please enter a valid keyword');
-  }else{
-    if (searchContext === 'directory') {
-      searchUser(keywords);
-    } else if (searchContext === 'message') {
-      const roomId = urlParams.get('roomid');
-      if (keywords === 'status') {
-        searchStatus(roomId);
-      }else{
-        searchMessage(keywords, roomId, pagination);
-      }
+  } else if (searchContext === 'directory') {
+    searchUser(keywords);
+  } else if (searchContext === 'message') {
+    const roomId = urlParams.get('roomid');
+    if (keywords === 'status') {
+      searchStatus(roomId);
     } else {
-      searchAnnouncement(keywords, pagination)
+      searchMessage(keywords, roomId, pagination);
     }
+  } else {
+    searchAnnouncement(keywords, pagination);
   }
 });
 
 $('#backBtn').on('click', (element) => {
   element.preventDefault();
-  const keywords = msgEle.val();
+  // const keywords = msgEle.val();
   if (searchContext === 'directory') {
     window.location.href = '/main';
   } else if (searchContext === 'message') {
     const roomId = urlParams.get('roomid');
-    roomId === 'public'
-      ? (window.location.href = '/public-wall')
-      : (window.location.href = `/private-chat/${roomId}`);
+    window.location.href =
+      roomId === 'public' ? '/public-wall' : `/private-chat/${roomId}`;
   } else {
     window.location.href = '/announcement';
   }
 });
 
-$('#loadBtn').on('click', (element) => {
+$('#loadBtn').on('click', () => {
   if (searchContext === 'message') {
-    pagination++;
+    pagination += 1;
     const keywords = msgEle.val();
     const roomId = urlParams.get('roomid');
     if (keywords !== 'status') {
       searchMessage(keywords, roomId, pagination);
     }
-  }else if(searchContext === 'announcement'){
-    pagination++;
+  } else if (searchContext === 'announcement') {
+    pagination += 1;
     const keywords = msgEle.val();
     searchAnnouncement(keywords, pagination);
   }

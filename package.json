@@ -15,7 +15,8 @@
   "scripts": {
     "devStart": "nodemon -r dotenv/config server.js -e js,ejs,css",
     "start": "node server.js",
-    "lint": "eslint",
+    "lint": "eslint --ext .js .",
+    "lint:fix": "eslint --fix --ext .js .",
     "test": "jest --runInBand ./test",
     "coverage": "jest tests/ --coverage"
   },
