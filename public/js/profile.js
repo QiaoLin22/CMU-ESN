@@ -9,7 +9,6 @@ const username = $('#username-data').val();
 const sendSMS = $('#sendSmsModal');
 const sendConfirm = $('#sendConfirmBtn');
 
-<<<<<<< HEAD
 function updateAPI(status) {
   const newStatus = {
     username: username,
@@ -27,7 +26,7 @@ function updateAPI(status) {
   });
 }
 
-function displayNotification() {
+function displayContactNotification() {
   $('.toast-body').replaceWith(
     `<div class="toast-body pl-3 pt-2 pr-2 pb-2">Successfully sent SMS to your contacts</div>`
   );
@@ -43,27 +42,29 @@ function sendNewSMS() {
     },
   })
     .then(() => {
-      displayNotification();
+      displayContactNotification();
     })
     .catch((e) => {
-=======
-function updateStatus(status) {
-  status.on('click', () => {
-    const newStatus = {
-      username: username,
-      status: status.text(),
-    };
-    fetch('/api/users', {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(newStatus),
-    }).catch((e) => {
->>>>>>> master
       console.log(e);
     });
 }
+
+// function updateStatus(status) {
+//   status.on('click', () => {
+//     const newStatus = {
+//       username: username,
+//       status: status.text(),
+//     };
+//     fetch('/api/users', {
+//       method: 'PUT',
+//       headers: {
+//         'Content-Type': 'application/json',
+//       },
+//       body: JSON.stringify(newStatus),
+//     }).catch((e) => {
+//       console.log(e);
+//     });
+// }
 
 function updateStatus(status) {
   status.on('click', () => {
@@ -79,14 +80,12 @@ updateStatus(help);
 updateStatus(emergency);
 updateStatus(na);
 
-<<<<<<< HEAD
 sendConfirm.on('click', () => {
   console.log('send new sms from frontend');
   sendNewSMS();
 });
 
 // add socket event 'sent SMS'
-=======
 function displayNotification() {
   $('.toast-body').replaceWith(
     `<div class="toast-body pl-3 pt-2 pr-2 pb-2">Your location has been updated</div>`
@@ -102,7 +101,6 @@ function displayDeleteNotification() {
   $('.toast').css('zIndex', 1000);
   $('.toast').toast('show');
 }
->>>>>>> master
 
 logoutBtn.on('click', () => {
   fetch('/api/users/logout', {
@@ -145,28 +143,28 @@ function errorLocation(err) {
   console.warn(`ERROR(${err.code}): ${err.message}`);
 }
 
-updateLocationBtn.on('click', async() => {
+updateLocationBtn.on('click', async () => {
   const options = {
     enableHighAccuracy: true,
     timeout: 5000,
-    maximumAge: 0
+    maximumAge: 0,
   };
-  await navigator.geolocation.getCurrentPosition(successLocation, errorLocation, options);
+  await navigator.geolocation.getCurrentPosition(
+    successLocation,
+    errorLocation,
+    options
+  );
 });
-
 
 deleteLocationBtn.on('click', () => {
   fetch('/api/users/location', {
     method: 'PUT',
     headers: {
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
     },
-    body: JSON.stringify({username: username}),
+    body: JSON.stringify({ username: username }),
   }).catch((e) => {
     console.log(e);
   });
   displayDeleteNotification();
 });
-
-
-
