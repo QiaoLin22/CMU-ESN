@@ -19,6 +19,11 @@
     "no-underscore-dangle": "off",
     "no-restricted-syntax": "off",
     "class-methods-use-this": "off",
-    "prefer-destructuring": "warn"
+    "prefer-destructuring": "warn",
+    "no-undef": "off",
+    "import/no-extraneous-dependencies": [
+      "error",
+      { "devDependencies": ["**/*.test.js"] }
+    ]
   }
 }

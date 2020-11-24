@@ -20,13 +20,13 @@ const io = socketIO.listen(server);
 // });
 app.set('io', io);
 
-const { retrieveUsers } = require('./models/user');
+const User = require('./models/user');
 
 io.on('connection', (socket) => {
   // console.log(`${socket.id} connected`);
 
   socket.on('join room', async (username) => {
-    const userList = await retrieveUsers();
+    const userList = await User.retrieveUsers();
 
     userList.forEach((user) => {
       const otherUsername = user.username;

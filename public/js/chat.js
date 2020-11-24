@@ -23,6 +23,9 @@ const otherUsername = (() => {
   } else if (roomId.match(endRegex)) {
     return roomId.replace(endRegex, '');
   }
+
+  // TODO Needs to change
+  return '';
 })();
 
 $('#roomId-data').text(otherUsername);
@@ -31,11 +34,18 @@ const chatContainer = $('.chat-container');
 const chatMessages = $('.chat-messages');
 const msgEle = $('#msg');
 
+function toBase64(arr) {
+  //arr = new Uint8Array(arr) if it's an ArrayBuffer
+  return btoa(
+     arr.reduce((data, byte) => data + String.fromCharCode(byte), '')
+  );
+}
+
 /* display chat message */
 function outputMessage(message) {
   let icon = '';
   const { status } = message;
-  //get status icon
+  // get status icon
   if (status === 'OK') {
     icon = '<i class="far fa-check-circle ml-1" style="color: #18b87e"></i>';
   } else if (status === 'Help') {
@@ -49,7 +59,12 @@ function outputMessage(message) {
   const timestamp = new Date(message.timestamp).toLocaleString();
   const msg = document.createElement('div');
   msg.classList.add('message');
-  msg.innerHTML = `<p class="meta mb-1"> ${message.sender} <span>${icon}</span> <span class="ml-3"> ${timestamp} </span></p> <p class="text"> ${message.message} </p>`;
+  if(message.photo === undefined){
+    msg.innerHTML = `<p class="meta mb-1"> ${message.sender} <span>${icon}</span> <span class="ml-3"> ${timestamp} </span></p> <p class="text"> ${message.message} </p>`;
+  }else{
+    msg.innerHTML = `<p class="meta mb-1"> ${message.sender} <span>${icon}</span> <span class="ml-3"> ${timestamp} </span></p> 
+    <p class="text"> ${message.message} </p><img class="img-thumbnail" src="data:image/png;base64,${toBase64( message.photo.data.data)}">`;
+  }
   chatMessages.append(msg);
 
   // scroll to the bottom
@@ -59,7 +74,7 @@ function outputMessage(message) {
 /* retrieve historical messages with specific roomId */
 function loadMessages() {
   // fetch "/api/messages/public"
-  //or "/api/messages/private/{roomId}" request to retrieve historical messages
+  // or "/api/messages/private/{roomId}" request to retrieve historical messages
   const fetchURL =
     roomId === 'public'
       ? '/api/messages/public'
@@ -82,21 +97,21 @@ jQuery(loadMessages);
 
 /* new public message request handler */
 socket.on('new public message', (newMsg) => {
-  //if user is in  public room, display message
+  // if user is in  public room, display message
   if (roomId === 'public') {
     outputMessage(newMsg);
   }
 });
 
-function updateReadStatus(roomId) {
-  fetch(`/api/messages/${roomId}/read`, {
+function updateReadStatus(_roomId) {
+  fetch(`/api/messages/${_roomId}/read`, {
     method: 'PUT',
   });
 }
 
-function displayNotification(username) {
+function displayNotification(_username) {
   $('.toast-body').replaceWith(
-    `<div class="toast-body pl-3 pt-2 pr-2 pb-2">${username} just sent you a message</div>`
+    `<div class="toast-body pl-3 pt-2 pr-2 pb-2">${_username} just sent you a message</div>`
   );
   $('.toast').css('zIndex', 1000);
   $('.toast').toast('show');
@@ -104,21 +119,19 @@ function displayNotification(username) {
 
 /*  new private message request handler */
 socket.on('new private message', (newMsg) => {
-  //if user is in the same room with the sender of the new message
-  //display the new message
-  console.log(roomId);
-  console.log(newMsg.roomId)
+  // if user is in the same room with the sender of the new message
+  // display the new message
   if (newMsg.roomId === roomId) {
-    //if the message is not send by current user
-    //mark the message as read
+    // if the message is not send by current user
+    // mark the message as read
     if (newMsg.sender !== username) {
       updateReadStatus(roomId);
     }
     outputMessage(newMsg);
   } else {
-    //if user is not in the same room with the sender of the new message
-    //send notification
-    console.log("ok");
+    // if user is not in the same room with the sender of the new message
+    // send notification
+    console.log('ok');
     displayNotification(newMsg.sender);
   }
 });
@@ -151,7 +164,7 @@ $('#submitBtn').on('click', (element) => {
     });
 });
 
-$('#searchBtn').on('click', (element) => {
+$('#searchBtn').on('click', () => {
   const fetchURL = `/search?context=message&roomid=${roomId}`;
   window.location.href = fetchURL;
 });

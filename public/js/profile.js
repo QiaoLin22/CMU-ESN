@@ -1,4 +1,6 @@
 const logoutBtn = $('#logoutBtn');
+const updateLocationBtn = $('.location-btn:nth-child(1)');
+const deleteLocationBtn = $('.location-btn:nth-child(2)');
 const ok = $('.status-btn:nth-child(1)');
 const help = $('.status-btn:nth-child(2)');
 const emergency = $('.status-btn:nth-child(3)');
@@ -7,6 +9,7 @@ const username = $('#username-data').val();
 const sendSMS = $('#sendSmsModal');
 const sendConfirm = $('#sendConfirmBtn');
 
+<<<<<<< HEAD
 function updateAPI(status) {
   const newStatus = {
     username: username,
@@ -43,6 +46,21 @@ function sendNewSMS() {
       displayNotification();
     })
     .catch((e) => {
+=======
+function updateStatus(status) {
+  status.on('click', () => {
+    const newStatus = {
+      username: username,
+      status: status.text(),
+    };
+    fetch('/api/users', {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(newStatus),
+    }).catch((e) => {
+>>>>>>> master
       console.log(e);
     });
 }
@@ -61,12 +79,30 @@ updateStatus(help);
 updateStatus(emergency);
 updateStatus(na);
 
+<<<<<<< HEAD
 sendConfirm.on('click', () => {
   console.log('send new sms from frontend');
   sendNewSMS();
 });
 
 // add socket event 'sent SMS'
+=======
+function displayNotification() {
+  $('.toast-body').replaceWith(
+    `<div class="toast-body pl-3 pt-2 pr-2 pb-2">Your location has been updated</div>`
+  );
+  $('.toast').css('zIndex', 1000);
+  $('.toast').toast('show');
+}
+
+function displayDeleteNotification() {
+  $('.toast-body').replaceWith(
+    `<div class="toast-body pl-3 pt-2 pr-2 pb-2">Your have stopped sharing location to others</div>`
+  );
+  $('.toast').css('zIndex', 1000);
+  $('.toast').toast('show');
+}
+>>>>>>> master
 
 logoutBtn.on('click', () => {
   fetch('/api/users/logout', {
@@ -82,3 +118,55 @@ logoutBtn.on('click', () => {
     }
   });
 });
+
+function successLocation(position) {
+  const crd = position.coords;
+  console.log(crd.longitude);
+  console.log(crd.latitude);
+  const location = {
+    username: username,
+    longitude: crd.longitude,
+    latitude: crd.latitude,
+  };
+
+  fetch(`/api/users/location`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(location),
+  }).catch((e) => {
+    console.log(e);
+  });
+  displayNotification();
+}
+
+function errorLocation(err) {
+  console.warn(`ERROR(${err.code}): ${err.message}`);
+}
+
+updateLocationBtn.on('click', async() => {
+  const options = {
+    enableHighAccuracy: true,
+    timeout: 5000,
+    maximumAge: 0
+  };
+  await navigator.geolocation.getCurrentPosition(successLocation, errorLocation, options);
+});
+
+
+deleteLocationBtn.on('click', () => {
+  fetch('/api/users/location', {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({username: username}),
+  }).catch((e) => {
+    console.log(e);
+  });
+  displayDeleteNotification();
+});
+
+
+

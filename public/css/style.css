@@ -412,6 +412,36 @@ a:hover {
 .contact {
   display: flex;
   justify-content: space-between;
+}
+
+/* News Page */
+.news-header {
+  height: 8vh;
+  position: sticky;
+  background-color: #07869a;
+  color: #ffffff;
+  box-shadow: 0px 8px 20px 0px #6ea4ad21;
+  align-items: center;
+}
+
+.news-header h5 {
+  margin-top: 8px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.news-header a {
+  color: #d2edf1;
+}
+
+.news {
+  width: 100%;
+  height: 84vh;
+  overflow-y: scroll;
+  background-color: #ecf5f7;
+}
+
+.news {
   background-color: #ffffff;
   border-bottom: #d7d7d7;
   border-bottom-width: 1px;
@@ -432,6 +462,111 @@ a:hover {
   cursor: pointer;
   display: inline-block;
 }
+
+.news-content {
+  height: auto;
+}
+.news .meta {
+  margin-bottom: 0.8rem;
+  font-weight: bold;
+  color: #07869a;
+}
+
+.news p span {
+  font-weight: 400;
+  color: rgb(187 210 214);
+  font-size: 0.8rem;
+  float: right;
+}
+
+.create-news-button {
+  position: absolute;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  background-color: #07869a;
+  color: white;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  z-index: 1031;
+  box-shadow: 2px 2px 5px 1px #05525f40;
+  cursor: pointer;
+}
+
+.create-news-button h6 {
+  font-size: 2rem;
+  font-weight: 400;
+  text-align: center;
+  margin-bottom: 0px;
+  margin-top: 0.25rem;
+}
+
+.create-news-text {
+  height: 50vh;
+  width: 100%;
+  border-radius: 5px;
+  border-width: 1px;
+  border-color: #17a2b8;
+  padding: 1rem;
+  background-color: #f5fafb;
+}
+
+
+/* Resources page */
+.posts-container {
+  width: 100%;
+  height: 84vh;
+  overflow-y: scroll;
+  background-color: #ecf5f7;
+}
+
+.resource-post {
+  background-color: #ffffff;
+  border-bottom: #d3d3d3 1px solid;
+}
+
+.resource-post:hover {
+  background-color: #d3d3d3;
+  cursor: pointer;
+}
+
+.resource-post .meta {
+  margin-bottom: 0.8rem;
+  font-weight: bold;
+  color: #07869a;
+}
+
+.resource-post #timestamp {
+  font-weight: 400;
+  color: rgb(187 210 214);
+  font-size: 0.8rem;
+  float: right;
+}
+
+
+.resource-post:hover #timestamp {
+  color: #07869a;
+}
+
+.resource-post #post-type {
+  float: right;
+}
+
+.resource-post-single {
+  background-color: inherit;
+}
+
+.resource-post-single:hover {
+  background-color: inherit;
+  cursor: inherit;
+}
+
+#comments-container {
+  width: 100%;
+  height: 76%;
+  overflow-y: scroll;
+}
+
 /* bootstrap style override */
 .list-group-item {
   border-width: 0px;

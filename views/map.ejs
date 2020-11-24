@@ -17,7 +17,18 @@
       src="https://use.fontawesome.com/releases/v5.15.1/js/all.js"
       data-auto-a11y="true"
     ></script>
-    <title>Announcements</title>
+    <title>Map</title>
+    <style>
+        #map {
+          height: 100%;
+          width: 100%;
+        }
+        html, body {
+          height: 100%;
+          margin: 0;
+          padding: 0;
+        }
+      </style>
   </head>
 
   <body>
@@ -27,59 +38,51 @@
 
         <div class="col-lg col-md-6 col-sm-8 esn-screen">
           <div class="row announcement-header">
-              <h5>Announcement</h5>
-              <a href="/search?context=announcement"><i class="fas fa-search mr-3"></i></a>
+              <h5>Geolocation</h5>
           </div>
 
-          <div class="row announcement-container">
-            <div class="announcements"></div>
-          </div>
-
-          <!-- Create new Announcement modal -->
-          <div class="modal fade border-info" id="announceModal" tabindex="-1" aria-labelledby="announceModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-              <div class="modal-content modal-lg">
-                <div class="modal-header">
-                  <div class="container-fluid">
-                    <div class="row text-left text-info">
-                      <h6 class="mb-2">New Announcement</h6>
-                    </div>
-                  </div>
-                </div>
-                <div class="modal-body">
-                  <div class="alert" id="announceAlert" role="alert" hidden></div>
-                  <div class="container-fluid">
-                    <div class="row text-left text-info">
-                      <textarea id="announcement-text" class="create-announcement-text" placeholder="New Announcement"></textarea>
-                    </div>
-                  </div>
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-dismiss="modal">
-                    Cancel
-                  </button>
-                  <button type="button" class="btn btn-info" data-dismiss="modal" id="confirmBtn">
-                    Post
-                  </button>
-                </div>
+          <div id="map"></div>
+          <div class="toast toast-custom mt-2" role="alert" aria-live="polite" aria-atomic="true" data-animation = "true" data-autohide = "true" data-delay = "4000">
+            <div role="alert" aria-live="assertive" aria-atomic="true">
+              <div class="toast-header p-2">
+                <i class="fas fa-bell mr-2" style="color: #07869a;"></i>
+                <strong class="mr-auto">Geolocation Updated</strong>
+                <small>a second ago</small>
               </div>
+              <div class="toast-body"></div>
             </div>
           </div>
-
-          <!-- add new announcement -->
-          <div class="row">
-            <div id="create-announcement" class="create-announcement-button"><h6>+</h6></div>
+  <div class="modal fade border-info" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-body">
+          <div class="alert" id="confirmAlert" role="alert" hidden></div>
+          <div class="container-fluid">
+            <div class="row text-left text-info">
+              <p>Do you want to update your current location?</p>
+            </div>
           </div>
-          
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">
+            No
+          </button>
+          <button type="button" class="btn btn-info" id="updateMapBtn">
+            Yes
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
 
           <!-- navigation bar -->
           <div class="row">
             <nav class="navbar custom-nav px-5">
               <a class="navbar-brand" href="/main"><i class="fas fa-home"></i></a>
-              <a class="navbar-brand" href="/announcement" style="color: #17a2b8;"><i class="far fa-bell"></i></a>
-              <a class="navbar-brand" href="/map"><i class="fas fa-map"></i></a>
-              <a class="navbar-brand" href="/resources"><i class="fas fa-hands-helping"></i ></a>
-              <a class="navbar-brand" href="/news"><i class="fas fa-bolt"></i></a>
+              <a class="navbar-brand" href="/announcement" ><i class="far fa-bell"></i></a>
+              <a class="navbar-brand" href="/map" style="color: #17a2b8;"><i class="far fa-map"></i></a>
               <a class="navbar-brand" href="/profile"><i class="far fa-user"></i></a>
             </nav>
           </div>
@@ -98,6 +101,9 @@
       </div>
     </div>
   </body>
+  <script defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBlrK6PslcKwo-OmZaOz6mItolqaxxc-pU&callback=initMap">
+</script>
   <script
     src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
     integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
@@ -114,5 +120,5 @@
     crossorigin="anonymous"
   ></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.3/socket.io.js"></script>
-  <script type="module" src="/js/announcement.js"></script>
+  <script src="/js/map.js"></script>
 </html>
