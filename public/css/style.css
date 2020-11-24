@@ -414,6 +414,21 @@ a:hover {
   justify-content: space-between;
 }
 
+.contact span {
+  align-self: center;
+}
+
+.contact h6 {
+  margin-bottom: 0px;
+}
+
+.contact-edit-button {
+  color: #1b5058;
+  cursor: pointer;
+  display: inline-block;
+}
+
+
 /* News Page */
 .news-header {
   height: 8vh;
@@ -449,19 +464,6 @@ a:hover {
   color: #065a67;
 }
 
-.contact span {
-  align-self: center;
-}
-
-.contact h6 {
-  margin-bottom: 0px;
-}
-
-.contact-edit-button {
-  color: #1b5058;
-  cursor: pointer;
-  display: inline-block;
-}
 
 .news-content {
   height: auto;
