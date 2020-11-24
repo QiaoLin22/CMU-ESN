@@ -27,14 +27,11 @@ const userSchema = mongoose.Schema({
       },
     ],
   },
-<<<<<<< HEAD
   location: {
     longitude: { type: Number },
     latitude: { type: Number },
-  }
-=======
+  },
   zip: String,
->>>>>>> 41c31cdbebfe7a82972d53a0e4f99156ca20af86
 });
 
 class UserClass {
@@ -158,9 +155,8 @@ userSchema.loadClass(UserClass);
 
 const User = mongoose.model('User', userSchema);
 
-<<<<<<< HEAD
 function updateUserLocation(username, lo, la) {
-  const newLocation = {longitude: lo, latitude: la};
+  const newLocation = { longitude: lo, latitude: la };
   return User.updateOne(
     { username: username }, // Filter
     { $set: { location: newLocation } } // Update
@@ -168,25 +164,24 @@ function updateUserLocation(username, lo, la) {
 }
 
 function retrieveUserLocations() {
-   return User.aggregate([
+  return User.aggregate([
     { $match: { location: { $ne: null } } },
-    { $project: { 
-      username: 1,
-      location: 1,
-      status: { $arrayElemAt: ['$statusArray', -1] } 
-    }},
+    {
+      $project: {
+        username: 1,
+        location: 1,
+        status: { $arrayElemAt: ['$statusArray', -1] },
+      },
+    },
   ]);
 }
 
 function retrieveUserLocation(username) {
-  return User.findOne({ username: username }, { location: 1})
+  return User.findOne({ username: username }, { location: 1 });
 }
 
 function deleteUserLocations(username) {
-  return User.updateOne(
-    { username: username },
-    { $unset: { location: ""}},
-  );
+  return User.updateOne({ username: username }, { $unset: { location: '' } });
 }
 
 module.exports = {
@@ -204,8 +199,6 @@ module.exports = {
   updateUserLocation,
   retrieveUserLocations,
   retrieveUserLocation,
-  deleteUserLocations
+  deleteUserLocations,
 };
-=======
 module.exports = User;
->>>>>>> 41c31cdbebfe7a82972d53a0e4f99156ca20af86

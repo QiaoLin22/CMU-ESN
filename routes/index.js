@@ -15,6 +15,7 @@ router.get('/announcement', authenticateUser, (req, res) => {
 
 router.get('/map', authenticateUser, (req, res) => {
   res.render('map');
+});
 router.get('/news', authenticateUser, (req, res) => {
   res.render('news', { username: res.locals.username });
 });
