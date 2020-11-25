@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 const socket = io();
 
 const createNews = $('#create-news');
@@ -11,25 +12,21 @@ const username = $('#username-data').val();
 const citynameBtn = $('#cityNameBtn');
 document.getElementById('create-news').style.visibility = 'hidden';
 
-
 function toBase64(arr) {
-  return btoa(
-     arr.reduce((data, byte) => data + String.fromCharCode(byte), '')
-  );
+  return btoa(arr.reduce((data, byte) => data + String.fromCharCode(byte), ''));
 }
-
 
 /** Forward notification box */
 function displayNotification(notifyMessage) {
   $('#forwardNotifyMessage').text(notifyMessage);
   confirmModal.modal('show');
-  $('#forwardNotifyBtn').on('click', ()=>{
+  $('#forwardNotifyBtn').on('click', () => {
     confirmModal.modal('hide');
-  })
+  });
 }
 
-/* Forward news function*/
-function forwardNews(recipient, newsId, roomId){
+/* Forward news function */
+function forwardNews(recipient, newsId, roomId) {
   const formData = {
     sender: username,
     recipient: recipient,
@@ -43,20 +40,22 @@ function forwardNews(recipient, newsId, roomId){
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(formData),
-  }).then((res)=>{
-    return res.json();
-  }).then((data)=>{
-    userlistModal.modal('hide');
-    displayNotification(data.message);
   })
-  .catch((e) => {
-    console.log(e);
-  });
+    .then((res) => {
+      return res.json();
+    })
+    .then((data) => {
+      userlistModal.modal('hide');
+      displayNotification(data.message);
+    })
+    .catch((e) => {
+      console.log(e);
+    });
 }
 
 /* Output user list */
 function outputUser(user, newsId) {
-  const { online, numUnreadMessages } = user;
+  const { online } = user;
   const { status } = user.latestStatus;
 
   let icon = '';
@@ -85,18 +84,17 @@ function outputUser(user, newsId) {
     $('#offline-list').append(userDiv);
   }
   userDiv.addEventListener('click', () => {
-    const recipient = user.username
+    const recipient = user.username;
     const roomId =
-    username < recipient
+      username < recipient
         ? `${username}${recipient}`
         : `${recipient}${username}`;
     forwardNews(recipient, newsId, roomId);
   });
 }
 
-
-function getUserList(newsId){
-  fetch('/api/users',{
+function getUserList(newsId) {
+  fetch('/api/users', {
     method: 'GET',
   })
     .then((res) => {
@@ -110,7 +108,6 @@ function getUserList(newsId){
     .catch((e) => {
       console.log(e);
     });
-
 }
 
 function outputNews(newNews) {
@@ -119,17 +116,23 @@ function outputNews(newNews) {
   newsdiv.classList.add('news-content');
   newsdiv.classList.add('p-3');
   const newsId = `ann-${newNews._id}`;
-  if(newNews.photo === undefined){
+  if (newNews.photo === undefined) {
     newsdiv.innerHTML = `<p class="meta mb-1"> ${newNews.sender} <span class="ml-3"> ${timestamp} </span></p>
     <p id=${newsId}> ${newNews.message}<button type="button" id = "forwardBtn" class="btn btn-info float-right" >FORWARD</button></p> `;
-  }else{
-    newsdiv.innerHTML = `<p class="meta mb-1"> ${newNews.sender} <span class="ml-3"> ${timestamp} </span></p>
-    <p id=${newsId}> ${newNews.message}<button type="button" id = "forwardBtn" class="btn btn-info float-right" >FORWARD</button></p>
-    <img class="img-thumbnail" src="data:image/png;base64,${toBase64( newNews.photo.data.data)}"> `;
+  } else {
+    newsdiv.innerHTML = `<p class="meta mb-1"> ${
+      newNews.sender
+    } <span class="ml-3"> ${timestamp} </span></p>
+    <p id=${newsId}> ${
+      newNews.message
+    }<button type="button" id = "forwardBtn" class="btn btn-info float-right" >FORWARD</button></p>
+    <img class="img-thumbnail" src="data:image/png;base64,${toBase64(
+      newNews.photo.data.data
+    )}"> `;
   }
   news.prepend(newsdiv);
 
-  document.getElementById("forwardBtn").addEventListener('click', () => {
+  document.getElementById('forwardBtn').addEventListener('click', () => {
     userlistModal.modal('show');
     getUserList(newNews._id);
   });
@@ -141,8 +144,8 @@ function loadNews(cityname) {
   })
     .then((res) => res.json())
     .then((json) => {
-      json.forEach((news) => {
-        outputNews(news);
+      json.forEach((newsItem) => {
+        outputNews(newsItem);
       });
     })
     .catch((e) => {
@@ -150,41 +153,37 @@ function loadNews(cityname) {
     });
 }
 
-
-
 citynameBtn.on('click', (element) => {
   element.preventDefault();
   news.empty();
-  var cityname = $('#cityname-input').val();
+  const cityname = $('#cityname-input').val();
   $('#cityname-data').text(cityname);
   loadNews(cityname);
   document.getElementById('create-news').style.visibility = 'visible';
   $('#cityname-input').val('');
 });
 
-
-
 createNews.on('click', () => {
   newsModal.modal('show');
   text.val('');
-  var photo = document.querySelector('input[type="file"]');
+  const photo = document.querySelector('input[type="file"]');
   photo.value = '';
 });
 
 socket.on('new news', (newMsg) => {
   outputNews(newMsg);
-  console.log(newMsg)
+  console.log(newMsg);
 });
 
 /* Post a new news */
 post.on('click', () => {
   const cityname = $('#cityname-data').text();
-  var photo = document.querySelector('input[type="file"]');
-  var formData = new FormData();
-  formData.append("sender", username);
-  formData.append("message", text.val());
-  formData.append("photo", photo.files[0]);
-  formData.append("cityname", cityname);
+  const photo = document.querySelector('input[type="file"]');
+  const formData = new FormData();
+  formData.append('sender', username);
+  formData.append('message', text.val());
+  formData.append('photo', photo.files[0]);
+  formData.append('cityname', cityname);
   fetch(`/api/news/`, {
     method: 'POST',
     body: formData,
