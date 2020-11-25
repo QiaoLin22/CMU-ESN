@@ -132,7 +132,7 @@ a:hover {
 }
 
 .directory-container h6 {
-  color: #17a2b8;
+  color: #065a67;
 }
 
 .directory-header {
@@ -188,12 +188,12 @@ a:hover {
 }
 
 .dropdown-container {
-  background: #18a2b84f;
+  background: #ade4ec;
   border: none;
 }
 
 .status-btn {
-  color: #1b5058;
+  color: #065a67;
 }
 
 /* chat page */
@@ -410,8 +410,13 @@ a:hover {
 }
 
 .contact {
+  color: #1b5058;
   display: flex;
   justify-content: space-between;
+  background-color: #ffffff;
+  border-bottom: #d7d7d7;
+  border-bottom-width: 1px;
+  border-bottom-style: solid;
 }
 
 .contact span {
@@ -427,7 +432,6 @@ a:hover {
   cursor: pointer;
   display: inline-block;
 }
-
 
 /* News Page */
 .news-header {
@@ -464,10 +468,14 @@ a:hover {
   color: #065a67;
 }
 
-
 .news-content {
   height: auto;
+  background-color: #ffffff;
+  border-bottom: #d7d7d7;
+  border-bottom-width: 1px;
+  border-bottom-style: solid;
 }
+
 .news .meta {
   margin-bottom: 0.8rem;
   font-weight: bold;
@@ -479,6 +487,12 @@ a:hover {
   color: rgb(187 210 214);
   font-size: 0.8rem;
   float: right;
+}
+
+.news-forward {
+  cursor: pointer;
+  margin-bottom: 0px;
+  text-align: right;
 }
 
 .create-news-button {
@@ -513,7 +527,6 @@ a:hover {
   background-color: #f5fafb;
 }
 
-
 /* Resources page */
 .posts-container {
   width: 100%;
@@ -528,7 +541,7 @@ a:hover {
 }
 
 .resource-post:hover {
-  background-color: #d3d3d3;
+  background-color: #e9e9e9;
   cursor: pointer;
 }
 
@@ -545,7 +558,6 @@ a:hover {
   float: right;
 }
 
-
 .resource-post:hover #timestamp {
   color: #07869a;
 }
@@ -561,6 +573,13 @@ a:hover {
 .resource-post-single:hover {
   background-color: inherit;
   cursor: inherit;
+}
+
+.resources-zip {
+  align-items: center;
+  color: #065a67;
+  background: white;
+  border-bottom: #18a2b8 solid 1px;
 }
 
 #comments-container {
@@ -581,4 +600,9 @@ a:hover {
 
 .mr-auto {
   color: #07869a;
+}
+
+/* navbar */
+.navbar-brand {
+  margin-right: 0px;
 }
