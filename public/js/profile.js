@@ -49,23 +49,6 @@ function sendNewSMS() {
     });
 }
 
-// function updateStatus(status) {
-//   status.on('click', () => {
-//     const newStatus = {
-//       username: username,
-//       status: status.text(),
-//     };
-//     fetch('/api/users', {
-//       method: 'PUT',
-//       headers: {
-//         'Content-Type': 'application/json',
-//       },
-//       body: JSON.stringify(newStatus),
-//     }).catch((e) => {
-//       console.log(e);
-//     });
-// }
-
 function updateStatus(status) {
   status.on('click', () => {
     if (status === emergency) {
