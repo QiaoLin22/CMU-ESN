@@ -116,20 +116,22 @@ function outputNews(newNews) {
   newsdiv.classList.add('news-content');
   newsdiv.classList.add('p-3');
   const newsId = `ann-${newNews._id}`;
+
   if (newNews.photo === undefined) {
     newsdiv.innerHTML = `<p class="meta mb-1"> ${newNews.sender} <span class="ml-3"> ${timestamp} </span></p>
-    <p id=${newsId}> ${newNews.message}<button type="button" id = "forwardBtn" class="btn btn-info float-right" >FORWARD</button></p> `;
+    <div id=${newsId}><p style = "margin-bottom: 0;">${newNews.message}</p><p id = "forwardBtn" class = "mt-2 news-forward"><i class="fas fa-share mr-2"></i>Forward</p></div> 
+    `;
   } else {
     newsdiv.innerHTML = `<p class="meta mb-1"> ${
       newNews.sender
     } <span class="ml-3"> ${timestamp} </span></p>
-    <p id=${newsId}> ${
-      newNews.message
-    }<button type="button" id = "forwardBtn" class="btn btn-info float-right" >FORWARD</button></p>
-    <img class="img-thumbnail" src="data:image/png;base64,${toBase64(
+    <img class="img-thumbnail mt-2" src="data:image/png;base64,${toBase64(
       newNews.photo.data.data
-    )}"> `;
+    )}"> 
+    <div id=${newsId}><p id = "forwardBtn" class = "mt-2 news-forward"><i class="fas fa-share mr-2"></i>Forward</p></div>
+    `;
   }
+
   news.prepend(newsdiv);
 
   document.getElementById('forwardBtn').addEventListener('click', () => {

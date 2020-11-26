@@ -67,13 +67,13 @@
                   <div class="container-fluid">
                     <div class="row text-left text-info">
                       <textarea id="news-text" class="create-news-text" placeholder="New News"></textarea>
+                      <form enctype="multipart/form-data" class="mt-2 mr-2">
+                        <input id='news-photo' type = file name="photo">
+                      </form> 
                     </div>
                   </div>
                 </div>
-                <div class="modal-footer">
-                   <form enctype="multipart/form-data" >
-                    <input id='news-photo' type = file name="photo">
-                    </form>                
+                <div class="modal-footer">               
                   <button type="button" class="btn btn-secondary" data-dismiss="modal">
                     Cancel
                   </button>
@@ -99,13 +99,13 @@
                 <div class="modal-body">
                   <div class="alert" id="newsAlert" role="alert" hidden></div>
                   <div class="container-fluid">
-                    <ul>
+                    
                       <div class="online-offline-list">
                         <div id="online-list"></div>
                         <div id="offline-list"></div>
                       </div>
                       <br>            
-                    </ul>
+                    
                   </div>
                 </div>
                 <div class="modal-footer">              
@@ -145,10 +145,10 @@
 
           <!-- navigation bar -->
           <div class="row">
-            <nav class="navbar custom-nav px-5">
-              <a class="navbar-brand" href="/main"><i class="fas fa-home"></i></a>
+            <nav class="navbar custom-nav px-4">
+              <a class="navbar-brand" href="/main"><i class="far fa-comments"></i></a>
               <a class="navbar-brand" href="/announcement"><i class="far fa-bell"></i></a>
-              <a class="navbar-brand" href="/map"><i class="fas fa-map"></i></a>
+              <a class="navbar-brand" href="/map"><i class="far fa-map"></i></a>
               <a class="navbar-brand" href="/resources"><i class="fas fa-hands-helping"></i ></a>
               <a class="navbar-brand" href="/news" style="color: #17a2b8;"><i class="fas fa-bolt"></i></a>
               <a class="navbar-brand" href="/profile"><i class="far fa-user"></i></a>

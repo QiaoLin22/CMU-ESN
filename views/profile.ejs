@@ -24,6 +24,7 @@
       <div class="row">
         <div class="col-lg col-md-3 "></div>
         <div class="col-lg col-md-6 col esn-screen">
+
           <div class="toast toast-custom mt-2" role="alert" aria-live="polite" aria-atomic="true" data-animation = "true" data-autohide = "true" data-delay = "4000">
             <div role="alert" aria-live="assertive" aria-atomic="true">
               <div class="toast-header p-2">
@@ -31,7 +32,18 @@
                 <strong class="mr-auto">SMS Notification</strong>
                 <small>a second ago</small>
               </div>
-              <div class="toast-body"></div>
+              <div class="toast-body" id="sms-toast-body"></div>
+            </div>
+          </div>
+
+          <div class="toast toast-custom mt-2" role="alert" aria-live="polite" aria-atomic="true" data-animation = "true" data-autohide = "true" data-delay = "4000">
+            <div role="alert" aria-live="assertive" aria-atomic="true">
+              <div class="toast-header p-2">
+                <i class="fas fa-bell mr-2" style="color: #07869a;"></i>
+                <strong class="mr-auto">Geolocation Updated</strong>
+                <small>a second ago</small>
+              </div>
+              <div class="toast-body" id="geo-toast-body"></div>
             </div>
           </div>
 
@@ -43,8 +55,9 @@
             <h6 style="font-weight: 700; color: #065a67; font-size: 1.5rem;">Hello, <%= username %></h6> 
           </div>
           
+          <!-- user status -->
           <div class="direct-msg mt-3">
-            <span><h6>User Status</h6></span>
+            <span><h6><i class="far fa-smile mr-2" style="color: #18a2b8;"></i>User Status</h6></span>
             <span class="dropdown">
               <a class="btn btn-info dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 Status
@@ -57,33 +70,23 @@
               </div>
             </span>
           </div>
+          
+          <!-- emergency contact -->
           <div class="direct-msg mt-1"> 
-            <span><h6>Emergency Contact</h6></span>
+            <span><h6><i class="fas fa-phone-alt mr-2" style="color: #18a2b8;"></i>Emergency Contact</h6></span>
             <span><a href="/profile/emergency">edit</a></span>
           </div>
 
-          <div class="toast toast-custom mt-2" role="alert" aria-live="polite" aria-atomic="true" data-animation = "true" data-autohide = "true" data-delay = "4000">
-            <div role="alert" aria-live="assertive" aria-atomic="true">
-              <div class="toast-header p-2">
-                <i class="fas fa-bell mr-2" style="color: #07869a;"></i>
-                <strong class="mr-auto">Geolocation Updated</strong>
-                <small>a second ago</small>
-              </div>
-              <div class="toast-body"></div>
-            </div>
-          </div>
-
-          <div class="empty-block mb-3"></div>
-
-          <div class="direct-msg mt-3">
-            <span><h6>Location Options</h6></span>
+          <!-- update geo location -->
+          <div class="direct-msg mt-1">
+            <span><h6><i class="fas fa-map-marker-alt mr-2" style="color: #18a2b8;"></i>Location Options</h6></span>
             <span class="dropdown">
               <a class="btn btn-info dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 Options
               </a>
               <div class="dropdown-menu dropdown-menu-right dropdown-container mt-2 pt-3 pb-3" aria-labelledby="dropdownMenuLink" >
-                <a class="dropdown-item location-btn" href="#">Share current Location<i class="fas fa-info-circle ml-2"></i></a>
-                <a class="dropdown-item location-btn" href="#">Stop sharing Location<i class="fas fa-info-circle ml-2"></i></a>
+                <a class="dropdown-item location-btn status-btn" href="#">Share Current Location<i class="fas fa-map-marker-alt ml-2" style="color: #18b87e"></i></a>
+                <a class="dropdown-item location-btn status-btn" href="#">Stop Sharing Location<i class="far fa-stop-circle ml-2" style="color: #fb5252"></i></a>
               </div>
             </span>
           </div>
@@ -127,13 +130,13 @@
 
           <!-- navigation bar -->
           <div class="row">
-            <nav class="navbar custom-nav px-5">
-              <a class="navbar-brand" href="/main"><i class="fas fa-home"></i></a>
-              <a class="navbar-brand" href="/announcement"><i class="far fa-bell"></i></a>
-              <a class="navbar-brand" href="/map"><i class="fas fa-map"></i></a>
+            <nav class="navbar custom-nav px-4">
+              <a class="navbar-brand" href="/main"><i class="far fa-comments"></i></a>
+              <a class="navbar-brand notify" href="/announcement"><i class="far fa-bell"></i></a>
+              <a class="navbar-brand" href="/map"><i class="far fa-map"></i></a>
               <a class="navbar-brand" href="/resources"><i class="fas fa-hands-helping"></i ></a>
               <a class="navbar-brand" href="/news"><i class="fas fa-bolt"></i></a>
-              <a class="navbar-brand" href="/profile" style="color: #17a2b8;"><i class="far fa-user"></i></a>
+              <a class="navbar-brand" href="/profile" style="color: #17a2b8;"><i class="fas fa-user"></i></a>
             </nav>
           </div>
           
