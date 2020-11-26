@@ -35,10 +35,8 @@ const chatMessages = $('.chat-messages');
 const msgEle = $('#msg');
 
 function toBase64(arr) {
-  //arr = new Uint8Array(arr) if it's an ArrayBuffer
-  return btoa(
-     arr.reduce((data, byte) => data + String.fromCharCode(byte), '')
-  );
+  // arr = new Uint8Array(arr) if it's an ArrayBuffer
+  return btoa(arr.reduce((data, byte) => data + String.fromCharCode(byte), ''));
 }
 
 /* display chat message */
@@ -59,11 +57,17 @@ function outputMessage(message) {
   const timestamp = new Date(message.timestamp).toLocaleString();
   const msg = document.createElement('div');
   msg.classList.add('message');
-  if(message.photo === undefined){
+  if (message.photo === undefined) {
     msg.innerHTML = `<p class="meta mb-1"> ${message.sender} <span>${icon}</span> <span class="ml-3"> ${timestamp} </span></p> <p class="text"> ${message.message} </p>`;
-  }else{
-    msg.innerHTML = `<p class="meta mb-1"> ${message.sender} <span>${icon}</span> <span class="ml-3"> ${timestamp} </span></p> 
-    <p class="text"> ${message.message} </p><img class="img-thumbnail" src="data:image/png;base64,${toBase64( message.photo.data.data)}">`;
+  } else {
+    msg.innerHTML = `<p class="meta mb-1"> ${
+      message.sender
+    } <span>${icon}</span> <span class="ml-3"> ${timestamp} </span></p> 
+    <p class="text"> ${
+      message.message
+    } </p><img class="img-thumbnail" src="data:image/png;base64,${toBase64(
+      message.photo.data.data
+    )}">`;
   }
   chatMessages.append(msg);
 

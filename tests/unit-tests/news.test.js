@@ -14,7 +14,7 @@ beforeEach(async () => {
   await News.create({
     sender: 'John',
     message: 'Hi',
-    cityname:'San Jose'
+    cityname: 'San Jose',
   });
 });
 afterEach(dbInMemory.cleanup);
@@ -30,7 +30,7 @@ describe('use case share news by multimedia', () => {
     const expected = {
       sender: 'Jack',
       message: 'Hello',
-      cityname:'New York',
+      cityname: 'New York',
     };
     expect(actual).toEqual(expected);
   });
@@ -42,7 +42,7 @@ describe('use case share news by multimedia', () => {
       {
         sender: 'John',
         message: 'Hi',
-        cityname:'San Jose',
+        cityname: 'San Jose',
       },
     ];
     expect(actual.length).toEqual(expected.length);
@@ -52,20 +52,19 @@ describe('use case share news by multimedia', () => {
   });
 
   it('get news by news ID successfully', async () => {
-    const findResult = await News.find({cityname: 'San Jose'});
-    const newsId = findResult[0]._id
+    const findResult = await News.find({ cityname: 'San Jose' });
+    const newsId = findResult[0]._id;
     const actual = await getNewsByNewsId(newsId);
     const expected = [
-        {
-          sender: 'John',
-          message: 'Hi',
-          cityname:'San Jose',
-        },
+      {
+        sender: 'John',
+        message: 'Hi',
+        cityname: 'San Jose',
+      },
     ];
     expect(actual.length).toEqual(expected.length);
     expect(actual[0].sender).toEqual(expected[0].sender);
     expect(actual[0].message).toEqual(expected[0].message);
     expect(actual[0].cityname).toEqual(expected[0].cityname);
   });
-
 });

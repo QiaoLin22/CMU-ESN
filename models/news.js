@@ -12,13 +12,13 @@ const NewsSchema = mongoose.Schema({
   },
   message: {
     type: String,
-    //required: [true, 'Message is required'],
+    // required: [true, 'Message is required'],
   },
-  photo: { 
-     data: Buffer, 
-     contentType: String,
+  photo: {
+    data: Buffer,
+    contentType: String,
   },
-  cityname:{
+  cityname: {
     type: String,
     required: [true, 'City name is required'],
   },
@@ -27,7 +27,7 @@ const NewsSchema = mongoose.Schema({
 const News = mongoose.model('News', NewsSchema);
 
 function createNewNews(sender, message, cityname, photo) {
-  const newNews= new News({
+  const newNews = new News({
     sender: sender,
     message: message,
     cityname: cityname,
@@ -37,13 +37,12 @@ function createNewNews(sender, message, cityname, photo) {
 }
 
 function getAllNews(cityname) {
-  //TODO: case insensitive search
-  return News.find({ cityname:  { $regex : new RegExp(cityname, "i") }});
+  // TODO: case insensitive search
+  return News.find({ cityname: { $regex: new RegExp(cityname, 'i') } });
 }
 
-
-function getNewsByNewsId(newsId){
-  return  News.find({_id: newsId});
+function getNewsByNewsId(newsId) {
+  return News.find({ _id: newsId });
 }
 /*
 function searchAnnouncement(filteredKeywords, pagination) {
@@ -55,12 +54,12 @@ function searchAnnouncement(filteredKeywords, pagination) {
     .sort({ timestamp: -1 })
     .skip(pagination * 10)
     .limit(10);
-}*/
+} */
 
 module.exports = {
   News,
   createNewNews,
   getAllNews,
   getNewsByNewsId,
-  //searchAnnouncement,
+  // searchAnnouncement,
 };

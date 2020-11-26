@@ -27,7 +27,7 @@ function updateAPI(status) {
 }
 
 function displayContactNotification() {
-  $('.toast-body').replaceWith(
+  $('#sms-toast-body').replaceWith(
     `<div class="toast-body pl-3 pt-2 pr-2 pb-2">Successfully sent SMS to your contacts</div>`
   );
   $('.toast').css('zIndex', 1000);
@@ -70,7 +70,7 @@ sendConfirm.on('click', () => {
 
 // add socket event 'sent SMS'
 function displayNotification() {
-  $('.toast-body').replaceWith(
+  $('#geo-toast-body').replaceWith(
     `<div class="toast-body pl-3 pt-2 pr-2 pb-2">Your location has been updated</div>`
   );
   $('.toast').css('zIndex', 1000);
