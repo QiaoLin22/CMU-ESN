@@ -29,9 +29,11 @@ describe('use case join community', () => {
 
     const expected = {
       username: 'John',
+      accountStatus: true,
       hash: '001',
       salt: '1110',
       online: false,
+      privilegeLevel: 'Citizen',
     };
     expect(actual).toEqual(expected);
   });
