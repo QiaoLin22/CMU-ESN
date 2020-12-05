@@ -42,6 +42,17 @@ const userSchema = mongoose.Schema({
     longitude: { type: Number },
     latitude: { type: Number },
   },
+  accountStatus: {
+    type: Boolean,
+    required: [true, 'Account Status is required'],
+    default: true,
+  },
+  privilegeLevel: {
+    type: String,
+    enum: ['Citizen', 'Coordinator', 'Administrator'],
+    default: 'Citizen',
+    required: [true, 'Privilege Level is required'],
+  },
   zip: String,
 });
 
