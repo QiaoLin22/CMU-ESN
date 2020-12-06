@@ -69,28 +69,32 @@ class UserController {
       .catch((err) => next(err));
   }
 
-  static updateUserProfile(req, res) {
-    const {
-      prevUsername,
-      newUsername,
-      password,
-      accountStatus,
-      privilegeLevel,
-    } = req.body;
-    const { hash, salt } = genHashAndSalt(password);
-    const active = accountStatus === 'active';
+  static async updateUserProfile(req, res) {
+    const { username } = req.params;
 
-    User.updateUserProfile(
-      prevUsername,
-      newUsername,
-      hash,
-      salt,
-      privilegeLevel,
-      active
-    ).then(() => {
-      req.app.get('io').emit('force logout', newUsername);
+    const { newUsername, password, accountStatus, privilegeLevel } = req.body;
+
+    try {
+      User.validateUsername(newUsername);
+      if (password.length > 0) {
+        User.validatePassword(password);
+      }
+
+      const newProfile = {
+        username: newUsername,
+        accountStatus: accountStatus === 'active',
+        privilegeLevel,
+        ...(password.length > 0 && genHashAndSalt(password)),
+      };
+
+      console.log(newProfile);
+
+      await User.updateUserProfile(username, newProfile);
+
       res.status(200).send('success');
-    });
+    } catch (e) {
+      res.status(400).json({ error: e.message });
+    }
   }
 }
 
