@@ -225,6 +225,16 @@ class UserClass {
   static getUserPrivilege(username) {
     return this.findOne({ username: username }, { privilegeLevel: 1 });
   }
+  static getInactiveUsers() {
+    return this.aggregate([
+      { $match: { accountStatus: { $eq: true } } },
+      {
+        $project: {
+          username: 1
+        },
+      },
+    ]);
+  }
 }
 
 userSchema.loadClass(UserClass);

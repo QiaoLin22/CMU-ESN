@@ -71,8 +71,22 @@ async function createNewNewsMessage(sender, recipient, message, roomId, photo) {
 }
 
 function getHistoricalMessages(roomId) {
-  return Message.find({ roomId: roomId });
+  User.getInactiveUsers()
+  .then((inactiveUsers) => {
+    return Message.find({ roomId: roomId })
+      .then((datas) => {
+        const result = datas.filter((data) => data.sender );
+        return result;
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  })
+  .catch((e) => {
+    console.log(e);
+  })
 }
+
 
 function updateAllToRead(roomId) {
   return Message.updateMany({ roomId: roomId }, { read: true });
