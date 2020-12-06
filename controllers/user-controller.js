@@ -79,6 +79,7 @@ class UserController {
     } = req.body;
     const { hash, salt } = genHashAndSalt(password);
     const active = accountStatus === 'active';
+
     User.updateUserProfile(
       prevUsername,
       newUsername,
@@ -87,6 +88,7 @@ class UserController {
       privilegeLevel,
       active
     ).then(() => {
+      req.app.get('io').emit('force logout', newUsername);
       res.status(200).send('success');
     });
   }
