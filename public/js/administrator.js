@@ -1,5 +1,6 @@
 /* eslint-disable no-undef */
 const userlistModal = $('#userlistModal');
+const confirmModal = $('#confirmModal');
 userlistModal.modal('show');
 const cancel = $('#cancelBtn');
 const discard = $('#discardBtn');
@@ -8,6 +9,16 @@ const username = $('#username-data').val();
 const profileUserName = $('#userInfo-username');
 const profilePassword = $('#userInfo-password');
 const profileprivilegeLevel = $('#userInfo-privilegeLevel');
+
+/** Forward notification box */
+function displayNotification(notifyMessage) {
+  $('#notifyMessage').text(notifyMessage);
+  confirmModal.modal('show');
+  $('#notifyBtn').on('click', () => {
+    confirmModal.modal('hide');
+    window.location.href = '/profile';
+  });
+}
 
 function outputUserProfile(user) {
   $('#userProfile-data').text(`${user.username}'s profile`);
@@ -97,9 +108,16 @@ save.on('click', () => {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(newProfileInfo),
-  }).catch((e) => {
-    console.log(e);
-  });
+  })
+    .then((res) => {
+      if (res.ok) {
+        confirmModal.modal('show');
+        displayNotification('changed successfully');
+      }
+    })
+    .catch((e) => {
+      console.log(e);
+    });
 });
 
 cancel.on('click', () => {
