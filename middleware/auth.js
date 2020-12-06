@@ -40,7 +40,7 @@ const checkInactive = async (req, res, next) => {
   const { username } = req.body;
   User.getAccountStatusByUsername(username)
     .then((status) => {
-      if (status[0].accountStatus === true) {
+      if (status.length === 0 || status[0].accountStatus === true) {
         next();
       } else {
         res.status(403).json({ error: 'your account is Forbidden' });

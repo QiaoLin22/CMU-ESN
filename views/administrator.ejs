@@ -31,7 +31,7 @@
           <!-- User Info form-->
           <div class="container-fluid">
             <div class="row text-left text-info">
-              <label>Username</label>
+              <label class="mt-3">Username</label>
               <input type="text" id="userInfo-username" class="create-contact-input" >
               <label class="mt-2">Password</label>
               <input type="text" id="userInfo-password" class="create-contact-input" placeholder="Change password">
@@ -42,8 +42,8 @@
                 <option value="Administrator">Administrator</option>
               </select>
               
-              <label class="form-label text-info">Account Status</label>
-              <div class="form-check">
+              <label class="form-label text-info mt-2">Account Status</label>
+              <div class="form-check mt-2 ml-1">
                 <input
                   class="form-check-input"
                   type="radio"
@@ -53,7 +53,7 @@
                 />
                 <label class="form-check-label" for="activeRadio">Active</label>
               </div>
-              <div class="form-check">
+              <div class="form-check mt-2 ml-1">
                 <input
                   class="form-check-input"
                   type="radio"
@@ -65,12 +65,14 @@
               </div>
             </div>
           </div>
-          <button type="button" class="btn btn-secondary" id="discardBtn">
-            Discard
-          </button>
-          <button type="button" class="btn btn-info" id="saveBtn">
-            Save
-          </button>
+          <div class="mt-2" style="float: right;">
+            <button type="button" class="btn btn-secondary" id="discardBtn">
+              Discard
+            </button>
+            <button type="button" class="btn btn-info" id="saveBtn">
+              Save
+            </button>
+          </div>
 
           <!-- User List modal -->
           <div class="modal fade border-info" id="userlistModal" tabindex="-1" aria-labelledby="newsModalLabel" aria-hidden="true">
