@@ -91,6 +91,10 @@ class UserController {
 
       await User.updateUserProfile(username, newProfile);
 
+      if (accountStatus === 'inactive') {
+        req.app.get('io').emit('force logout', newUsername);
+      }
+
       res.status(200).send('success');
     } catch (e) {
       res.status(400).json({ error: e.message });
