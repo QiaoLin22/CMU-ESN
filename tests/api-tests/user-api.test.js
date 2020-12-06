@@ -55,7 +55,7 @@ const token = createToken({ _id: '000', username: 'John' });
 describe('GET /', () => {
   test('It should respond with all users', async () => {
     const response = await request(app)
-      .get('/api/users/')
+      .get('/api/users/active')
       .set('Cookie', `jwt=${token}`);
     const expected = [
       {
@@ -91,7 +91,7 @@ describe('POST /', () => {
 
     // make sure we have 3 users now
     const response = await request(app)
-      .get('/api/users/')
+      .get('/api/users/active')
       .set('Cookie', `jwt=${token}`);
     expect(response.body.length).toBe(3);
   });

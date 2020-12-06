@@ -21,7 +21,7 @@ io.on('connection', (socket) => {
   // console.log(`${socket.id} connected`);
 
   socket.on('join room', async (username) => {
-    const userList = await User.retrieveUsers();
+    const userList = await User.retrieveActiveUsers();
 
     userList.forEach((user) => {
       const otherUsername = user.username;

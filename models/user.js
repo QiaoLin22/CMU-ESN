@@ -65,7 +65,7 @@ class UserClass {
     });
   }
 
-  static async retrieveUsers(username) {
+  static async retrieveActiveUsers(username) {
     return this.aggregate([
       { $match: { accountStatus: { $ne: false } } },
       {
@@ -99,6 +99,14 @@ class UserClass {
       },
       { $sort: { online: -1, username: 1 } },
     ]);
+  }
+
+  static async retrieveAllUsers() {
+    return this.find(
+      {},
+      { _id: 0, __v: 0, statusArray: 0, emergencyContact: 0, location: 0 },
+      { sort: { online: -1, username: 1 } }
+    );
   }
 
   static findUserByUsername(username) {

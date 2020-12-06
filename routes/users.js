@@ -6,7 +6,9 @@ const LoginLogoutController = require('../controllers/login-logout-controller');
 const UserController = require('../controllers/user-controller');
 const MapController = require('../controllers/map-controller');
 
-router.get('/', authenticateUser, UserController.retrieveUsers);
+router.get('/active', authenticateUser, UserController.retrieveActiveUsers);
+
+router.get('/all', authenticateUser, UserController.retrieveAllUsers);
 
 router.get('/locations', authenticateUser, MapController.retrieveLocations);
 

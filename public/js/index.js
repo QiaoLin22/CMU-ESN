@@ -79,7 +79,7 @@ function checkUsernamePassword(username, password) {
 
 $('#confirmBtn').on('click', () => {
   // fetch "/api/users" request to create a new user
-  fetch('/api/users', getPostOptions())
+  fetch('/api/users/active', getPostOptions())
     .then(checkStatus)
     .then(() => {
       // if registration is successful, popup welcome message

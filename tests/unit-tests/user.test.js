@@ -90,7 +90,7 @@ describe('use case join community', () => {
   });
 
   it('retrieve users successfully', async () => {
-    const actual = await User.retrieveUsers();
+    const actual = await User.retrieveActiveUsers();
 
     const expected = [
       {
