@@ -11,6 +11,12 @@ router.get('/locations', authenticateUser, MapController.retrieveLocations);
 
 router.get('/location', authenticateUser, MapController.retrieveLocation);
 
+router.get(
+  '/profile/:username',
+  authenticateUser,
+  UserController.getUserProfile
+);
+
 router.post('/', UserController.createUser);
 
 router.post('/login', checkInactive, LoginLogoutController.login);
@@ -22,6 +28,9 @@ router.put('/logout', authenticateUser, LoginLogoutController.logout);
 router.put('/', UserController.updateStatus);
 
 router.put('/location', MapController.deleteLocation);
+
+router.put('/profile', authenticateUser, UserController.updateUserProfile);
+
 router.get('/:username/zip', UserController.getZip);
 
 router.put('/:username/zip', UserController.updateZip);

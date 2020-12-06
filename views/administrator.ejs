@@ -17,73 +17,60 @@
       src="https://use.fontawesome.com/releases/v5.15.1/js/all.js"
       data-auto-a11y="true"
     ></script>
-    <title>News</title>
+    <title>User Profile</title>
   </head>
 
   <body>
     <div class="container">
       <div class="row">
         <div class="col-lg col-md-3 col-sm-2"></div>
-
         <div class="col-lg col-md-6 col-sm-8 esn-screen">
           <div class="row news-header">
-              <!--<h5>News</h5>-->
-              <h5 id = "cityname-data">News</h5>
+              <h5 id = "userProfile-data">info</h5>
           </div>
-          <!-- Enter Cityname -->
-          <div class="row searchbar p-3" style="background: white; height: 8vh;">
-            <form class = "search-form">
-              <input 
-                id="cityname-input" 
-                type="text" 
-                placeholder="Enter city name"
-                required
-                autocomplete="off"
-              />
-              <button                    
-                type="submit"                    
-                class="btn btn-info ml-2"                    
-                id="cityNameBtn"                  
-              >></button>
-            </form>
-          </div>
-          <div class="row news-container">
-            <div class="news"></div>
-          </div>
-
-          <!-- Create new News modal -->
-          <div class="modal fade border-info" id="newsModal" tabindex="-1" aria-labelledby="newsModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-              <div class="modal-content modal-lg">
-                <div class="modal-header">
-                  <div class="container-fluid">
-                    <div class="row text-left text-info">
-                      <h6 class="mb-2">New News</h6>
-                    </div>
-                  </div>
-                </div>
-                <div class="modal-body">
-                  <div class="alert" id="newsAlert" role="alert" hidden></div>
-                  <div class="container-fluid">
-                    <div class="row text-left text-info">
-                      <textarea id="news-text" class="create-news-text" placeholder="New News"></textarea>
-                      <form enctype="multipart/form-data" class="mt-2 mr-2">
-                        <input id='news-photo' type = file name="photo">
-                      </form> 
-                    </div>
-                  </div>
-                </div>
-                <div class="modal-footer">               
-                  <button type="button" class="btn btn-secondary" data-dismiss="modal">
-                    Cancel
-                  </button>
-                  <button type="button" class="btn btn-info" data-dismiss="modal" id="confirmBtn">
-                    Post
-                  </button>
-                </div>
+          <!-- User Info form-->
+          <div class="container-fluid">
+            <div class="row text-left text-info">
+              <label>Username</label>
+              <input type="text" id="userInfo-username" class="create-contact-input" >
+              <label class="mt-2">Password</label>
+              <input type="text" id="userInfo-password" class="create-contact-input" placeholder="Change password">
+              <label class="mt-2">Privilege Level</label>
+              <select class="form-control" id="userInfo-privilegeLevel">
+                <option value="Citizen">Citizen</option>
+                <option value="Coordinator">Coordinator</option>
+                <option value="Administrator">Administrator</option>
+              </select>
+              
+              <label class="form-label text-info">Account Status</label>
+              <div class="form-check">
+                <input
+                  class="form-check-input"
+                  type="radio"
+                  id="activeRadio"
+                  value="active"
+                  name="accountStatusRadios"
+                />
+                <label class="form-check-label" for="activeRadio">Active</label>
+              </div>
+              <div class="form-check">
+                <input
+                  class="form-check-input"
+                  type="radio"
+                  id="inactiveRadio"
+                  value="Inactive"
+                  name="accountStatusRadios"
+                />
+                <label class="form-check-label" for="inactiveRadio">Inactive</label>
               </div>
             </div>
           </div>
+          <button type="button" class="btn btn-secondary" id="discardBtn">
+            Discard
+          </button>
+          <button type="button" class="btn btn-info" id="saveBtn">
+            Save
+          </button>
 
           <!-- User List modal -->
           <div class="modal fade border-info" id="userlistModal" tabindex="-1" aria-labelledby="newsModalLabel" aria-hidden="true">
@@ -97,7 +84,7 @@
                   </div>
                 </div>
                 <div class="modal-body">
-                  <div class="alert" id="newsAlert" role="alert" hidden></div>
+                  
                   <div class="container-fluid">
                     
                       <div class="online-offline-list">
@@ -109,39 +96,34 @@
                   </div>
                 </div>
                 <div class="modal-footer">              
-                  <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                  <button type="button" class="btn btn-secondary" id="cancelBtn">
                     Cancel
                   </button>
                 </div>
               </div>
             </div>
           </div>
+          
            <!-- Confirm modal -->
-          <div class="modal fade border-info" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
+           <div class="modal fade border-info" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg">
               <div class="modal-content">
                 <div class="modal-body">
                   <div class="alert" id="confirmAlert" role="alert" hidden></div>
                   <div class="container-fluid">
                     <div class="row text-left text-info">
-                      <p id="forwardNotifyMessage"></p>
+                      <p id="notifyMessage"></p>
                     </div>
                   </div>
                 </div>
                 <div class="modal-footer">
-                  <button type="button" class="btn btn-info" id="forwardNotifyBtn">
+                  <button type="button" class="btn btn-info" id="notifyBtn">
                     OK
                   </button>
                 </div>
               </div>
             </div>
           </div>
-
-          <!-- add new news -->
-          <div class="row">
-            <div id="create-news" class="create-news-button"><h6>+</h6></div>
-          </div>
-          
 
           <!-- navigation bar -->
           <div class="row">
@@ -150,8 +132,8 @@
               <a class="navbar-brand" href="/announcement"><i class="far fa-bell"></i></a>
               <a class="navbar-brand" href="/map"><i class="far fa-map"></i></a>
               <a class="navbar-brand" href="/resources"><i class="fas fa-hands-helping"></i ></a>
-              <a class="navbar-brand" href="/news" style="color: #17a2b8;"><i class="fas fa-bolt"></i></a>
-              <a class="navbar-brand" href="/profile"><i class="far fa-user"></i></a>
+              <a class="navbar-brand" href="/news"><i class="fas fa-bolt"></i></a>
+              <a class="navbar-brand" href="/profile" style="color: #17a2b8;"><i class="far fa-user"></i></a>
             </nav>
           </div>
           
@@ -186,5 +168,5 @@
   ></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.3/socket.io.js"></script>
   <script type="module" src="js/force-logout.js"></script>
-  <script type="module" src="/js/news.js"></script>
+  <script type="module" src="/js/administrator.js"></script>
 </html>

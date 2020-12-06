@@ -61,6 +61,37 @@ class UserController {
       res.status(200).send('success');
     });
   }
+
+  static getUserProfile(req, res) {
+    const { username } = req.params;
+    User.getUserProfile(username)
+      .then((user) => res.status(200).json(user))
+      .catch((err) => next(err));
+  }
+
+  static updateUserProfile(req, res) {
+    const {
+      prevUsername,
+      newUsername,
+      password,
+      accountStatus,
+      privilegeLevel,
+    } = req.body;
+    const { hash, salt } = genHashAndSalt(password);
+    const active = accountStatus === 'active';
+
+    User.updateUserProfile(
+      prevUsername,
+      newUsername,
+      hash,
+      salt,
+      privilegeLevel,
+      active
+    ).then(() => {
+      req.app.get('io').emit('force logout', newUsername);
+      res.status(200).send('success');
+    });
+  }
 }
 
 module.exports = UserController;

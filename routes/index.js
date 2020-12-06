@@ -53,4 +53,8 @@ router.get('/resources/posts/:postId', authenticateUser, (req, res) => {
   res.render('resource-post', { username: res.locals.username });
 });
 
+router.get('/administrator', authenticateUser, (req, res) => {
+  res.render('administrator', { username: res.locals.username });
+});
+
 module.exports = router;

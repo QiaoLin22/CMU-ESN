@@ -247,6 +247,35 @@ class UserClass {
       },
     ]);
   }
+
+  static getUserProfile(username) {
+    return this.findOne(
+      { username: username },
+      { username: 1, privilegeLevel: 1, accountStatus: 1 }
+    );
+  }
+
+  static updateUserProfile(
+    prevUsername,
+    newUsername,
+    hash,
+    salt,
+    privilegeLevel,
+    accountStatus
+  ) {
+    return this.updateOne(
+      { username: prevUsername }, // Filter
+      {
+        $set: {
+          username: newUsername,
+          hash: hash,
+          salt: salt,
+          privilegeLevel: privilegeLevel,
+          accountStatus: accountStatus,
+        },
+      } // Update
+    );
+  }
 }
 
 userSchema.loadClass(UserClass);
