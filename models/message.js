@@ -71,22 +71,24 @@ async function createNewNewsMessage(sender, recipient, message, roomId, photo) {
 }
 
 function getHistoricalMessages(roomId) {
-  User.getInactiveUsers()
-  .then((inactiveUsers) => {
-    return Message.find({ roomId: roomId })
-      .then((datas) => {
-        const result = datas.filter((data) => data.sender );
-        return result;
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  })
-  .catch((e) => {
-    console.log(e);
-  })
-}
+  const active = [];
+  User.getActiveUsers()
+    .then((activeUsers) => {
+      activeUsers.forEach((data) => active.push(data.username));
+    })
+    .catch((e) => {
+      console.log(e);
+    });
 
+  return Message.find({ roomId: roomId })
+    .then((datas) => {
+      const result = datas.filter((data) => active.includes(data.sender));
+      return result;
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+}
 
 function updateAllToRead(roomId) {
   return Message.updateMany({ roomId: roomId }, { read: true });

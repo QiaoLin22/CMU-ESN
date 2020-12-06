@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const { authenticateUser } = require('../middleware/auth');
+const { authenticateUser, checkInactive } = require('../middleware/auth');
 
 const LoginLogoutController = require('../controllers/login-logout-controller');
 const UserController = require('../controllers/user-controller');
@@ -13,7 +13,7 @@ router.get('/location', authenticateUser, MapController.retrieveLocation);
 
 router.post('/', UserController.createUser);
 
-router.post('/login', LoginLogoutController.login);
+router.post('/login', checkInactive, LoginLogoutController.login);
 
 router.post('/location', MapController.updateLocation);
 

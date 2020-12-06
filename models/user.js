@@ -225,12 +225,24 @@ class UserClass {
   static getUserPrivilege(username) {
     return this.findOne({ username: username }, { privilegeLevel: 1 });
   }
-  static getInactiveUsers() {
+
+  static getActiveUsers() {
     return this.aggregate([
       { $match: { accountStatus: { $eq: true } } },
       {
         $project: {
-          username: 1
+          username: 1,
+        },
+      },
+    ]);
+  }
+
+  static getAccountStatusByUsername(username) {
+    return this.aggregate([
+      { $match: { username: { $eq: username } } },
+      {
+        $project: {
+          accountStatus: 1,
         },
       },
     ]);

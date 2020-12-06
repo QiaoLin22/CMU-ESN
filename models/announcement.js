@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const User = require('./user');
 
 const AnnouncementSchema = mongoose.Schema({
   sender: {
@@ -28,7 +29,23 @@ function createNewAnnouncement(sender, message) {
 }
 
 function getAllAnnouncements() {
-  return Announcement.find({});
+  const active = [];
+  User.getActiveUsers()
+    .then((activeUsers) => {
+      activeUsers.forEach((data) => active.push(data.username));
+    })
+    .catch((e) => {
+      console.log(e);
+    });
+
+  return Announcement.find({})
+    .then((datas) => {
+      const result = datas.filter((data) => active.includes(data.sender));
+      return result;
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 }
 
 function searchAnnouncement(filteredKeywords, pagination) {
