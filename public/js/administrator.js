@@ -96,13 +96,12 @@ save.on('click', () => {
     prevUsernamestring.indexOf("'s profile")
   );
   const newProfileInfo = {
-    prevUsername: prevUsername,
     newUsername: profileUserName.val(),
     password: profilePassword.val(),
     accountStatus: profileAccountStatus,
     privilegeLevel: profileprivilegeLevel.val(),
   };
-  fetch('api/users/profile/', {
+  fetch(`api/users/${prevUsername}/profile`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
