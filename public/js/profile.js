@@ -8,6 +8,7 @@ const na = $('.status-btn:nth-child(4)');
 const username = $('#username-data').val();
 const sendSMS = $('#sendSmsModal');
 const sendConfirm = $('#sendConfirmBtn');
+const administrator = $('#administratorBtn');
 
 function updateAPI(status) {
   const newStatus = {
@@ -150,4 +151,8 @@ deleteLocationBtn.on('click', () => {
     console.log(e);
   });
   displayDeleteNotification();
+});
+
+administrator.on('click', () => {
+  window.location.href = '/administrator';
 });
