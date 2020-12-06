@@ -50,10 +50,10 @@ beforeEach(async () => {
 });
 afterEach(DBInMemory.cleanup);
 
+const token = createToken({ _id: '000', username: 'John' });
+
 describe('GET /', () => {
   test('It should respond with all users', async () => {
-    const token = createToken({ _id: '000', username: 'John' });
-
     const response = await request(app)
       .get('/api/users/')
       .set('Cookie', `jwt=${token}`);
@@ -83,14 +83,13 @@ describe('POST /', () => {
   test('It should responds with the newly created user', async () => {
     const newUser = await request(app).post('/api/users/').send({
       username: 'George',
-      password: '666',
+      password: '6666',
     });
 
     // make sure we add it correctly
     expect(newUser.statusCode).toBe(201);
 
     // make sure we have 3 users now
-    const token = createToken({ _id: '000', username: 'John' });
     const response = await request(app)
       .get('/api/users/')
       .set('Cookie', `jwt=${token}`);
@@ -102,7 +101,7 @@ describe('POST /login', () => {
   test('It should responds with a user successfully login', async () => {
     const response = await request(app).post('/api/users/login').send({
       username: 'George',
-      password: '666',
+      password: '6666',
     });
 
     // make sure we can login successfully
@@ -112,7 +111,6 @@ describe('POST /login', () => {
 
 describe('PUT /logout', () => {
   test('It should respond with a user logout successfully', async () => {
-    const token = createToken({ _id: '111', username: 'John' });
     User.updateOnlineStatus('John', true);
     const response = await request(app)
       .put('/api/users/logout')
@@ -125,10 +123,13 @@ describe('PUT /logout', () => {
 
 describe('PUT /', () => {
   test('It should responds with a successfully update online status', async () => {
-    const response = await request(app).put('/api/users/').send({
-      username: 'John',
-      status: 'offline',
-    });
+    const response = await request(app)
+      .put('/api/users/')
+      .set('Cookie', `jwt=${token}`)
+      .send({
+        username: 'John',
+        status: 'offline',
+      });
 
     // make sure we can change status successfully
     expect(response.statusCode).toBe(200);
