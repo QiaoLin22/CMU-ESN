@@ -61,6 +61,41 @@ class UserController {
       res.status(200).send('success');
     });
   }
+
+  static getUserProfile(req, res) {
+    const { username } = req.params;
+    User.getUserProfile(username)
+      .then((user) => res.status(200).json(user))
+      .catch((err) => next(err));
+  }
+
+  static async updateUserProfile(req, res) {
+    const { username } = req.params;
+
+    const { newUsername, password, accountStatus, privilegeLevel } = req.body;
+
+    try {
+      User.validateUsername(newUsername);
+      if (password.length > 0) {
+        User.validatePassword(password);
+      }
+
+      const newProfile = {
+        username: newUsername,
+        accountStatus: accountStatus === 'active',
+        privilegeLevel,
+        ...(password.length > 0 && genHashAndSalt(password)),
+      };
+
+      console.log(newProfile);
+
+      await User.updateUserProfile(username, newProfile);
+
+      res.status(200).send('success');
+    } catch (e) {
+      res.status(400).json({ error: e.message });
+    }
+  }
 }
 
 module.exports = UserController;

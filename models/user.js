@@ -128,15 +128,20 @@ class UserClass {
     return result[0].status;
   }
 
-  static validateUsernamePassword(username, password) {
-    if (!username.length >= 3)
+  static validateUsername(username) {
+    if (!username) throw Error('Username needed');
+
+    if (username.length < 3)
       throw Error('Username should be at least 3 characters long');
 
     if (reservedUsernames.includes(username))
       throw Error('Username is reserved');
+  }
 
-    if (!password.length >= 4)
-      throw Error('Passwords should be at least 4 characters long');
+  static validatePassword(password) {
+    if (!password) throw Error('Password needed');
+    if (password.length < 4)
+      throw Error('Password should be at least 4 characters long');
   }
 
   static retrieveUserStatus(username) {
@@ -218,6 +223,23 @@ class UserClass {
 
   static deleteUserLocations(username) {
     return this.updateOne({ username: username }, { $unset: { location: '' } });
+  }
+
+  static getUserProfile(username) {
+    return this.findOne(
+      { username: username },
+      { username: 1, privilegeLevel: 1, accountStatus: 1 }
+    );
+  }
+
+  static updateUserProfile(username, newProfile) {
+    return this.updateOne(
+      { username }, // Filter
+      {
+        $set: newProfile,
+      }, // Update
+      { runValidators: true }
+    );
   }
 }
 

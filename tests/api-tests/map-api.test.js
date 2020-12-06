@@ -73,10 +73,10 @@ beforeEach(async () => {
 });
 afterEach(DBInMemory.cleanup);
 
+const token = createToken({ _id: '000', username: 'John' });
+
 describe('GET /locations', () => {
   test('It should respond with all user locations', async () => {
-    const token = createToken({ _id: '000', username: 'John' });
-
     const response = await request(app)
       .get('/api/users/locations')
       .set('Cookie', `jwt=${token}`);
@@ -110,8 +110,6 @@ describe('GET /locations negative', () => {
 
 describe('GET /location', () => {
   test('It should respond with one user locations', async () => {
-    const token = createToken({ _id: '000', username: 'John' });
-
     const response = await request(app)
       .get('/api/users/location')
       .set('Cookie', `jwt=${token}`);
@@ -137,11 +135,14 @@ describe('GET /location negative', () => {
 
 describe('POST /', () => {
   test('It should respond with new user location created', async () => {
-    const response = await request(app).post('/api/users/location').send({
-      username: 'Jack',
-      longitude: 3,
-      latitude: 3,
-    });
+    const response = await request(app)
+      .post('/api/users/location')
+      .set('Cookie', `jwt=${token}`)
+      .send({
+        username: 'Jack',
+        longitude: 3,
+        latitude: 3,
+      });
     // Make sure the location is created successfully
     expect(response.statusCode).toBe(200);
   });
@@ -149,9 +150,12 @@ describe('POST /', () => {
 
 describe('POST / negative', () => {
   test('It should respond with 400 bad request', async () => {
-    const response = await request(app).post('/api/users/location').send({
-      username: 'Jack',
-    });
+    const response = await request(app)
+      .post('/api/users/location')
+      .set('Cookie', `jwt=${token}`)
+      .send({
+        username: 'Jack',
+      });
 
     expect(response.statusCode).toBe(400);
   });
@@ -159,9 +163,12 @@ describe('POST / negative', () => {
 
 describe('PUT /', () => {
   test('It should respond user location successfully update', async () => {
-    const response = await request(app).put('/api/users/location').send({
-      username: 'John',
-    });
+    const response = await request(app)
+      .put('/api/users/location')
+      .set('Cookie', `jwt=${token}`)
+      .send({
+        username: 'John',
+      });
     // Make sure the location is deleted successfully
     expect(response.statusCode).toBe(200);
   });
@@ -169,7 +176,9 @@ describe('PUT /', () => {
 
 describe('PUT / negative', () => {
   test('It should respond with 400 bad request', async () => {
-    const response = await request(app).put('/api/users/location');
+    const response = await request(app)
+      .put('/api/users/location')
+      .set('Cookie', `jwt=${token}`);
     // Make sure the location is deleted successfully
     expect(response.statusCode).toBe(400);
   });

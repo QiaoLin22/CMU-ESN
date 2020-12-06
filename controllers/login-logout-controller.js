@@ -11,7 +11,8 @@ class LoginLogoutController {
 
       // username does not exists
       if (!user) {
-        User.validateUsernamePassword(username, password);
+        User.validateUsername(username);
+        User.validatePassword(password);
         // ask the user to confirm the creation of a new user
         res.status(200).send({ message: 'create new user?' });
       }
