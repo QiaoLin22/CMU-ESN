@@ -67,6 +67,7 @@ class UserClass {
 
   static async retrieveUsers(username) {
     return this.aggregate([
+      { $match: { accountStatus: { $ne: false } } },
       {
         $lookup: {
           from: 'messages',
@@ -91,6 +92,7 @@ class UserClass {
         $project: {
           username: 1,
           online: 1,
+          accountStatus: 1,
           latestStatus: { $arrayElemAt: ['$statusArray', -1] },
           numUnreadMessages: { $size: '$unreadMessages' },
         },
@@ -223,6 +225,32 @@ class UserClass {
 
   static deleteUserLocations(username) {
     return this.updateOne({ username: username }, { $unset: { location: '' } });
+  }
+
+  static getUserPrivilege(username) {
+    return this.findOne({ username: username }, { privilegeLevel: 1 });
+  }
+
+  static getActiveUsers() {
+    return this.aggregate([
+      { $match: { accountStatus: { $eq: true } } },
+      {
+        $project: {
+          username: 1,
+        },
+      },
+    ]);
+  }
+
+  static getAccountStatusByUsername(username) {
+    return this.aggregate([
+      { $match: { username: { $eq: username } } },
+      {
+        $project: {
+          accountStatus: 1,
+        },
+      },
+    ]);
   }
 
   static getUserProfile(username) {

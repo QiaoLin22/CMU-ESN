@@ -1,5 +1,6 @@
 const { verifyToken } = require('../lib/jwt');
 const { isRoomIdValid } = require('../lib/room-id');
+const User = require('../models/user');
 
 const authenticateUser = (req, res, next) => {
   const token = req.cookies.jwt;
@@ -35,4 +36,19 @@ const verifyRoomId = async (req, res, next) => {
   }
 };
 
-module.exports = { authenticateUser, verifyRoomId };
+const checkInactive = async (req, res, next) => {
+  const { username } = req.body;
+  User.getAccountStatusByUsername(username)
+    .then((status) => {
+      if (status.length === 0 || status[0].accountStatus === true) {
+        next();
+      } else {
+        res.status(403).json({ error: 'your account is Forbidden' });
+      }
+    })
+    .catch((e) => {
+      console.log(e);
+    });
+};
+
+module.exports = { authenticateUser, verifyRoomId, checkInactive };

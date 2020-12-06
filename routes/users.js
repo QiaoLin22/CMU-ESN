@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const { authenticateUser } = require('../middleware/auth');
+const { authenticateUser, checkInactive } = require('../middleware/auth');
 const RBAC = require('../middleware/RBAC');
 
 const LoginLogoutController = require('../controllers/login-logout-controller');
@@ -20,7 +20,7 @@ router.get(
 
 router.post('/', UserController.createUser);
 
-router.post('/login', LoginLogoutController.login);
+router.post('/login', checkInactive, LoginLogoutController.login);
 
 router.post('/location', authenticateUser, MapController.updateLocation);
 
