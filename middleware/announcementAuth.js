@@ -4,7 +4,10 @@ const authenticateAnnouncement = (req, res, next) => {
   const { username } = res.locals;
   User.getUserPrivilege(username)
     .then((result) => {
-      if (result.privilegeLevel === 'Coordinator') {
+      if (
+        result.privilegeLevel === 'Coordinator' ||
+        result.privilegeLevel === 'Administrator'
+      ) {
         next();
       }
     })

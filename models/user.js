@@ -277,6 +277,15 @@ class UserClass {
       { runValidators: true }
     );
   }
+
+  static async compareUserProfile(username, newProfile) {
+    const currentProfile = await this.getUserProfile(username);
+    return (
+      currentProfile.username !== newProfile.username ||
+      currentProfile.privilegeLevel !== newProfile.privilegeLevel ||
+      currentProfile.accountStatus !== newProfile.accountStatus
+    );
+  }
 }
 
 userSchema.loadClass(UserClass);
