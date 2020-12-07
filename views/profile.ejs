@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, shrink-to-fit=no"
+    />
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="../css/style.css" />
+    <script
+      src="https://use.fontawesome.com/releases/v5.15.1/js/all.js"
+      data-auto-a11y="true"
+    ></script>
+    <title>Profile page</title>
+  </head>
+  <body>
+    <div class="container directory-container">
+      <div class="row">
+        <div class="col-lg col-md-3"></div>
+        <div class="col-lg col-md-6 col esn-screen">
+          <div
+            class="toast toast-custom mt-2"
+            role="alert"
+            aria-live="polite"
+            aria-atomic="true"
+            data-animation="true"
+            data-autohide="true"
+            data-delay="4000"
+          >
+            <div role="alert" aria-live="assertive" aria-atomic="true">
+              <div class="toast-header p-2">
+                <i class="fas fa-bell mr-2" style="color: #07869a"></i>
+                <strong class="mr-auto">Notification</strong>
+                <small>a second ago</small>
+              </div>
+              <div class="toast-body"></div>
+            </div>
+          </div>
+
+          <div class="row directory-header">
+            <h5>Profile</h5>
+          </div>
+
+          <div class="mt-3">
+            <h6 style="font-weight: 700; color: #065a67; font-size: 1.5rem">
+              Hello, <%= username %>
+            </h6>
+          </div>
+
+          <!-- user status -->
+          <div class="direct-msg mt-3">
+            <span
+              ><h6>
+                <i class="far fa-smile mr-2" style="color: #18a2b8"></i>User
+                Status
+              </h6></span
+            >
+            <span class="dropdown">
+              <a
+                class="btn btn-info dropdown-toggle"
+                href="#"
+                role="button"
+                id="dropdownMenuLink"
+                data-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false"
+              >
+                Status
+              </a>
+              <div
+                class="dropdown-menu dropdown-menu-right dropdown-container mt-2 pt-3 pb-3"
+                aria-labelledby="dropdownMenuLink"
+              >
+                <a class="dropdown-item status-btn" href="#"
+                  >OK<i
+                    class="far fa-check-circle ml-2"
+                    style="color: #18b87e"
+                  ></i
+                ></a>
+                <a class="dropdown-item status-btn" href="#"
+                  >Help<i
+                    class="fas fa-info-circle ml-2"
+                    style="color: #fff28f"
+                  ></i
+                ></a>
+                <a class="dropdown-item status-btn" href="#"
+                  >Emergency<i
+                    class="fas fa-first-aid ml-2"
+                    style="color: #fb5252"
+                  ></i
+                ></a>
+                <a class="dropdown-item status-btn" href="#"
+                  >Undefined<i
+                    class="far fa-question-circle ml-2"
+                    style="color: white"
+                  ></i
+                ></a>
+              </div>
+            </span>
+          </div>
+
+          <!-- emergency contact -->
+          <div class="direct-msg mt-1">
+            <span
+              ><h6>
+                <i class="fas fa-phone-alt mr-2" style="color: #18a2b8"></i
+                >Emergency Contact
+              </h6></span
+            >
+            <span><a href="/profile/emergency">edit</a></span>
+          </div>
+
+          <!-- update geo location -->
+          <div class="direct-msg mt-1">
+            <span
+              ><h6>
+                <i class="fas fa-map-marker-alt mr-2" style="color: #18a2b8"></i
+                >Location Options
+              </h6></span
+            >
+            <span class="dropdown">
+              <a
+                class="btn btn-info dropdown-toggle"
+                href="#"
+                role="button"
+                id="dropdownMenuLink"
+                data-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false"
+              >
+                Options
+              </a>
+              <div
+                class="dropdown-menu dropdown-menu-right dropdown-container mt-2 pt-3 pb-3"
+                aria-labelledby="dropdownMenuLink"
+              >
+                <a class="dropdown-item location-btn" href="#"
+                  >Share Current Location<i
+                    class="fas fa-map-marker-alt ml-2"
+                    style="color: #18b87e"
+                  ></i
+                ></a>
+                <a class="dropdown-item location-btn" href="#"
+                  >Stop Sharing Location<i
+                    class="far fa-stop-circle ml-2"
+                    style="color: #fb5252"
+                  ></i
+                ></a>
+              </div>
+            </span>
+          </div>
+
+          <% if (privilegeLevel === 'Administrator') { %>
+          <div class="direct-msg mt-1">
+            <span
+              ><h6>
+                <i class="fas fa-user-edit mr-2" style="color: #18a2b8"></i
+                >Administer User Profile
+              </h6></span
+            >
+            <span
+              ><button id="administratorBtn" class="btn btn-info">
+                Administer
+              </button></span
+            >
+          </div>
+          <% } %>
+
+          <div class="empty-block mb-1"></div>
+
+          <button id="logoutBtn" class="btn btn-info btn-block">Log out</button>
+
+          <!-- emergency send SMS confirm modal -->
+          <div class="modals"></div>
+          <div
+            class="modal fade border-info"
+            id="sendSmsModal"
+            tabindex="-1"
+            aria-labelledby="announceModalLabel"
+            aria-hidden="true"
+          >
+            <div class="modal-dialog">
+              <div class="modal-content modal-lg">
+                <div class="modal-header">
+                  <div class="container-fluid">
+                    <div class="row text-left text-info">
+                      <h6 class="mb-2">Send SMS to All Emergency Contacts</h6>
+                    </div>
+                  </div>
+                </div>
+                <div class="modal-body">
+                  <div
+                    class="alert"
+                    id="announceAlert"
+                    role="alert"
+                    hidden
+                  ></div>
+                  <div class="container-fluid">
+                    <div class="row text-left text-info">
+                      <p>
+                        Do you want to notify all your contacts that you're in
+                        an emergency?
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button
+                    type="button"
+                    class="btn btn-secondary"
+                    data-dismiss="modal"
+                    id="dontSendBtn"
+                  >
+                    No, Thanks
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-info"
+                    data-dismiss="modal"
+                    id="sendConfirmBtn"
+                  >
+                    Yes
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- navigation bar -->
+          <div class="row">
+            <nav class="navbar custom-nav px-4">
+              <a class="navbar-brand" href="/main"
+                ><i class="far fa-comments"></i
+              ></a>
+              <a class="navbar-brand notify" href="/announcement"
+                ><i class="far fa-bell"></i
+              ></a>
+              <a class="navbar-brand" href="/map"><i class="far fa-map"></i></a>
+              <a class="navbar-brand" href="/resources"
+                ><i class="fas fa-hands-helping"></i
+              ></a>
+              <a class="navbar-brand" href="/news"
+                ><i class="fas fa-bolt"></i
+              ></a>
+              <a class="navbar-brand" href="/profile" style="color: #17a2b8"
+                ><i class="fas fa-user"></i
+              ></a>
+            </nav>
+          </div>
+        </div>
+
+        <div class="col-lg col-md-3"></div>
+      </div>
+    </div>
+    <!-- use only for passing the username -->
+    <input id="username-data" value="<%= username %>" style="display: none" />
+  </body>
+  <script
+    src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+    integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+    crossorigin="anonymous"
+  ></script>
+  <script
+    src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+    integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
+    crossorigin="anonymous"
+  ></script>
+  <script
+    src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+    integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
+    crossorigin="anonymous"
+  ></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.3/socket.io.js"></script>
+  <script type="module" src="/js/force-logout.js"></script>
+  <script type="module" src="js/profile.js"></script>
+</html>

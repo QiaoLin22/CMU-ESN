@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, shrink-to-fit=no"
+    />
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="../css/style.css" />
+    <script
+      src="https://use.fontawesome.com/releases/v5.15.1/js/all.js"
+      data-auto-a11y="true"
+    ></script>
+    <title>Announcements</title>
+  </head>
+
+  <body>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg col-md-3 col-sm-2"></div>
+
+        <div class="col-lg col-md-6 col-sm-8 esn-screen">
+          <div class="row announcement-header">
+              <h5>Announcement</h5>
+              <a href="/search?context=announcement"><i class="fas fa-search mr-3"></i></a>
+          </div>
+
+          <div class="row announcement-container">
+            <div class="announcements"></div>
+          </div>
+
+          <!-- Create new Announcement modal -->
+          <div class="modal fade border-info" id="announceModal" tabindex="-1" aria-labelledby="announceModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content modal-lg">
+                <div class="modal-header">
+                  <div class="container-fluid">
+                    <div class="row text-left text-info">
+                      <h6 class="mb-2">New Announcement</h6>
+                    </div>
+                  </div>
+                </div>
+                <div class="modal-body">
+                  <div class="alert" id="announceAlert" role="alert" hidden></div>
+                  <div class="container-fluid">
+                    <div class="row text-left text-info">
+                      <textarea id="announcement-text" class="create-announcement-text" placeholder="New Announcement"></textarea>
+                    </div>
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                    Cancel
+                  </button>
+                  <button type="button" class="btn btn-info" data-dismiss="modal" id="confirmBtn">
+                    Post
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- add new announcement -->
+          <div class="row">
+            <div id="create-announcement" class="create-announcement-button"><h6>+</h6></div>
+          </div>
+          
+
+          <!-- navigation bar -->
+          <div class="row">
+            <nav class="navbar custom-nav px-4">
+              <a class="navbar-brand" href="/main"><i class="far fa-comments"></i></a>
+              <a class="navbar-brand" href="/announcement" style="color: #17a2b8;"><i class="fas fa-bell"></i></a>
+              <a class="navbar-brand" href="/map"><i class="far fa-map"></i></a>
+              <a class="navbar-brand" href="/resources"><i class="fas fa-hands-helping"></i ></a>
+              <a class="navbar-brand" href="/news"><i class="fas fa-bolt"></i></a>
+              <a class="navbar-brand" href="/profile"><i class="far fa-user"></i></a>
+            </nav>
+          </div>
+          
+
+          <!-- use only for passing the username -->
+          <input
+            id="username-data"
+            value="<%= username %>"
+            style="display: none"
+          />
+
+        </div>
+
+        <div class="col-lg col-md-3 col-sm-2"></div>
+      </div>
+    </div>
+  </body>
+  <script
+    src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+    integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+    crossorigin="anonymous"
+  ></script>
+  <script
+    src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+    integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
+    crossorigin="anonymous"
+  ></script>
+  <script
+    src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+    integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
+    crossorigin="anonymous"
+  ></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.3/socket.io.js"></script>
+  <script type="module" src="/js/force-logout.js"></script>
+  <script type="module" src="/js/announcement.js"></script>
+</html>

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, shrink-to-fit=no"
+    />
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="../css/style.css" />
+    <script
+      src="https://use.fontawesome.com/releases/v5.15.1/js/all.js"
+      data-auto-a11y="true"
+    ></script>
+    <title>Main page</title>
+  </head>
+
+  <body>
+    <div class="container">
+      
+      <div class="row">
+        <div class="col-lg col-md-3 col-sm-2"></div>
+
+        <div class="col-lg col-md-6 col-sm-8 esn-screen">
+          <div class="toast toast-custom mt-2" role="alert" aria-live="polite" aria-atomic="true" data-animation = "true" data-autohide = "true" data-delay = "4000">
+            <div role="alert" aria-live="assertive" aria-atomic="true">
+              <div class="toast-header p-2">
+                <i class="fas fa-bell mr-2" style="color: #07869a;"></i>
+                <strong class="mr-auto">New Message</strong>
+                <small>a second ago</small>
+              </div>
+              <div class="toast-body"></div>
+            </div>
+          </div>
+
+          <div class="row chat-header">
+            <h5 class="mt-1 chat-header-content">
+              <a href="/main" class="mr-3 ml-3" ><</a>
+              <span id = "roomId-data"></span>
+              <a id="searchBtn" style="position: absolute; right: 1rem;"><i class="fas fa-search ml-3"></i></a>
+            </h5>
+          </div>
+
+          <div class="row chat-container p-4">
+            <div class="chat-messages"></div>
+          </div>
+
+          <div class="row chat-footer searchbar p-2">
+              <form class = "search-form" id="chatForm">
+                <input 
+                  id="msg"
+                  type="text"
+                  placeholder="Enter message..."
+                  style="background-color: white;"
+                  required
+                  autocomplete="off"
+                />
+                <button                    
+                  type="submit"
+                  class="btn btn-info ml-2"
+                  id="submitBtn"                  
+                >></button>
+              </form>
+          </div>
+
+          <!-- use only for passing the username -->
+          <input
+            id="username-data"
+            value="<%= username %>"
+            style="display: none"
+          />
+
+        </div>
+
+        <div class="col-lg col-md-3 col-sm-2"></div>
+      </div>
+    </div>
+  </body>
+  <script
+    src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+    integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+    crossorigin="anonymous"
+  ></script>
+  <script
+    src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+    integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
+    crossorigin="anonymous"
+  ></script>
+  <script
+    src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+    integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
+    crossorigin="anonymous"
+  ></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.3/socket.io.js"></script>
+  <script type="module" src="/js/force-logout.js"></script>
+  <script type="module" src="/js/chat.js"></script>
+</html>
