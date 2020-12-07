@@ -6,6 +6,7 @@ const app = require('../../app');
 const DBInMemory = require('../../services/db-in-memory');
 const { createToken } = require('../../lib/jwt');
 const { Announcement } = require('../../models/announcement');
+const User = require('../../models/user');
 
 const server = http.createServer(app);
 const io = socketIO.listen(server);
@@ -15,6 +16,23 @@ beforeAll(DBInMemory.connect);
 afterAll(DBInMemory.close);
 
 beforeEach(async () => {
+  await User.insertMany([
+    {
+      username: 'John',
+      hash: '001',
+      salt: '110',
+      accountStatus: true,
+      privilegeLevel: 'Coordinator',
+    },
+    {
+      username: 'Mike',
+      hash: '002',
+      salt: '111',
+      accountStatus: false,
+      privilegeLevel: 'Citizen',
+    },
+  ]);
+
   await Announcement.insertMany([
     {
       sender: 'John',
