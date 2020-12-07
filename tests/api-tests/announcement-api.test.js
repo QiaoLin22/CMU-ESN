@@ -83,4 +83,22 @@ describe('POST /announcements', () => {
       .set('Cookie', `jwt=${token}`);
     expect(response.body.length).toBe(3);
   });
+
+  test('It should respond with the 401 unauthorized', async () => {
+    const oneAnnouncement = {
+      sender: 'Mike',
+      message: 'Hi',
+    };
+
+    await request(app)
+      .post('/api/announcements')
+      .set('Cookie', `jwt=${token}`)
+      .send(oneAnnouncement);
+
+    // make sure we have 3 announcements now
+    const response = await request(app)
+      .get('/api/announcements')
+      .set('Cookie', `jwt=${token}`);
+    expect(response.body.length).toBe(2);
+  });
 });
