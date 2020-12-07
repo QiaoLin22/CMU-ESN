@@ -32,7 +32,6 @@ beforeEach(async () => {
           status: 'OK',
         },
       ],
-      accountStatus: true,
     },
     {
       username: 'Mike',
@@ -50,7 +49,6 @@ beforeEach(async () => {
           status: 'Help',
         },
       ],
-      accountStatus: true,
     },
     {
       username: 'Jack',
