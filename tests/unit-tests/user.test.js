@@ -187,4 +187,15 @@ describe('use case join community', () => {
     expect(actual.hash).toEqual(expected.hash);
     expect(actual.salt).toEqual(expected.salt);
   });
+
+  it("compare user's profile successfully", async () => {
+    const newProfile = {
+      username: 'Jack',
+      accountStatus: true,
+      privilegeLevel: 'Citizen',
+    };
+
+    const actual = await User.compareUserProfile('Jack', newProfile);
+    expect(actual).toEqual(true);
+  });
 });
