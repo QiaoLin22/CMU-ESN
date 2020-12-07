@@ -30,6 +30,12 @@ class UserController {
       .catch((err) => next(err));
   }
 
+  static findAUser(req, res, next) {
+    User.findUserByUsername(res.locals.username)
+      .then((user) => res.status(200).json(user))
+      .catch((err) => next(err));
+  }
+
   static updateStatus(req, res) {
     const { status, username } = req.body;
     User.updateStatusIcon(username, status)
