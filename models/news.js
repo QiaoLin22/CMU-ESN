@@ -15,8 +15,9 @@ const NewsSchema = mongoose.Schema({
     // required: [true, 'Message is required'],
   },
   photo: {
-    data: Buffer,
-    contentType: String,
+    // data: Buffer,
+    // contentType: String,
+    type: String,
   },
   cityname: {
     type: String,
