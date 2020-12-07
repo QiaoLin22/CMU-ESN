@@ -13,6 +13,7 @@ beforeEach(async () => {
     username: 'Jack',
     hash: '000',
     salt: '001',
+    privilegeLevel: 'Coordinator',
   });
 });
 afterEach(DBInMemory.cleanup);
@@ -89,7 +90,7 @@ describe('use case join community', () => {
     expect(actual.status).toEqual(expected);
   });
 
-  it('retrieve users successfully', async () => {
+  it('retrieve active users successfully', async () => {
     const actual = await User.retrieveActiveUsers();
 
     const expected = [
@@ -108,5 +109,82 @@ describe('use case join community', () => {
     expect(actual[0].latestStatus.status).toEqual(
       expected[0].latestStatus.status
     );
+  });
+
+  it('retrieve all users successfully', async () => {
+    await User.insertMany([
+      {
+        username: 'John',
+        hash: '001',
+        salt: '110',
+        accountStatus: false,
+        statusArray: [
+          {
+            timestamp: '1',
+            status: 'OK',
+          },
+        ],
+      },
+    ]);
+    const actual = await User.retrieveAllUsers();
+
+    const expected = [
+      {
+        username: 'Jack',
+        hash: '000',
+        salt: '001',
+        online: false,
+        accountStatus: true,
+        privilegeLevel: 'Coordinator',
+      },
+      {
+        username: 'John',
+        hash: '001',
+        salt: '110',
+        online: false,
+        accountStatus: false,
+        privilegeLevel: 'Citizen',
+      },
+    ];
+    expect(actual.length).toEqual(expected.length);
+  });
+
+  it('get user profile successfully', async () => {
+    const actual = await User.getUserProfile('Jack');
+
+    const expected = {
+      username: 'Jack',
+      accountStatus: true,
+      privilegeLevel: 'Coordinator',
+    };
+    expect(actual.username).toEqual(expected.username);
+    expect(actual.accountStatus).toEqual(expected.accountStatus);
+    expect(actual.privilegeLevel).toEqual(expected.privilegeLevel);
+  });
+
+  it('update user profile successfully', async () => {
+    const newProfile = {
+      username: 'JackNew',
+      accountStatus: true,
+      privilegeLevel: 'Citizen',
+      hash: '021',
+      salt: '411',
+    };
+
+    await User.updateUserProfile('Jack', newProfile);
+    const actual = await User.findUserByUsername('JackNew');
+    const expected = {
+      online: false,
+      accountStatus: true,
+      privilegeLevel: 'Citizen',
+      username: 'JackNew',
+      hash: '021',
+      salt: '411',
+    };
+    expect(actual.username).toEqual(expected.username);
+    expect(actual.accountStatus).toEqual(expected.accountStatus);
+    expect(actual.privilegeLevel).toEqual(expected.privilegeLevel);
+    expect(actual.hash).toEqual(expected.hash);
+    expect(actual.salt).toEqual(expected.salt);
   });
 });
