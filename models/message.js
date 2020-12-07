@@ -71,9 +71,9 @@ async function createNewNewsMessage(sender, recipient, message, roomId, photo) {
   return newMessage.save();
 }
 
-function getHistoricalMessages(roomId) {
+async function getHistoricalMessages(roomId) {
   const active = [];
-  User.getActiveUsers()
+  await User.getActiveUsers()
     .then((activeUsers) => {
       activeUsers.forEach((data) => active.push(data.username));
     })

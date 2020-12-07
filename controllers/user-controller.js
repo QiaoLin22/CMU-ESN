@@ -68,7 +68,6 @@ class UserController {
     const { username } = req.params;
     const { zip } = req.body;
 
-    console.log(req.body);
     User.updateZip(username, zip).then(() => {
       res.status(200).send('success');
     });
@@ -83,9 +82,7 @@ class UserController {
 
   static async updateUserProfile(req, res) {
     const { username } = req.params;
-
     const { newUsername, password, accountStatus, privilegeLevel } = req.body;
-
     try {
       User.validateUsername(newUsername);
       if (password.length > 0) {
@@ -98,11 +95,7 @@ class UserController {
         privilegeLevel,
         ...(password.length > 0 && genHashAndSalt(password)),
       };
-
-      console.log(newProfile);
-
       await User.updateUserProfile(username, newProfile);
-
       if (accountStatus === 'inactive') {
         req.app.get('io').emit('force logout', newUsername);
       }
