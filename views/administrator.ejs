@@ -26,15 +26,21 @@
         <div class="col-lg col-md-3 col-sm-2"></div>
         <div class="col-lg col-md-6 col-sm-8 esn-screen">
           <div class="row news-header">
-              <h5 id = "userProfile-data">info</h5>
+            <h5 id="userProfile-data">info</h5>
           </div>
           <!-- User Info form-->
+          <div class="alert alert-danger" id="error-alert" hidden></div>
           <div class="container-fluid">
             <div class="row text-left text-info">
               <label class="mt-3">Username</label>
               <input type="text" id="userInfo-username" class="create-contact-input" >
               <label class="mt-2">Password</label>
-              <input type="text" id="userInfo-password" class="create-contact-input" placeholder="Change password">
+              <input
+                type="text"
+                id="userInfo-password"
+                class="create-contact-input"
+                placeholder="Change password"
+              />
               <label class="mt-2">Privilege Level</label>
 
               <select class="form-control" id="userInfo-privilegeLevel" style="border: 1px solid #18a2b8;">
@@ -59,10 +65,12 @@
                   class="form-check-input"
                   type="radio"
                   id="inactiveRadio"
-                  value="Inactive"
+                  value="inactive"
                   name="accountStatusRadios"
                 />
-                <label class="form-check-label" for="inactiveRadio">Inactive</label>
+                <label class="form-check-label" for="inactiveRadio"
+                  >Inactive</label
+                >
               </div>
             </div>
           </div>
@@ -76,43 +84,63 @@
           </div>
 
           <!-- User List modal -->
-          <div class="modal fade border-info" id="userlistModal" tabindex="-1" aria-labelledby="newsModalLabel" aria-hidden="true">
+          <div
+            class="modal fade border-info"
+            id="userlistModal"
+            tabindex="-1"
+            aria-labelledby="newsModalLabel"
+            aria-hidden="true"
+            data-backdrop="static"
+            data-keyboard="false"
+          >
             <div class="modal-dialog">
               <div class="modal-content modal-lg">
                 <div class="modal-header">
                   <div class="container-fluid">
                     <div class="row text-left text-info">
-                      <h6 class="mb-2">Directory</h6>
+                      <h6 class="mb-2">Select a User to Administer</h6>
                     </div>
                   </div>
                 </div>
                 <div class="modal-body">
-                  
                   <div class="container-fluid">
-                    
-                      <div class="online-offline-list">
-                        <div id="online-list"></div>
-                        <div id="offline-list"></div>
-                      </div>
-                      <br>            
-                    
+                    <div class="online-offline-list">
+                      <div id="online-list"></div>
+                      <div id="offline-list"></div>
+                    </div>
+                    <br />
                   </div>
                 </div>
-                <div class="modal-footer">              
-                  <button type="button" class="btn btn-secondary" id="cancelBtn">
+                <div class="modal-footer">
+                  <button
+                    type="button"
+                    class="btn btn-secondary"
+                    id="cancelBtn"
+                  >
                     Cancel
                   </button>
                 </div>
               </div>
             </div>
           </div>
-          
-           <!-- Confirm modal -->
-           <div class="modal fade border-info" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
+
+          <!-- Confirm modal -->
+          <div
+            class="modal fade border-info"
+            id="confirmModal"
+            tabindex="-1"
+            aria-labelledby="confirmModalLabel"
+            aria-hidden="true"
+          >
             <div class="modal-dialog modal-lg">
               <div class="modal-content">
                 <div class="modal-body">
-                  <div class="alert" id="confirmAlert" role="alert" hidden></div>
+                  <div
+                    class="alert"
+                    id="confirmAlert"
+                    role="alert"
+                    hidden
+                  ></div>
                   <div class="container-fluid">
                     <div class="row text-left text-info">
                       <p id="notifyMessage"></p>
@@ -131,15 +159,24 @@
           <!-- navigation bar -->
           <div class="row">
             <nav class="navbar custom-nav px-4">
-              <a class="navbar-brand" href="/main"><i class="far fa-comments"></i></a>
-              <a class="navbar-brand" href="/announcement"><i class="far fa-bell"></i></a>
+              <a class="navbar-brand" href="/main"
+                ><i class="far fa-comments"></i
+              ></a>
+              <a class="navbar-brand" href="/announcement"
+                ><i class="far fa-bell"></i
+              ></a>
               <a class="navbar-brand" href="/map"><i class="far fa-map"></i></a>
-              <a class="navbar-brand" href="/resources"><i class="fas fa-hands-helping"></i ></a>
-              <a class="navbar-brand" href="/news"><i class="fas fa-bolt"></i></a>
-              <a class="navbar-brand" href="/profile" style="color: #17a2b8;"><i class="far fa-user"></i></a>
+              <a class="navbar-brand" href="/resources"
+                ><i class="fas fa-hands-helping"></i
+              ></a>
+              <a class="navbar-brand" href="/news"
+                ><i class="fas fa-bolt"></i
+              ></a>
+              <a class="navbar-brand" href="/profile" style="color: #17a2b8"
+                ><i class="far fa-user"></i
+              ></a>
             </nav>
           </div>
-          
 
           <!-- use only for passing the username -->
           <input
@@ -147,7 +184,6 @@
             value="<%= username %>"
             style="display: none"
           />
-
         </div>
 
         <div class="col-lg col-md-3 col-sm-2"></div>

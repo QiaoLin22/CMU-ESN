@@ -9,6 +9,7 @@ const username = $('#username-data').val();
 const profileUserName = $('#userInfo-username');
 const profilePassword = $('#userInfo-password');
 const profileprivilegeLevel = $('#userInfo-privilegeLevel');
+const errorAlert = $('#error-alert');
 
 /** Forward notification box */
 function displayNotification(notifyMessage) {
@@ -87,6 +88,8 @@ function getUserList() {
 }
 
 save.on('click', () => {
+  errorAlert.attr('hidden', false);
+
   const profileAccountStatus = $(
     "input[name='accountStatusRadios']:checked"
   ).val();
@@ -96,13 +99,12 @@ save.on('click', () => {
     prevUsernamestring.indexOf("'s profile")
   );
   const newProfileInfo = {
-    prevUsername: prevUsername,
     newUsername: profileUserName.val(),
     password: profilePassword.val(),
     accountStatus: profileAccountStatus,
     privilegeLevel: profileprivilegeLevel.val(),
   };
-  fetch('api/users/profile/', {
+  fetch(`api/users/${prevUsername}/profile`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
@@ -113,6 +115,13 @@ save.on('click', () => {
       if (res.ok) {
         confirmModal.modal('show');
         displayNotification('changed successfully');
+      } else {
+        console.log('error');
+        res.json().then((json) => {
+          console.log(json);
+          errorAlert.text(json.error);
+          errorAlert.removeAttr('hidden');
+        });
       }
     })
     .catch((e) => {
