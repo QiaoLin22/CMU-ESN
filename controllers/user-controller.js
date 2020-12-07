@@ -24,8 +24,14 @@ class UserController {
       });
   }
 
-  static retrieveUsers(req, res, next) {
-    User.retrieveUsers(res.locals.username)
+  static retrieveActiveUsers(req, res, next) {
+    User.retrieveActiveUsers(res.locals.username)
+      .then((users) => res.status(200).json(users))
+      .catch((err) => next(err));
+  }
+
+  static retrieveAllUsers(req, res, next) {
+    User.retrieveAllUsers()
       .then((users) => res.status(200).json(users))
       .catch((err) => next(err));
   }

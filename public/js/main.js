@@ -63,9 +63,9 @@ function outputUser(user) {
 }
 
 /* retrieve userlist */
-function retrieveUsers() {
+function retrieveActiveUsers() {
   // fetch "/api/users" request to retrieve userlist
-  fetch('/api/users', getGetOptions())
+  fetch('/api/users/active', getGetOptions())
     .then((res) => {
       return res.json();
     })
@@ -82,7 +82,7 @@ socket.on('updateDirectory', () => {
   console.log('updateDirectory');
   $('#offline-list').empty();
   $('#online-list').empty();
-  retrieveUsers();
+  retrieveActiveUsers();
 });
 
-jQuery(retrieveUsers);
+jQuery(retrieveActiveUsers);

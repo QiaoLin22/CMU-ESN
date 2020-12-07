@@ -94,7 +94,7 @@ function outputUser(user, newsId) {
 }
 
 function getUserList(newsId) {
-  fetch('/api/users', {
+  fetch('/api/users/active', {
     method: 'GET',
   })
     .then((res) => {

@@ -35,14 +35,6 @@ class NewsController {
     getAllNews(cityname).then((news) => res.send(news));
   }
 
-  /*
-  static getUserList(req, res){
-    console.log(res.locals.username)
-    Users.retrieveUsers(res.locals.username)
-      .then((users) => res.status(200).json(users))
-      .catch((err) => next(err));
-  } */
-
   static async forwardNews(req, res) {
     const { sender, recipient, newsId, roomId } = req.body;
     if (!sender || !recipient || !newsId || !roomId) {

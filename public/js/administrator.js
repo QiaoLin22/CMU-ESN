@@ -70,7 +70,7 @@ function outputUserList(user) {
 }
 
 function getUserList() {
-  fetch('/api/users', {
+  fetch('/api/users/all', {
     method: 'GET',
   })
     .then((res) => {
