@@ -28,9 +28,9 @@ function createNewAnnouncement(sender, message) {
   return newAnnouncement.save();
 }
 
-function getAllAnnouncements() {
+async function getAllAnnouncements() {
   const active = [];
-  User.getActiveUsers()
+  await User.getActiveUsers()
     .then((activeUsers) => {
       activeUsers.forEach((data) => active.push(data.username));
     })
