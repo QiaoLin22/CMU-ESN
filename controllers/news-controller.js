@@ -1,4 +1,5 @@
 const fs = require('fs');
+const cloudinary = require('cloudinary').v2;
 const {
   createNewNews,
   getAllNews,
@@ -12,7 +13,7 @@ class NewsController {
     const { sender, message, cityname } = req.body;
     let photo;
     if (req.file !== undefined) {
-      const img = fs.readFileSync(req.file.path);
+      const img = cloudinary.url(req.file.path);
       // var encodePhoto = img.toString('base64');
 
       photo = {
