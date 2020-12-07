@@ -52,22 +52,6 @@ beforeEach(async () => {
     },
     {
       username: 'Jack',
-      hash: '003',
-      salt: '011',
-      statusArray: [
-        {
-          timestamp: '1',
-          status: 'Undefined',
-        },
-        {
-          timestamp: '2',
-          status: 'Help',
-        },
-      ],
-      accountStatus: false,
-    },
-    {
-      username: 'Jack',
       hash: '001',
       salt: '110',
       accountStatus: false,
@@ -147,7 +131,7 @@ describe('POST /login', () => {
       password: '123456',
     });
 
-    // make sure we can login successfully
+    // make sure we login failed
     expect(response.statusCode).toBe(403);
   });
 });
@@ -210,7 +194,7 @@ describe('GET /all', () => {
         numUnreadMessages: 0,
       },
     ];
-    // Make sure we retrieve two users correctly
+    // Make sure we retrieve three users correctly
     expect(response.body.length).toEqual(expected.length);
     expect(response.body[0].username).toEqual('Jack');
     expect(response.body[1].username).toEqual('John');
@@ -224,7 +208,7 @@ describe('GET /profile/:username', () => {
     const response = await request(app)
       .get('/api/users/profile/John')
       .set('Cookie', `jwt=${token}`);
-    // Make sure we retrieve two users correctly
+    // Make sure we retrieve user's profile correctly
     expect(response.body.username).toEqual('John');
     expect(response.body.privilegeLevel).toEqual('Administrator');
     expect(response.body.accountStatus).toEqual(true);
@@ -232,28 +216,24 @@ describe('GET /profile/:username', () => {
   });
 });
 
-/*
-describe('PUT /profile/:username', () => {
-  test("It should respond with an object of user's profile", async () => {
-    await request(app)
-      .put('/api/users/profile/Jack')
-      .set('Cookie', `jwt=${token}`, 'John')
-      .send({
-        username: 'JackNew',
-        accountStatus: true,
-        privilegeLevel: 'Coordinator',
-        hash: '021',
-        salt: '411',
-      });
+describe('PUT /:username/profile', () => {
+  test('It should respond with update user profile successfully', async () => {
     const response = await request(app)
+      .put('/api/users/Jack/profile')
+      .set('Cookie', `jwt=${token}`)
+      .send({
+        newUsername: 'JackNew',
+        accountStatus: 'active',
+        privilegeLevel: 'Coordinator',
+        password: '99999',
+      });
+    expect(response.statusCode).toBe(200);
+    const compare = await request(app)
       .get('/api/search/users/JackNew')
       .set('Cookie', `jwt=${token}`);
-    console.log(response.body);
-    // Make sure we retrieve two users correctly
-    expect(response.body[0].username).toEqual('JackNew');
-    expect(response.body[0].privilegeLevel).toEqual('Coordinator');
-    expect(response.body[0].accountStatus).toEqual(true);
-    expect(response.statusCode).toBe(200);
+    // Make sure we updated correctly
+    expect(compare.body[0].username).toEqual('JackNew');
+    expect(compare.body[0].privilegeLevel).toEqual('Coordinator');
+    expect(compare.body[0].accountStatus).toEqual(true);
   });
 });
-*/

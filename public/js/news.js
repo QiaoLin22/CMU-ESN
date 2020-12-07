@@ -12,12 +12,6 @@ const username = $('#username-data').val();
 const citynameBtn = $('#cityNameBtn');
 document.getElementById('create-news').style.visibility = 'hidden';
 
-/*
-function toBase64(arr) {
-  return btoa(arr.reduce((data, byte) => data + String.fromCharCode(byte), ''));
-}
-*/
-
 /** Forward notification box */
 function displayNotification(notifyMessage) {
   $('#forwardNotifyMessage').text(notifyMessage);

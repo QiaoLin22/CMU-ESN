@@ -34,12 +34,6 @@ const chatContainer = $('.chat-container');
 const chatMessages = $('.chat-messages');
 const msgEle = $('#msg');
 
-/*
-function toBase64(arr) {
-  // arr = new Uint8Array(arr) if it's an ArrayBuffer
-  return btoa(arr.reduce((data, byte) => data + String.fromCharCode(byte), ''));
-}
-*/
 /* display chat message */
 function outputMessage(message) {
   let icon = '';
