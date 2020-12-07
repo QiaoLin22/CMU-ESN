@@ -30,6 +30,7 @@ beforeEach(async () => {
           status: 'OK',
         },
       ],
+      accountStatus: true,
     },
     {
       username: 'Mike',
@@ -45,6 +46,23 @@ beforeEach(async () => {
           status: 'Help',
         },
       ],
+      accountStatus: true,
+    },
+    {
+      username: 'Jack',
+      hash: '003',
+      salt: '011',
+      statusArray: [
+        {
+          timestamp: '1',
+          status: 'Undefined',
+        },
+        {
+          timestamp: '2',
+          status: 'Help',
+        },
+      ],
+      accountStatus: false,
     },
   ]);
 });
@@ -106,6 +124,16 @@ describe('POST /login', () => {
 
     // make sure we can login successfully
     expect(response.statusCode).toBe(200);
+  });
+
+  test('It should responds 403 when inactive user login', async () => {
+    const response = await request(app).post('/api/users/login').send({
+      username: 'Jack',
+      password: '123456',
+    });
+
+    // make sure we can login successfully
+    expect(response.statusCode).toBe(403);
   });
 });
 

@@ -33,7 +33,24 @@ function loadAnnouncement() {
     });
 }
 
+function hideCreateBtn() {
+  fetch(`/api/announcements/privilege`, {
+    method: 'GET',
+  })
+    .then((res) => res.json())
+    .then((json) => {
+      if (json.privilegeLevel !== 'Coordinator') {
+        document.getElementById('create-announcement').style.visibility =
+          'hidden';
+      }
+    })
+    .catch((e) => {
+      console.log(e);
+    });
+}
+
 jQuery(loadAnnouncement);
+jQuery(hideCreateBtn);
 
 createAnnounce.on('click', () => {
   announceModal.modal('show');

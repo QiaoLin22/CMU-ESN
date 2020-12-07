@@ -6,12 +6,11 @@ const authenticateAnnouncement = (req, res, next) => {
     .then((result) => {
       if (result.privilegeLevel === 'Coordinator') {
         next();
-      } else {
-        res.status(401).send({ message: 'User Unauthorized' });
       }
     })
     .catch((e) => {
-      res.status(400).json({ error: e });
+      console.log(e);
+      // res.status(400).json({ error: e });
     });
 };
 

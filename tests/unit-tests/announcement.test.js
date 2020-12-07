@@ -5,11 +5,29 @@ const {
   createNewAnnouncement,
   getAllAnnouncements,
 } = require('../../models/announcement');
+const User = require('../../models/user');
 const dbInMemory = require('../../services/db-in-memory');
 
 beforeAll(DBInMemory.connect);
 afterAll(DBInMemory.close);
 beforeEach(async () => {
+  await User.insertMany([
+    {
+      username: 'John',
+      hash: '001',
+      salt: '110',
+      accountStatus: true,
+      privilegeLevel: 'Coordinator',
+    },
+    {
+      username: 'Jack',
+      hash: '002',
+      salt: '111',
+      accountStatus: true,
+      privilegeLevel: 'Coordinator',
+    },
+  ]);
+
   await Announcement.create({
     sender: 'John',
     message: 'Hi',
@@ -41,6 +59,7 @@ describe('use case post announcement', () => {
         message: 'Hi',
       },
     ];
-    expect(actual.length).toEqual(expected.length);
+    expect(actual[0].sender).toEqual(expected[0].sender);
+    expect(actual[0].message).toEqual(expected[0].message);
   });
 });
