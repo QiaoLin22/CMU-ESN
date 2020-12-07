@@ -20,7 +20,6 @@ beforeEach(async () => {
       username: 'John',
       hash: '001',
       salt: '110',
-      accountStatus: true,
       privilegeLevel: 'Administrator',
       statusArray: [
         {
@@ -32,12 +31,12 @@ beforeEach(async () => {
           status: 'OK',
         },
       ],
+      accountStatus: true,
     },
     {
       username: 'Mike',
       hash: '002',
       salt: '111',
-      accountStatus: true,
       privilegeLevel: 'Coordinator',
       statusArray: [
         {
@@ -49,19 +48,23 @@ beforeEach(async () => {
           status: 'Help',
         },
       ],
+      accountStatus: true,
     },
     {
       username: 'Jack',
-      hash: '001',
-      salt: '110',
-      accountStatus: false,
-      privilegeLevel: 'Citizen',
+      hash: '003',
+      salt: '011',
       statusArray: [
         {
           timestamp: '1',
-          status: 'OK',
+          status: 'Undefined',
+        },
+        {
+          timestamp: '2',
+          status: 'Help',
         },
       ],
+      accountStatus: false,
     },
   ]);
 });
