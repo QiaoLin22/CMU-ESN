@@ -60,14 +60,8 @@ function outputMessage(message) {
   if (message.photo === undefined) {
     msg.innerHTML = `<p class="meta mb-1"> ${message.sender} <span>${icon}</span> <span class="ml-3"> ${timestamp} </span></p> <p class="text"> ${message.message} </p>`;
   } else {
-    msg.innerHTML = `<p class="meta mb-1"> ${
-      message.sender
-    } <span>${icon}</span> <span class="ml-3"> ${timestamp} </span></p> 
-    <p class="text"> ${
-      message.message
-    } </p><img class="img-thumbnail" src="data:image/png;base64,${toBase64(
-      message.photo.data.data
-    )}">`;
+    msg.innerHTML = `<p class="meta mb-1"> ${message.sender} <span>${icon}</span> <span class="ml-3"> ${timestamp} </span></p> 
+    <p class="text"> ${message.message} </p><img class="img-thumbnail mt-2" src=" ${message.photo}"> `;
   }
   chatMessages.append(msg);
 

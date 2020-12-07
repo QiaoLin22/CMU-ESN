@@ -33,8 +33,9 @@ const MessageSchema = mongoose.Schema({
     default: false,
   },
   photo: {
-    data: Buffer,
-    contentType: String,
+    // data: Buffer,
+    // contentType: String,
+    type: String,
   },
 });
 

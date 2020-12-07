@@ -122,12 +122,8 @@ function outputNews(newNews) {
     <div id=${newsId}><p style = "margin-bottom: 0;">${newNews.message}</p><p id = "forwardBtn" class = "mt-2 news-forward"><i class="fas fa-share mr-2"></i>Forward</p></div> 
     `;
   } else {
-    newsdiv.innerHTML = `<p class="meta mb-1"> ${
-      newNews.sender
-    } <span class="ml-3"> ${timestamp} </span></p>
-    <img class="img-thumbnail mt-2" src="data:image/png;base64,${toBase64(
-      newNews.photo.data.data
-    )}"> 
+    newsdiv.innerHTML = `<p class="meta mb-1"> ${newNews.sender} <span class="ml-3"> ${timestamp} </span></p>
+    <div id=${newsId}><p style = "margin-bottom: 0;">${newNews.message}<img class="img-thumbnail mt-2" src=" ${newNews.photo}"> 
     <div id=${newsId}><p id = "forwardBtn" class = "mt-2 news-forward"><i class="fas fa-share mr-2"></i>Forward</p></div>
     `;
   }
