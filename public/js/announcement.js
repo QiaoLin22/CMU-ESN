@@ -39,7 +39,7 @@ function hideCreateBtn() {
   })
     .then((res) => res.json())
     .then((json) => {
-      if (json.privilegeLevel !== 'Coordinator') {
+      if (json.privilegeLevel === 'Citizen') {
         document.getElementById('create-announcement').style.visibility =
           'hidden';
       }

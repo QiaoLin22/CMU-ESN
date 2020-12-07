@@ -88,16 +88,16 @@ class UserController {
       if (password.length > 0) {
         User.validatePassword(password);
       }
-
       const newProfile = {
         username: newUsername,
         accountStatus: accountStatus === 'active',
         privilegeLevel,
         ...(password.length > 0 && genHashAndSalt(password)),
       };
-      await User.updateUserProfile(username, newProfile);
-      if (accountStatus === 'inactive') {
-        req.app.get('io').emit('force logout', newUsername);
+      const needUpdate = await User.compareUserProfile(username, newProfile);
+      if (needUpdate || password.length > 0) {
+        await User.updateUserProfile(username, newProfile);
+        req.app.get('io').emit('force logout', username);
       }
 
       res.status(200).send('success');
