@@ -63,6 +63,17 @@ describe('GET /announcements', () => {
   });
 });
 
+describe('GET /privilege', () => {
+  test('It should respond with the current user', async () => {
+    const response = await request(app)
+      .get('/api/announcements/privilege')
+      .set('Cookie', `jwt=${token}`);
+
+    expect(response.body).toHaveProperty('privilegeLevel');
+    expect(response.statusCode).toBe(200);
+  });
+});
+
 describe('POST /announcements', () => {
   test('It should respond with the newly created announcement', async () => {
     const oneAnnouncement = {
