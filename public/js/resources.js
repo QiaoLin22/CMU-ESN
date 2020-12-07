@@ -12,6 +12,7 @@ const submitPostBtn = $('#submit-post-btn');
 
 let zipCode;
 const enterZipModal = $('#enter-zip-modal');
+const editZipForm = $('#edit-zip-form');
 
 function capitalizeFirstLetter(str) {
   return str.charAt(0).toUpperCase() + str.slice(1);
@@ -130,6 +131,7 @@ $('#zip-save-btn').click(async (event) => {
   });
   zipCode = zip;
   enterZipModal.modal('hide');
+  $('#curr-zip-code').val(zip);
   loadResourcePosts();
 });
 
@@ -148,9 +150,26 @@ async function getUserZip() {
   }
 }
 
+editZipForm.submit(async (e) => {
+  e.preventDefault();
+
+  const newZip = $('#curr-zip-code').val();
+  if (newZip !== zipCode) {
+    await fetch(`/api/users/${username}/zip`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ zip: newZip }),
+    });
+
+    window.location.reload();
+  }
+});
+
 jQuery(async () => {
   if (await getUserZip()) {
-    $('#curr-zip-code').text(zipCode);
+    $('#curr-zip-code').val(zipCode);
     loadResourcePosts();
   } else {
     showEnterZipModal();

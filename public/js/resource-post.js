@@ -39,7 +39,7 @@ function renderComment(commentObj) {
     $(`      
       <div>
         <span class="meta">${sender}</span>
-        <span id="timestamp">${localTime}</span>
+        <small id="timestamp" style="float: right">${localTime}</small>
       </div>
       <div>
         ${comment}
