@@ -55,13 +55,13 @@ beforeEach(async () => {
       sender: 'John',
       timestamp: '1',
       message: 'Hello',
-      cityname: 'San Jose',
+      zipcode: '94034',
     },
     {
-      sender: 'John',
+      sender: 'Mike',
       timestamp: '2',
       message: 'World',
-      cityname: 'New York',
+      zipcode: '10031',
     },
   ]);
 });
@@ -69,10 +69,10 @@ afterEach(DBInMemory.cleanup);
 
 const token = createToken({ _id: '000', username: 'John' });
 
-describe('GET /news/:cityname', () => {
+describe('GET /news/:zipcode', () => {
   test('It should respond with an array of news', async () => {
     const response = await request(app)
-      .get('/api/news/San Jose')
+      .get('/api/news/94034')
       .set('Cookie', `jwt=${token}`);
 
     expect(response.body.length).toBe(1);
@@ -85,9 +85,9 @@ describe('GET /news/:cityname', () => {
 describe('POST /news', () => {
   test('It should respond with the newly created news', async () => {
     const newsFormData = {
-      sender: 'John',
+      sender: 'Jack',
       message: 'Hi',
-      cityname: 'Los Angeles',
+      zipCode: '90210',
     };
     const newNews = await request(app)
       .post('/api/news')
@@ -96,12 +96,13 @@ describe('POST /news', () => {
 
     // make sure we add it correctly
     expect(newNews.statusCode).toBe(201);
-    // make sure we have 1 news in Los Angeles now
+    // make sure we have 1 news in 90210 now
     const response = await request(app)
-      .get('/api/news/Los Angeles')
+      .get('/api/news/90210')
       .set('Cookie', `jwt=${token}`);
     expect(response.body.length).toBe(1);
   });
+
   test('It should respond with status code 400', async () => {
     const newsFormData = {
       sender: 'John',
@@ -118,7 +119,7 @@ describe('POST /news', () => {
 
 describe('POST /news/forward', () => {
   test('It should respond with forward successfully message', async () => {
-    const findResult = await News.find({ cityname: 'New York' });
+    const findResult = await News.find({ zipcode: '10031' });
     const newsId = findResult[0]._id;
 
     const newsFormData = {
