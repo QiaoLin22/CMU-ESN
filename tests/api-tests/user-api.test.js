@@ -115,10 +115,26 @@ describe('POST /', () => {
       .set('Cookie', `jwt=${token}`);
     expect(response.body.length).toBe(3);
   });
+
+  // test('It should responds 400 with existing username', async () => {
+  //   const allUsers = await User.find({});
+  //   console.log(allUsers);
+  //   const res = await request(app).post('/api/users/').send({
+  //     username: 'Mike',
+  //     password: '6666',
+  //   });
+
+  //   expect(res.statusCode).toBe(400);
+  // });
 });
 
 describe('POST /login', () => {
   test('It should responds with a user successfully login', async () => {
+    await request(app).post('/api/users/').send({
+      username: 'George',
+      password: '6666',
+    });
+
     const response = await request(app).post('/api/users/login').send({
       username: 'George',
       password: '6666',
@@ -126,6 +142,16 @@ describe('POST /login', () => {
 
     // make sure we can login successfully
     expect(response.statusCode).toBe(200);
+  });
+
+  test('Should responds with 400 with incorrect password', async () => {
+    const response = await request(app).post('/api/users/login').send({
+      username: 'Mike',
+      password: '12345',
+    });
+
+    // make sure we login failed
+    expect(response.statusCode).toBe(400);
   });
 
   test('It should responds 403 when inactive user login', async () => {

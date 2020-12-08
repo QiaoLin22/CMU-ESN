@@ -15,15 +15,6 @@ class RBAC {
       res.status(403).send('Not authorized');
     }
   }
-
-  static async validateCoordinator(req, res) {
-    const profile = await User.getUserProfile(res.locals.username);
-    if (['Administrator', 'Coordinator'].includes(profile.privilegeLevel)) {
-      next();
-    } else {
-      res.status(403).send('Not authorized');
-    }
-  }
 }
 
 module.exports = RBAC;

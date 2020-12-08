@@ -198,4 +198,45 @@ describe('use case join community', () => {
     const actual = await User.compareUserProfile('Jack', newProfile);
     expect(actual).toEqual(true);
   });
+
+  describe('validate username and password', () => {
+    it('should throw error when username is not provided', () => {
+      expect(() => {
+        User.validateUsername();
+      }).toThrow('Username needed');
+    });
+
+    it('should throw error when username is less than 3 chars', () => {
+      expect(() => {
+        User.validateUsername('hi');
+      }).toThrow('Username should be at least 3 characters long');
+    });
+
+    it('should throw error when password is not provided', () => {
+      expect(() => {
+        User.validatePassword(undefined);
+      }).toThrow('Password needed');
+    });
+
+    it('should throw error when password is less than 4 chars', () => {
+      expect(() => {
+        User.validatePassword('hel');
+      }).toThrow('Password should be at least 4 characters long');
+    });
+  });
+
+  describe('get and update zip', () => {
+    it('should get undefined zip code successfully', async () => {
+      const res = await User.getZip('Jack');
+      expect(res.zip).toEqual(undefined);
+    });
+
+    it('should update zip code successfully', async () => {
+      await User.updateZip('Jack', '12345');
+
+      const res = await User.findOne({ username: 'Jack' }, { zip: 1 });
+
+      expect(res.zip).toEqual('12345');
+    });
+  });
 });
