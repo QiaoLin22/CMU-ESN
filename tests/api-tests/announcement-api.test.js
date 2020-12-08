@@ -25,6 +25,13 @@ beforeEach(async () => {
       privilegeLevel: 'Coordinator',
     },
     {
+      username: 'Admin',
+      hash: '001',
+      salt: '110',
+      accountStatus: true,
+      privilegeLevel: 'Administrator',
+    },
+    {
       username: 'Mike',
       hash: '002',
       salt: '111',
@@ -49,6 +56,7 @@ beforeEach(async () => {
 afterEach(DBInMemory.cleanup);
 
 const token = createToken({ _id: '000', username: 'John' });
+const tokenAdmin = createToken({ _id: '000', username: 'Admin' });
 
 describe('GET /announcements', () => {
   test('It should respond with an array of announcements', async () => {
@@ -75,7 +83,7 @@ describe('GET /privilege', () => {
 });
 
 describe('POST /announcements', () => {
-  test('It should respond with the newly created announcement', async () => {
+  test('It should respond with the newly created announcement for coordinator', async () => {
     const oneAnnouncement = {
       sender: 'John',
       message: 'Hi',
@@ -83,6 +91,26 @@ describe('POST /announcements', () => {
     const newAnnouncement = await request(app)
       .post('/api/announcements')
       .set('Cookie', `jwt=${token}`)
+      .send(oneAnnouncement);
+
+    // make sure we add it correctly
+    expect(newAnnouncement.statusCode).toBe(201);
+
+    // make sure we have 3 announcements now
+    const response = await request(app)
+      .get('/api/announcements')
+      .set('Cookie', `jwt=${token}`);
+    expect(response.body.length).toBe(3);
+  });
+
+  test('It should respond with the newly created announcement for admin', async () => {
+    const oneAnnouncement = {
+      sender: 'Admin',
+      message: 'Hi',
+    };
+    const newAnnouncement = await request(app)
+      .post('/api/announcements')
+      .set('Cookie', `jwt=${tokenAdmin}`)
       .send(oneAnnouncement);
 
     // make sure we add it correctly

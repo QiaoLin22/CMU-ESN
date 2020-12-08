@@ -183,7 +183,6 @@ class UserClass {
   }
 
   static updateZip(username, zip) {
-    console.log(zip);
     return this.updateOne({ username }, { $set: { zip } });
   }
 
