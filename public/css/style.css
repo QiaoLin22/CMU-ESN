@@ -455,17 +455,16 @@ a:hover {
 
 .news {
   width: 100%;
-  height: 84vh;
+  height: 73vh;
   overflow-y: scroll;
   background-color: #ecf5f7;
 }
 
-.news {
-  background-color: #ffffff;
-  border-bottom: #d7d7d7;
-  border-bottom-width: 1px;
-  border-bottom-style: solid;
+.news-zip {
+  align-items: center;
   color: #065a67;
+  background: white;
+  border-bottom: #18a2b8 solid 1px;
 }
 
 .news-content {
@@ -530,7 +529,7 @@ a:hover {
 /* Resources page */
 .posts-container {
   width: 100%;
-  height: 84vh;
+  height: 74vh;
   overflow-y: scroll;
   background-color: #ecf5f7;
 }

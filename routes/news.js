@@ -4,7 +4,7 @@ const { upload } = require('../middleware/upload');
 
 const NewsController = require('../controllers/news-controller');
 
-router.get('/:cityname', authenticateUser, NewsController.getHistoricalNews);
+router.get('/:zipcode', authenticateUser, NewsController.getHistoricalNews);
 
 // router.get('/users',  authenticateUser, NewsController.getUserList);
 

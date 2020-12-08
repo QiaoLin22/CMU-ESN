@@ -27,30 +27,43 @@
 
         <div class="col-lg col-md-6 col-sm-8 esn-screen">
           <div class="row news-header">
-              <!--<h5>News</h5>-->
-              <h5 id = "cityname-data">News</h5>
+              <h5>News</h5>
           </div>
-          <!-- Enter Cityname -->
-          <div class="row searchbar p-3" style="background: white; height: 8vh;">
-            <form class = "search-form">
-              <input 
-                id="cityname-input" 
-                type="text" 
-                placeholder="Enter city name"
-                required
-                autocomplete="off"
-              />
-              <button                    
-                type="submit"                    
-                class="btn btn-info ml-2"                    
-                id="cityNameBtn"                  
-              >></button>
-            </form>
-          </div>
+          <form class="row p-3 news-zip form-inline" id="edit-zip-form">
+            <label class="ml-2">Current Zip Code:</label> 
+            <input id="curr-zip-code" class="ml-2 form-control" type="text">
+          </form>
+          
           <div class="row news-container">
             <div class="news"></div>
           </div>
-
+        
+          <!-- Enter zip modal -->
+          <div
+            class="modal fade border-info"
+            id="enter-zip-modal"
+            tabindex="-1"
+            aria-hidden="true"
+            data-backdrop="static" data-keyboard="false"
+          >
+            <div class="modal-dialog modal-dialog-centered">
+              <div class="modal-content modal-lg">
+                <div class="modal-body">
+                  <form>
+                    <label>
+                      This is your first time using <strong class="text-info">Resources</strong>. Please enter your
+                      zip code below to see the resources in your area.
+                    </label>
+                    <label class='text-info' >Zip code</label>
+                    <input class="form-control" type="text" id="zip-code"></input>
+                  </form>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-info" id="zip-save-btn">Save</button>
+                </div>
+              </div>
+            </div>
+          </div>
           <!-- Create new News modal -->
           <div class="modal fade border-info" id="newsModal" tabindex="-1" aria-labelledby="newsModalLabel" aria-hidden="true">
             <div class="modal-dialog">
@@ -185,6 +198,6 @@
     crossorigin="anonymous"
   ></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.3/socket.io.js"></script>
-  <script type="module" src="/js/force-logout.js"></script>
+  <script type="module" src="js/force-logout.js"></script>
   <script type="module" src="/js/news.js"></script>
 </html>
