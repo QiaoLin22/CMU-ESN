@@ -96,7 +96,7 @@ submitPostBtn.click((event) => {
     postType: newPostType,
     resourceType: newPostResourceType.val(),
     message: newPostMessage.val(),
-    zip: $('#zip-code').val(),
+    zip: $('#curr-zip-code').val(),
   };
   console.log(newPost);
   fetch(`/api/resource-posts`, {
