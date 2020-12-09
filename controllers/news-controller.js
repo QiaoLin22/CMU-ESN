@@ -8,19 +8,12 @@ const { createNewNewsMessage } = require('../models/message');
 
 class NewsController {
   static createNews(req, res) {
-    const { sender, message, cityname } = req.body;
+    const { sender, message, zipCode } = req.body;
     let photo;
     if (req.file !== undefined) {
-      // const img = cloudinary.url(req.file.path);
-      // var encodePhoto = img.toString('base64');
-
       photo = req.file.path;
-      /* {
-        data: Buffer.from(img, 'binary'),
-        contentType: req.file.mimetype,
-      }; */
     }
-    createNewNews(sender, message, cityname, photo)
+    createNewNews(sender, message, zipCode, photo)
       .then((newNews) => {
         req.app.get('io').emit('new news', newNews);
         res.status(201).send({ message: 'successfully create an news' });
@@ -31,8 +24,8 @@ class NewsController {
   }
 
   static getHistoricalNews(req, res) {
-    const { cityname } = req.params;
-    getAllNews(cityname).then((news) => res.send(news));
+    const { zipcode } = req.params;
+    getAllNews(zipcode).then((news) => res.send(news));
   }
 
   static async forwardNews(req, res) {

@@ -9,8 +9,10 @@ const news = $('.news');
 const text = $('#news-text');
 const post = $('#confirmBtn');
 const username = $('#username-data').val();
-const citynameBtn = $('#cityNameBtn');
-document.getElementById('create-news').style.visibility = 'hidden';
+
+let zipCode;
+const enterZipModal = $('#enter-zip-modal');
+const editZipForm = $('#edit-zip-form');
 
 /** Forward notification box */
 function displayNotification(notifyMessage) {
@@ -132,8 +134,8 @@ function outputNews(newNews) {
   });
 }
 
-function loadNews(cityname) {
-  fetch(`/api/news/${cityname}`, {
+function loadNews() {
+  fetch(`/api/news/${zipCode}`, {
     method: 'GET',
   })
     .then((res) => res.json())
@@ -146,16 +148,6 @@ function loadNews(cityname) {
       console.log(e);
     });
 }
-
-citynameBtn.on('click', (element) => {
-  element.preventDefault();
-  news.empty();
-  const cityname = $('#cityname-input').val();
-  $('#cityname-data').text(cityname);
-  loadNews(cityname);
-  document.getElementById('create-news').style.visibility = 'visible';
-  $('#cityname-input').val('');
-});
 
 createNews.on('click', () => {
   newsModal.modal('show');
@@ -171,17 +163,79 @@ socket.on('new news', (newMsg) => {
 
 /* Post a new news */
 post.on('click', () => {
-  const cityname = $('#cityname-data').text();
+  // const zipCode = $('#cityname-data').text();
   const photo = document.querySelector('input[type="file"]');
   const formData = new FormData();
   formData.append('sender', username);
   formData.append('message', text.val());
   formData.append('photo', photo.files[0]);
-  formData.append('cityname', cityname);
+  formData.append('zipCode', zipCode);
   fetch(`/api/news/`, {
     method: 'POST',
     body: formData,
   }).catch((e) => {
     console.log(e);
   });
+});
+
+function showEnterZipModal() {
+  enterZipModal.modal('show');
+}
+
+$('#zip-save-btn').click(async (event) => {
+  event.preventDefault();
+  const zip = $('#zip-code').val();
+  console.log(zip);
+  await fetch(`/api/users/${username}/zip`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ zip }),
+  });
+  zipCode = zip;
+  enterZipModal.modal('hide');
+  $('#curr-zip-code').val(zip);
+  loadNews();
+});
+
+async function getUserZip() {
+  const res = await fetch(`/api/users/${username}/zip`, {
+    method: 'GET',
+  });
+
+  const { zip } = await res.json();
+
+  if (!zip) {
+    return false;
+  } else {
+    zipCode = zip;
+    return true;
+  }
+}
+
+editZipForm.submit(async (e) => {
+  e.preventDefault();
+
+  const newZip = $('#curr-zip-code').val();
+  if (newZip !== zipCode) {
+    await fetch(`/api/users/${username}/zip`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ zip: newZip }),
+    });
+
+    window.location.reload();
+  }
+});
+
+jQuery(async () => {
+  if (await getUserZip()) {
+    $('#curr-zip-code').val(zipCode);
+    loadNews();
+  } else {
+    showEnterZipModal();
+  }
 });
