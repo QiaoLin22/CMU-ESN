@@ -15,13 +15,14 @@ beforeEach(async () => {
     sender: 'John',
     message: 'Hi',
     zipcode: '94034',
+    photo: 'url',
   });
 });
 afterEach(dbInMemory.cleanup);
 
 describe('use case share news by multimedia', () => {
   it('create new news successfully', async () => {
-    await createNewNews('Jack', 'Hello', '10031');
+    await createNewNews('Jack', 'Hello', '10031', 'newUrl');
     const result = await News.findOne(
       { sender: 'Jack' },
       { _id: 0, __v: 0, timestamp: 0 }
@@ -31,6 +32,7 @@ describe('use case share news by multimedia', () => {
       sender: 'Jack',
       message: 'Hello',
       zipcode: '10031',
+      photo: 'newUrl',
     };
     expect(actual).toEqual(expected);
   });
@@ -43,12 +45,14 @@ describe('use case share news by multimedia', () => {
         sender: 'John',
         message: 'Hi',
         zipcode: '94034',
+        photo: 'url',
       },
     ];
     expect(actual.length).toEqual(expected.length);
     expect(actual[0].sender).toEqual(expected[0].sender);
     expect(actual[0].message).toEqual(expected[0].message);
     expect(actual[0].zipcode).toEqual(expected[0].zipcode);
+    expect(actual[0].photo).toEqual(expected[0].photo);
   });
 
   it('get news by news ID successfully', async () => {
@@ -60,11 +64,13 @@ describe('use case share news by multimedia', () => {
         sender: 'John',
         message: 'Hi',
         zipcode: '94034',
+        photo: 'url',
       },
     ];
     expect(actual.length).toEqual(expected.length);
     expect(actual[0].sender).toEqual(expected[0].sender);
     expect(actual[0].message).toEqual(expected[0].message);
     expect(actual[0].zipcode).toEqual(expected[0].zipcode);
+    expect(actual[0].photo).toEqual(expected[0].photo);
   });
 });
