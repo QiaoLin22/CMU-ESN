@@ -56,12 +56,14 @@ beforeEach(async () => {
       timestamp: '1',
       message: 'Hello',
       zipcode: '94034',
+      photo: 'url1',
     },
     {
       sender: 'Mike',
       timestamp: '2',
       message: 'World',
       zipcode: '10031',
+      photo: 'url2',
     },
   ]);
 });
@@ -78,6 +80,7 @@ describe('GET /news/:zipcode', () => {
     expect(response.body.length).toBe(1);
     expect(response.body[0]).toHaveProperty('sender');
     expect(response.body[0]).toHaveProperty('message');
+    expect(response.body[0]).toHaveProperty('photo');
     expect(response.statusCode).toBe(200);
   });
 });
@@ -88,6 +91,7 @@ describe('POST /news', () => {
       sender: 'Jack',
       message: 'Hi',
       zipCode: '90210',
+      photo: 'newUrl',
     };
     const newNews = await request(app)
       .post('/api/news')
@@ -127,6 +131,7 @@ describe('POST /news/forward', () => {
       recipient: 'Mike',
       newsId: newsId,
       roomId: 'JohnMike',
+      photo: 'url2',
     };
     const response = await request(app)
       .post('/api/news/forward')
@@ -142,6 +147,7 @@ describe('POST /news/forward', () => {
     expect(findMessage[0].sender).toBe('John');
     expect(findMessage[0].recipient).toBe('Mike');
     expect(findMessage[0].message).toBe('World');
+    expect(findMessage[0].photo).toBe('url2');
   });
 
   test('It should respond with status code 400', async () => {
